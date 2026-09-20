@@ -1,15 +1,11 @@
 import { media } from '@kit.MediaKit';
+import { audio } from '@kit.AudioKit';
 import appLogger from '../utils/Logger';
 
 /**
  * 播放器状态类型
  */
 export type PlayerState = 'idle' | 'initialized' | 'prepared' | 'playing' | 'paused' | 'completed' | 'stopped' | 'released';
-
-/**
- * 音频中断类型
- */
-export type AudioInterruptType = 'focus' | 'noFocus';
 
 /**
  * 播放器事件回调接口
@@ -23,8 +19,8 @@ export interface AVPlayerCallbacks {
   onDurationUpdate?: (durationMs: number) => void;
   /** 错误回调 */
   onError?: (error: Error) => void;
-  /** 音频中断回调 */
-  onAudioInterrupt?: (type: AudioInterruptType) => void;
+  /** 音频中断回调（透传系统 InterruptEvent 对象） */
+  onAudioInterrupt?: (event: audio.InterruptEvent) => void;
 }
 
 /**
@@ -76,7 +72,7 @@ export class AVPlayerWrapper {
    * @param callbacks 回调对象
    */
   setCallbacks(callbacks: AVPlayerCallbacks): void {
-    this.callbacks = { ...callbacks };
+    this.callbacks = callbacks;
   }
 
   /**
@@ -118,7 +114,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: setFdSource failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -140,7 +136,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: prepare failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -153,12 +149,7 @@ export class AVPlayerWrapper {
         throw new Error('Player not created');
       }
       if (this._state !== 'prepared' && this._state !== 'paused' && this._state !== 'completed') {
-        // 如果是 completed 状态，需要先 seek 到 0 再播放
-        if (this._state === 'completed') {
-          await this.seek(0);
-        } else {
-          throw new Error(`Invalid state for play: ${this._state}`);
-        }
+        throw new Error(`Invalid state for play: ${this._state}`);
       }
 
       await this.player.play();
@@ -166,7 +157,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: play failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -188,7 +179,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: pause failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -210,7 +201,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: stop failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -233,7 +224,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: reset failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -261,7 +252,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: release failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -285,7 +276,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: seek failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -313,7 +304,7 @@ export class AVPlayerWrapper {
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: setSpeed failed`, error);
       this.notifyError(error as Error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -325,13 +316,13 @@ export class AVPlayerWrapper {
       case 0.75:
         return media.PlaybackSpeed.SPEED_FORWARD_0_75_X;
       case 1.0:
-        return media.PlaybackSpeed.SPEED_FORWARD_1_0_X;
+        return media.PlaybackSpeed.SPEED_FORWARD_1_00_X;
       case 1.25:
         return media.PlaybackSpeed.SPEED_FORWARD_1_25_X;
-      case 1.5:
-        return media.PlaybackSpeed.SPEED_FORWARD_1_5_X;
+      case 1.75:
+        return media.PlaybackSpeed.SPEED_FORWARD_1_75_X;
       case 2.0:
-        return media.PlaybackSpeed.SPEED_FORWARD_2_0_X;
+        return media.PlaybackSpeed.SPEED_FORWARD_2_00_X;
       default:
         return undefined;
     }
@@ -379,17 +370,11 @@ export class AVPlayerWrapper {
       this.notifyError(err);
     });
 
-    // 音频中断事件
-    this.player.on('audioInterrupt', (interruptInfo: media.AudioInterruptInfo) => {
-      let type: AudioInterruptType = 'noFocus';
-      if (interruptInfo.audioFocusType === media.AudioFocusType.AUDIO_FOCUS_TYPE_GAIN) {
-        type = 'focus';
-      } else {
-        type = 'noFocus';
-      }
-      appLogger.info(`AVPlayerWrapper: audioInterrupt, type=${type}`);
+    // 音频中断事件（透传系统 InterruptEvent，由 PlayerController 用官方枚举解析）
+    this.player.on('audioInterrupt', (interruptInfo: audio.InterruptEvent) => {
+      appLogger.info(`AVPlayerWrapper: audioInterrupt, hintType=${interruptInfo.hintType}, forceType=${interruptInfo.forceType}`);
       if (this.callbacks.onAudioInterrupt) {
-        this.callbacks.onAudioInterrupt(type);
+        this.callbacks.onAudioInterrupt(interruptInfo);
       }
     });
   }

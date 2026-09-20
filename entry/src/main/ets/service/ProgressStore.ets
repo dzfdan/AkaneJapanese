@@ -2,6 +2,7 @@ import { preferences } from '@kit.ArkData';
 import { UserProgress } from '../model/UserProgress';
 import { AppConstants } from '../constants/AppConstants';
 import { getTodayStr, isSameDay, isConsecutiveDay } from '../utils/DateUtil';
+import { CallbackList } from '../utils/CallbackList';
 import appLogger from '../utils/Logger';
 
 type Preferences = preferences.Preferences;
@@ -19,6 +20,13 @@ const defaultProgress: UserProgress = {
 };
 
 /**
+ * 深拷贝进度对象（ArkTS 不支持对象展开语法）
+ */
+function cloneProgress(source: UserProgress): UserProgress {
+  return JSON.parse(JSON.stringify(source)) as UserProgress;
+}
+
+/**
  * 学习进度存储
  * 基于 Preferences 持久化用户学习进度数据
  * 单例模式，需先调用 init(context) 初始化
@@ -27,10 +35,10 @@ export class ProgressStore {
   private static instance: ProgressStore | null = null;
   private prefs: Preferences | null = null;
   private context: Context | null = null;
-  private progress: UserProgress = { ...defaultProgress };
+  private progress: UserProgress = cloneProgress(defaultProgress);
 
-  /** 进度变化回调（UI 层订阅） */
-  onProgressChange?: (progress: UserProgress) => void;
+  private progressChangeListeners: CallbackList<(progress: UserProgress) => void> =
+    new CallbackList<(progress: UserProgress) => void>();
 
   private constructor() {
   }
@@ -60,7 +68,7 @@ export class ProgressStore {
     } catch (error) {
       appLogger.error('ProgressStore: init failed', error);
       // 初始化失败时使用默认进度
-      this.progress = { ...defaultProgress };
+      this.progress = cloneProgress(defaultProgress);
     }
   }
 
@@ -69,7 +77,15 @@ export class ProgressStore {
    * @returns 用户学习进度
    */
   getProgress(): UserProgress {
-    return { ...this.progress };
+    return cloneProgress(this.progress);
+  }
+
+  addOnProgressChange(callback: (progress: UserProgress) => void): void {
+    this.progressChangeListeners.add(callback);
+  }
+
+  removeOnProgressChange(callback: (progress: UserProgress) => void): void {
+    this.progressChangeListeners.remove(callback);
   }
 
   /**
@@ -239,12 +255,12 @@ export class ProgressStore {
 
     try {
       const jsonStr = JSON.stringify(this.progress);
-      await this.prefs.putString('data', jsonStr);
+      await this.prefs.put('data', jsonStr);
       await this.prefs.flush();
       appLogger.debug('ProgressStore: saved');
     } catch (error) {
       appLogger.error('ProgressStore: save failed', error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -258,25 +274,29 @@ export class ProgressStore {
     }
 
     try {
-      const jsonStr = await this.prefs.getString('data', '');
+      const raw = await this.prefs.get('data', '');
+      const jsonStr = raw as string;
       if (jsonStr && jsonStr.length > 0) {
         const loaded = JSON.parse(jsonStr) as UserProgress;
         // 合并默认值，确保新增字段有默认值
-        this.progress = {
-          ...defaultProgress,
-          ...loaded,
+        const merged: UserProgress = {
+          completedScenes: loaded.completedScenes || defaultProgress.completedScenes,
           sceneProgress: loaded.sceneProgress || {},
+          totalStudyMinutes: loaded.totalStudyMinutes ?? defaultProgress.totalStudyMinutes,
+          streakDays: loaded.streakDays ?? defaultProgress.streakDays,
+          lastStudyDate: loaded.lastStudyDate ?? defaultProgress.lastStudyDate,
           favoriteSentences: loaded.favoriteSentences || []
         };
+        this.progress = merged;
         appLogger.info(`ProgressStore: loaded, completedScenes=${this.progress.completedScenes.length}`);
       } else {
-        this.progress = { ...defaultProgress };
+        this.progress = cloneProgress(defaultProgress);
         appLogger.info('ProgressStore: no saved data, using defaults');
       }
       this.notifyChange();
     } catch (error) {
       appLogger.error('ProgressStore: load failed, using defaults', error);
-      this.progress = { ...defaultProgress };
+      this.progress = cloneProgress(defaultProgress);
     }
   }
 
@@ -284,8 +304,9 @@ export class ProgressStore {
    * 通知进度变化
    */
   private notifyChange(): void {
-    if (this.onProgressChange) {
-      this.onProgressChange({ ...this.progress });
-    }
+    const snapshot: UserProgress = cloneProgress(this.progress);
+    this.progressChangeListeners.notify((callback: (progress: UserProgress) => void) => {
+      callback(snapshot);
+    });
   }
 }

@@ -11,7 +11,7 @@ export struct SceneCard {
   @Prop scene: Scene;
   @Prop progressPercent: number = 0;
   @Prop isCompleted: boolean = false;
-  onClick?: () => void;
+  onCardClick?: () => void;
 
   build() {
     Column() {
@@ -98,8 +98,8 @@ export struct SceneCard {
       color: this.getBorderColor()
     })
     .onClick(() => {
-      if (this.onClick) {
-        this.onClick();
+      if (this.onCardClick) {
+        this.onCardClick();
       }
     });
   }

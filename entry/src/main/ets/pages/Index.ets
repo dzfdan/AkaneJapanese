@@ -12,6 +12,10 @@ import { PlayerBar } from '../components/PlayerBar';
 import { MiniPlayer } from '../components/MiniPlayer';
 import { SceneListPage } from './SceneListPage';
 import { PlayerPage } from './PlayerPage';
+import { StudyPage } from './StudyPage';
+import { ProgressPage } from './ProgressPage';
+import { FavoritePage } from './FavoritePage';
+import { SettingsPage } from './SettingsPage';
 import { ModeManager, AppMode } from '../service/ModeManager';
 import { PlayerController, PlayerUiState } from '../service/PlayerController';
 import { SceneRepository } from '../service/SceneRepository';
@@ -36,11 +40,14 @@ struct Index {
   // 全屏播放页（驾驶模式）
   @State showPlayerPage: boolean = false;
 
-  // 当前显示的详情页（驻车模式学习页等，MVP 先占位）
-  @State showDetailPage: string = '';
+  // 驻车学习详情页
+  @State showStudyPage: boolean = false;
   @State selectedSceneId: string = '';
 
   private mediaQueryListener: mediaquery.MediaQueryListener | null = null;
+  private modeChangeCallback: ((mode: AppMode) => void) | null = null;
+  private stateChangeCallback: ((state: PlayerUiState) => void) | null = null;
+  private timeUpdateCallback: ((currentTimeMs: number, durationMs: number) => void) | null = null;
 
   aboutToAppear() {
     appLogger.info('Index aboutToAppear');
@@ -49,23 +56,26 @@ struct Index {
     this.currentMode = ModeManager.getInstance().getMode();
 
     // 订阅 ModeManager 模式变化
-    ModeManager.getInstance().onModeChange = (mode: AppMode) => {
+    this.modeChangeCallback = (mode: AppMode) => {
       this.currentMode = mode;
     };
+    ModeManager.getInstance().addOnModeChange(this.modeChangeCallback);
 
     // 从 PlayerController 获取初始状态
     const uiState = PlayerController.getInstance().getUiState();
     this.updatePlayerState(uiState);
 
     // 订阅 PlayerController 状态变化
-    PlayerController.getInstance().onStateChange = (state: PlayerUiState) => {
+    this.stateChangeCallback = (state: PlayerUiState) => {
       this.updatePlayerState(state);
     };
+    PlayerController.getInstance().addOnStateChange(this.stateChangeCallback);
 
-    PlayerController.getInstance().onTimeUpdate = (currentTimeMs: number, durationMs: number) => {
+    this.timeUpdateCallback = (currentTimeMs: number, durationMs: number) => {
       this.currentTimeMs = currentTimeMs;
       this.durationMs = durationMs;
     };
+    PlayerController.getInstance().addOnTimeUpdate(this.timeUpdateCallback);
 
     // 初始化屏幕宽度判断
     this.initMediaQuery();
@@ -75,13 +85,22 @@ struct Index {
     appLogger.info('Index aboutToDisappear');
 
     // 取消订阅
-    ModeManager.getInstance().onModeChange = undefined;
-    PlayerController.getInstance().onStateChange = undefined;
-    PlayerController.getInstance().onTimeUpdate = undefined;
+    if (this.modeChangeCallback) {
+      ModeManager.getInstance().removeOnModeChange(this.modeChangeCallback);
+      this.modeChangeCallback = null;
+    }
+    if (this.stateChangeCallback) {
+      PlayerController.getInstance().removeOnStateChange(this.stateChangeCallback);
+      this.stateChangeCallback = null;
+    }
+    if (this.timeUpdateCallback) {
+      PlayerController.getInstance().removeOnTimeUpdate(this.timeUpdateCallback);
+      this.timeUpdateCallback = null;
+    }
 
     // 注销 mediaquery 监听
     if (this.mediaQueryListener) {
-      this.mediaQueryListener.off();
+      this.mediaQueryListener.off('change');
       this.mediaQueryListener = null;
     }
   }
@@ -119,105 +138,121 @@ struct Index {
   }
 
   build() {
-    Column() {
-      // 主内容区
-      if (this.isWideScreen) {
-        // 宽屏模式：SideNav + 内容页
-        Row() {
-          SideNav({
+    Stack() {
+      // 主界面
+      Column() {
+        // 主内容区
+        if (this.isWideScreen) {
+          // 宽屏模式：SideNav + 内容页
+          Row() {
+            SideNav({
+              currentTab: $currentTab,
+              onTabChange: (tab: string) => {
+                this.currentTab = tab;
+              }
+            });
+
+            Column() {
+              this.buildContentPage();
+            }
+            .layoutWeight(1)
+            .height('100%');
+          }
+          .layoutWeight(1)
+          .width('100%');
+        } else {
+          // 窄屏模式：内容页 + BottomTab
+          Column() {
+            this.buildContentPage();
+          }
+          .layoutWeight(1)
+          .width('100%');
+
+          // 窄屏底部 TAB
+          BottomTab({
             currentTab: $currentTab,
             onTabChange: (tab: string) => {
               this.currentTab = tab;
             }
           });
-
-          Column() {
-            this.buildContentPage();
-          }
-          .layoutWeight(1)
-          .height('100%');
         }
-        .layoutWeight(1)
-        .width('100%');
-      } else {
-        // 窄屏模式：内容页 + BottomTab
-        Column() {
-          this.buildContentPage();
-        }
-        .layoutWeight(1)
-        .width('100%');
 
-        // 窄屏底部 TAB
-        BottomTab({
-          currentTab: $currentTab,
-          onTabChange: (tab: string) => {
-            this.currentTab = tab;
+        // 底部播放条（有播放内容时显示）
+        if (this.hasPlayContent) {
+          if (this.isWideScreen) {
+            PlayerBar({
+              sceneTitle: this.currentSceneTitle,
+              sentenceJapanese: this.currentSentence,
+              isPlaying: this.isPlaying,
+              currentTimeMs: this.currentTimeMs,
+              durationMs: this.durationMs,
+              onPlayPause: () => {
+                PlayerController.getInstance().togglePlay();
+              },
+              onPrev: () => {
+                PlayerController.getInstance().prevSentence();
+              },
+              onNext: () => {
+                PlayerController.getInstance().nextSentence();
+              },
+              onBarClick: () => {
+                // 驾驶模式点击播放条进入全屏播放页
+                if (this.currentMode === 'driving') {
+                  this.showPlayerPage = true;
+                }
+              }
+            })
+            .width('100%')
+            .padding(12);
+          } else {
+            MiniPlayer({
+              sentenceJapanese: this.currentSentence,
+              isPlaying: this.isPlaying,
+              onPlayPause: () => {
+                PlayerController.getInstance().togglePlay();
+              },
+              onBarClick: () => {
+                // 驾驶模式点击进入全屏播放页
+                if (this.currentMode === 'driving') {
+                  this.showPlayerPage = true;
+                }
+              }
+            })
+            .width('100%');
           }
-        });
+        }
+      }
+      .width('100%')
+      .height('100%');
+
+      // 全屏播放页（驾驶模式覆盖层）
+      if (this.showPlayerPage) {
+        PlayerPage({
+          isVisible: this.showPlayerPage,
+          onClose: () => {
+            this.showPlayerPage = false;
+          }
+        })
+        .width('100%')
+        .height('100%');
       }
 
-      // 底部播放条（有播放内容时显示）
-      if (this.hasPlayContent) {
-        if (this.isWideScreen) {
-          PlayerBar({
-            sceneTitle: this.currentSceneTitle,
-            sentenceJapanese: this.currentSentence,
-            isPlaying: this.isPlaying,
-            currentTimeMs: this.currentTimeMs,
-            durationMs: this.durationMs,
-            onPlayPause: () => {
-              PlayerController.getInstance().togglePlay();
-            },
-            onPrev: () => {
-              PlayerController.getInstance().prevSentence();
-            },
-            onNext: () => {
-              PlayerController.getInstance().nextSentence();
-            },
-            onClick: () => {
-              // 驾驶模式点击播放条进入全屏播放页
-              if (this.currentMode === 'driving') {
-                this.showPlayerPage = true;
-              }
-            }
-          })
-          .width('100%')
-          .padding(12);
-        } else {
-          MiniPlayer({
-            sentenceJapanese: this.currentSentence,
-            isPlaying: this.isPlaying,
-            onPlayPause: () => {
-              PlayerController.getInstance().togglePlay();
-            },
-            onClick: () => {
-              // 驾驶模式点击进入全屏播放页
-              if (this.currentMode === 'driving') {
-                this.showPlayerPage = true;
-              }
-            }
-          })
-          .width('100%');
-        }
+      // 驻车学习详情页（覆盖层）
+      if (this.showStudyPage) {
+        StudyPage({
+          isVisible: this.showStudyPage,
+          sceneId: this.selectedSceneId,
+          onBack: () => {
+            this.showStudyPage = false;
+          }
+        })
+        .width('100%')
+        .height('100%');
       }
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(ThemeColors.bgApp)
-    .overlay(this.showPlayerPage, this.PlayerPageOverlayBuilder());
-  }
-
-  @Builder
-  PlayerPageOverlayBuilder() {
-    PlayerPage({
-      isVisible: this.showPlayerPage,
-      onClose: () => {
-        this.showPlayerPage = false;
-      }
-    })
-    .width('100%')
-    .height('100%')
-    .position({ x: 0, y: 0 });
+    .backgroundColor(ThemeColors.bgApp);
   }
 
   @Builder
@@ -232,36 +267,18 @@ struct Index {
       .width('100%')
       .height('100%');
     } else if (this.currentTab === 'progress') {
-      this.PlaceholderPage('进度', '📊');
+      ProgressPage()
+        .width('100%')
+        .height('100%');
     } else if (this.currentTab === 'favorites') {
-      this.PlaceholderPage('收藏', '⭐');
+      FavoritePage()
+        .width('100%')
+        .height('100%');
     } else if (this.currentTab === 'settings') {
-      this.PlaceholderPage('设置', '⚙️');
+      SettingsPage()
+        .width('100%')
+        .height('100%');
     }
-  }
-
-  @Builder
-  PlaceholderPage(title: string, icon: string) {
-    Column() {
-      Text(icon)
-        .fontSize(64)
-        .margin({ bottom: 16 });
-
-      Text(title)
-        .fontSize(20)
-        .fontColor(ThemeColors.textPrimary)
-        .fontWeight(600);
-
-      Text('功能开发中，敬请期待')
-        .fontSize(14)
-        .fontColor(ThemeColors.textTertiary)
-        .margin({ top: 8 });
-    }
-    .width('100%')
-    .height('100%')
-    .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor(ThemeColors.bgApp);
   }
 
   private handleSceneClick(sceneId: string): void {
@@ -272,16 +289,17 @@ struct Index {
       const targetScene: Scene | undefined = SceneRepository.getInstance().getSceneById(sceneId);
       if (targetScene) {
         PlayerController.getInstance().playScene(targetScene).then(() => {
+          this.showStudyPage = false;
           this.showPlayerPage = true;
-        }).catch(err => {
+        }).catch((err: Object) => {
           appLogger.error('Play scene failed: ' + JSON.stringify(err));
         });
       }
     } else {
-      // 驻车模式：进入学习详情页（MVP 占位）
+      // 驻车模式：进入学习详情页
       this.selectedSceneId = sceneId;
-      this.showDetailPage = 'study';
-      appLogger.info('Parked mode study page - placeholder');
+      this.showPlayerPage = false;
+      this.showStudyPage = true;
     }
   }
 }

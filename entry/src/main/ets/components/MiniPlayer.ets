@@ -10,7 +10,7 @@ export struct MiniPlayer {
   @Prop sentenceJapanese: string = '';
   @Prop isPlaying: boolean = false;
   onPlayPause: () => void = () => {};
-  onClick?: () => void;
+  onBarClick?: () => void;
 
   build() {
     Row() {
@@ -23,8 +23,8 @@ export struct MiniPlayer {
         .maxLines(1)
         .margin({ right: 8 })
         .onClick(() => {
-          if (this.onClick) {
-            this.onClick();
+          if (this.onBarClick) {
+            this.onBarClick();
           }
         });
 

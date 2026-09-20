@@ -6,6 +6,7 @@
 import { ThemeColors } from '../constants/ThemeConstants';
 import { AppConstants } from '../constants/AppConstants';
 import { PlayerController, PlayerUiState } from '../service/PlayerController';
+import { SceneRepository } from '../service/SceneRepository';
 import { SettingsStore } from '../service/SettingsStore';
 import { UserSettings } from '../model/UserSettings';
 import { Sentence } from '../model/Sentence';
@@ -48,14 +49,14 @@ export struct PlayerPage {
     this.stateCallback = (state: PlayerUiState) => {
       this.updateFromPlayerState(state);
     };
-    PlayerController.getInstance().onStateChange = this.stateCallback;
+    PlayerController.getInstance().addOnStateChange(this.stateCallback);
 
     // 订阅时间更新
     this.timeCallback = (currentTimeMs: number, durationMs: number) => {
       this.currentTimeMs = currentTimeMs;
       this.durationMs = durationMs;
     };
-    PlayerController.getInstance().onTimeUpdate = this.timeCallback;
+    PlayerController.getInstance().addOnTimeUpdate(this.timeCallback);
 
     // 从 SettingsStore 获取显示偏好
     const settings = SettingsStore.getInstance().getSettings();
@@ -67,21 +68,21 @@ export struct PlayerPage {
       this.showRomaji = newSettings.showRomaji;
       this.showTranslation = newSettings.showTranslation;
     };
-    SettingsStore.getInstance().onSettingsChange = this.settingsCallback;
+    SettingsStore.getInstance().addOnSettingsChange(this.settingsCallback);
   }
 
   aboutToDisappear() {
     appLogger.info('PlayerPage aboutToDisappear');
 
     // 取消订阅
-    if (PlayerController.getInstance().onStateChange === this.stateCallback) {
-      PlayerController.getInstance().onStateChange = undefined;
+    if (this.stateCallback) {
+      PlayerController.getInstance().removeOnStateChange(this.stateCallback);
     }
-    if (PlayerController.getInstance().onTimeUpdate === this.timeCallback) {
-      PlayerController.getInstance().onTimeUpdate = undefined;
+    if (this.timeCallback) {
+      PlayerController.getInstance().removeOnTimeUpdate(this.timeCallback);
     }
-    if (SettingsStore.getInstance().onSettingsChange === this.settingsCallback) {
-      SettingsStore.getInstance().onSettingsChange = undefined;
+    if (this.settingsCallback) {
+      SettingsStore.getInstance().removeOnSettingsChange(this.settingsCallback);
     }
 
     this.stateCallback = null;
@@ -108,10 +109,15 @@ export struct PlayerPage {
       this.sentenceIndex = 0;
     }
 
-    // 计算总句子数和总对话数
-    const uiState = PlayerController.getInstance().getUiState();
-    // 注意：totalSentences 和 totalDialogues 需要从当前场景获取
-    // 这里简化处理，在实际使用时可以从 PlayerController 中获取
+    if (state.sceneId) {
+      const scene = SceneRepository.getInstance().getSceneById(state.sceneId);
+      const dialogue = scene ? scene.dialogues[state.dialogueIndex] : undefined;
+      this.totalDialogues = scene ? scene.dialogues.length : 0;
+      this.totalSentences = dialogue ? dialogue.sentences.length : 0;
+    } else {
+      this.totalDialogues = 0;
+      this.totalSentences = 0;
+    }
   }
 
   private handlePlayPause(): void {
@@ -333,11 +339,20 @@ export struct PlayerPage {
         .margin({ top: 24 });
 
         // 句子导航信息
-        if (this.sentenceIndex > 0) {
-          Text(`第 ${this.sentenceIndex} 句`)
-            .fontSize(12)
-            .fontColor(ThemeColors.textTertiary)
-            .margin({ top: 16 });
+        if (this.sentenceIndex > 0 && this.totalSentences > 0) {
+          Column() {
+            Text(`第 ${this.sentenceIndex} / ${this.totalSentences} 句`)
+              .fontSize(12)
+              .fontColor(ThemeColors.textTertiary);
+
+            if (this.totalDialogues > 1) {
+              Text(`对话 ${this.dialogueIndex + 1} / ${this.totalDialogues}`)
+                .fontSize(12)
+                .fontColor(ThemeColors.textTertiary)
+                .margin({ top: 4 });
+            }
+          }
+          .margin({ top: 16 });
         }
       }
       .width('100%')

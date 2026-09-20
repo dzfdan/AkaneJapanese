@@ -64,7 +64,7 @@ export struct SettingItemSelect {
     .onClick(() => {
       this.showSheet = true;
     })
-    .bindContentSheet(this.showSheet, this.SheetBuilder(), {
+    .bindSheet(this.showSheet, this.SheetBuilder(), {
       height: SheetSize.MEDIUM,
       dragBar: true,
       backgroundColor: ThemeColors.bgCard,

@@ -32,14 +32,14 @@ export default class EntryAbility extends UIAbility {
       return SceneRepository.getInstance().loadAll();
     }).then(() => {
       appLogger.info('Scenes loaded');
-    }).catch(err => {
+    }).catch((err: Object) => {
       appLogger.error('Init failed: ' + JSON.stringify(err));
     });
   }
 
   onDestroy(): void {
     appLogger.info('EntryAbility onDestroy');
-    PlayerController.getInstance().release().catch(err => {
+    PlayerController.getInstance().release().catch((err: Object) => {
       appLogger.error('Release player failed: ' + JSON.stringify(err));
     });
   }

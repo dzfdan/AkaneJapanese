@@ -16,7 +16,7 @@ export struct PlayerBar {
   onPlayPause: () => void = () => {};
   onPrev: () => void = () => {};
   onNext: () => void = () => {};
-  onClick?: () => void;
+  onBarClick?: () => void;
   @State showCompact: boolean = false;
 
   build() {
@@ -42,8 +42,8 @@ export struct PlayerBar {
       .layoutWeight(1)
       .alignItems(HorizontalAlign.Start)
       .onClick(() => {
-        if (this.onClick) {
-          this.onClick();
+        if (this.onBarClick) {
+          this.onBarClick();
         }
       });
 
@@ -55,16 +55,18 @@ export struct PlayerBar {
         });
 
         // 播放/暂停按钮（主按钮）
-        this.CircleButton(
-          this.isPlaying ? '⏸' : '▶',
-          52,
-          ThemeColors.primary,
-          '#FFFFFF',
-          () => {
-            this.onPlayPause();
-          },
-          22
-        )
+        Column() {
+          this.CircleButton(
+            this.isPlaying ? '⏸' : '▶',
+            52,
+            ThemeColors.primary,
+            '#FFFFFF',
+            () => {
+              this.onPlayPause();
+            },
+            22
+          );
+        }
         .margin({ left: 8, right: 8 });
 
         // 下一首按钮

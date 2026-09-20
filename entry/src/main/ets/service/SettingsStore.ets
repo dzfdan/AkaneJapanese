@@ -1,6 +1,7 @@
 import { preferences } from '@kit.ArkData';
 import { UserSettings } from '../model/UserSettings';
 import { AppConstants } from '../constants/AppConstants';
+import { CallbackList } from '../utils/CallbackList';
 import appLogger from '../utils/Logger';
 
 type Preferences = preferences.Preferences;
@@ -17,6 +18,13 @@ const defaultSettings: UserSettings = {
 };
 
 /**
+ * 深拷贝设置对象（ArkTS 不支持对象展开语法）
+ */
+function cloneSettings(source: UserSettings): UserSettings {
+  return JSON.parse(JSON.stringify(source)) as UserSettings;
+}
+
+/**
  * 设置存储
  * 基于 Preferences 持久化用户设置数据
  * 单例模式，需先调用 init(context) 初始化
@@ -24,10 +32,10 @@ const defaultSettings: UserSettings = {
 export class SettingsStore {
   private static instance: SettingsStore | null = null;
   private prefs: Preferences | null = null;
-  private settings: UserSettings = { ...defaultSettings };
+  private settings: UserSettings = cloneSettings(defaultSettings);
 
-  /** 设置变化回调（UI 层订阅） */
-  onSettingsChange?: (settings: UserSettings) => void;
+  private settingsChangeListeners: CallbackList<(settings: UserSettings) => void> =
+    new CallbackList<(settings: UserSettings) => void>();
 
   private constructor() {
   }
@@ -55,7 +63,7 @@ export class SettingsStore {
       await this.load();
     } catch (error) {
       appLogger.error('SettingsStore: init failed', error);
-      this.settings = { ...defaultSettings };
+      this.settings = cloneSettings(defaultSettings);
     }
   }
 
@@ -64,7 +72,15 @@ export class SettingsStore {
    * @returns 用户设置
    */
   getSettings(): UserSettings {
-    return { ...this.settings };
+    return cloneSettings(this.settings);
+  }
+
+  addOnSettingsChange(callback: (settings: UserSettings) => void): void {
+    this.settingsChangeListeners.add(callback);
+  }
+
+  removeOnSettingsChange(callback: (settings: UserSettings) => void): void {
+    this.settingsChangeListeners.remove(callback);
   }
 
   /**
@@ -170,12 +186,12 @@ export class SettingsStore {
 
     try {
       const jsonStr = JSON.stringify(this.settings);
-      await this.prefs.putString('data', jsonStr);
+      await this.prefs.put('data', jsonStr);
       await this.prefs.flush();
       appLogger.debug('SettingsStore: saved');
     } catch (error) {
       appLogger.error('SettingsStore: save failed', error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -189,23 +205,28 @@ export class SettingsStore {
     }
 
     try {
-      const jsonStr = await this.prefs.getString('data', '');
+      const raw = await this.prefs.get('data', '');
+      const jsonStr = raw as string;
       if (jsonStr && jsonStr.length > 0) {
         const loaded = JSON.parse(jsonStr) as UserSettings;
         // 合并默认值，确保新增字段有默认值
-        this.settings = {
-          ...defaultSettings,
-          ...loaded
+        const merged: UserSettings = {
+          defaultMode: loaded.defaultMode ?? defaultSettings.defaultMode,
+          defaultSpeed: loaded.defaultSpeed ?? defaultSettings.defaultSpeed,
+          showRomaji: loaded.showRomaji ?? defaultSettings.showRomaji,
+          showTranslation: loaded.showTranslation ?? defaultSettings.showTranslation,
+          theme: loaded.theme ?? defaultSettings.theme
         };
+        this.settings = merged;
         appLogger.info(`SettingsStore: loaded, theme=${this.settings.theme}`);
       } else {
-        this.settings = { ...defaultSettings };
+        this.settings = cloneSettings(defaultSettings);
         appLogger.info('SettingsStore: no saved data, using defaults');
       }
       this.notifyChange();
     } catch (error) {
       appLogger.error('SettingsStore: load failed, using defaults', error);
-      this.settings = { ...defaultSettings };
+      this.settings = cloneSettings(defaultSettings);
     }
   }
 
@@ -213,8 +234,9 @@ export class SettingsStore {
    * 通知设置变化
    */
   private notifyChange(): void {
-    if (this.onSettingsChange) {
-      this.onSettingsChange({ ...this.settings });
-    }
+    const snapshot: UserSettings = cloneSettings(this.settings);
+    this.settingsChangeListeners.notify((callback: (settings: UserSettings) => void) => {
+      callback(snapshot);
+    });
   }
 }

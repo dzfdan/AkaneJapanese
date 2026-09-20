@@ -1,3 +1,4 @@
+import { util } from '@kit.ArkTS';
 import { Scene } from '../model/Scene';
 import appLogger from '../utils/Logger';
 
@@ -28,6 +29,12 @@ interface SceneIndex {
  * 负责从 rawfile 加载 JSON 并解析为 Scene 模型
  * 单例模式，需先调用 init(context) 初始化
  */
+export interface RawFdInfo {
+  fd: number;
+  offset: number;
+  length: number;
+}
+
 export class SceneRepository {
   private static instance: SceneRepository | null = null;
   private context: Context | null = null;
@@ -107,7 +114,7 @@ export class SceneRepository {
       return loadedScenes;
     } catch (error) {
       appLogger.error('SceneRepository: loadAll failed', error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -151,7 +158,7 @@ export class SceneRepository {
    * @param audioPath 音频文件名（如 scene-001-normal.m4a）
    * @returns fd 对象，包含 fd、offset、length
    */
-  async getAudioFd(audioPath: string): Promise<{ fd: number; offset: number; length: number }> {
+  async getAudioFd(audioPath: string): Promise<RawFdInfo> {
     if (!this.context) {
       throw new Error('SceneRepository: context is null, call init first');
     }
@@ -168,7 +175,7 @@ export class SceneRepository {
       };
     } catch (error) {
       appLogger.error(`SceneRepository: getAudioFd failed for ${fullPath}`, error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -178,12 +185,7 @@ export class SceneRepository {
    * @returns 字符串
    */
   private uint8ArrayToString(data: Uint8Array): string {
-    let result = '';
-    const chunkSize = 8192;
-    for (let i = 0; i < data.length; i += chunkSize) {
-      const chunk = data.subarray(i, i + chunkSize);
-      result += String.fromCharCode.apply(null, chunk as unknown as number[]);
-    }
-    return result;
+    const textDecoder = util.TextDecoder.create('utf-8');
+    return textDecoder.decodeToString(data);
   }
 }

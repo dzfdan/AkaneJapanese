@@ -42,8 +42,7 @@ export struct SideNav {
             .fontWeight(700);
         }
         .width('100%')
-        .height(this.isCompact ? 56 : 72)
-        .justifyContent(FlexAlign.Center);
+        .height(this.isCompact ? 56 : 72);
       }
       .width('100%')
       .padding({ top: this.isCompact ? 12 : 16, bottom: this.isCompact ? 8 : 12 });

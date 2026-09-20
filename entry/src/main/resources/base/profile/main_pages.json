@@ -1,11 +1,6 @@
 {
   "src": [
-    "pages/Index",
-    "pages/SceneListPage",
-    "pages/PlayerPage",
-    "pages/StudyPage",
-    "pages/ProgressPage",
-    "pages/FavoritePage",
-    "pages/SettingsPage"
+    "pages/Index"
   ]
 }
+

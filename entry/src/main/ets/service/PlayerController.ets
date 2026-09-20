@@ -1,11 +1,15 @@
+import { media } from '@kit.MediaKit';
+import { audio } from '@kit.AudioKit';
 import { Scene } from '../model/Scene';
 import { Dialogue } from '../model/Dialogue';
 import { Sentence } from '../model/Sentence';
 import { AVPlayerWrapper } from '../platform/AVPlayerWrapper';
 import { AVSessionManager } from '../platform/AVSessionManager';
 import { BackgroundTaskManager } from '../platform/BackgroundTaskManager';
-import { AudioFocusHandler, AudioFocusEvent } from './AudioFocusHandler';
+import { AudioFocusHandler, AudioFocusEvent, InterruptHint } from './AudioFocusHandler';
 import { SceneRepository } from './SceneRepository';
+import { ProgressStore } from './ProgressStore';
+import { CallbackList } from '../utils/CallbackList';
 import { AppConstants } from '../constants/AppConstants';
 import appLogger from '../utils/Logger';
 
@@ -31,6 +35,11 @@ export interface PlayerUiState {
  * 管理 AVPlayerWrapper 和播放状态，提供场景/对话/句子级别的播放控制
  * 单例模式
  */
+type StateChangeCallback = (state: PlayerUiState) => void;
+type TimeUpdateCallback = (currentTimeMs: number, durationMs: number) => void;
+type SentenceChangeCallback = (sentence: Sentence) => void;
+type ErrorCallback = (message: string) => void;
+
 export class PlayerController {
   private static instance: PlayerController | null = null;
   private player: AVPlayerWrapper;
@@ -43,11 +52,10 @@ export class PlayerController {
   private durationMs: number = 0;
   private isPlaying: boolean = false;
 
-  // 状态回调（UI 层订阅）
-  onStateChange?: (state: PlayerUiState) => void;
-  onTimeUpdate?: (currentTimeMs: number, durationMs: number) => void;
-  onSentenceChange?: (sentence: Sentence) => void;
-  onError?: (message: string) => void;
+  private stateChangeListeners: CallbackList<StateChangeCallback> = new CallbackList<StateChangeCallback>();
+  private timeUpdateListeners: CallbackList<TimeUpdateCallback> = new CallbackList<TimeUpdateCallback>();
+  private sentenceChangeListeners: CallbackList<SentenceChangeCallback> = new CallbackList<SentenceChangeCallback>();
+  private errorListeners: CallbackList<ErrorCallback> = new CallbackList<ErrorCallback>();
 
   private constructor() {
     this.player = new AVPlayerWrapper();
@@ -63,6 +71,38 @@ export class PlayerController {
       PlayerController.instance = new PlayerController();
     }
     return PlayerController.instance;
+  }
+
+  addOnStateChange(callback: StateChangeCallback): void {
+    this.stateChangeListeners.add(callback);
+  }
+
+  removeOnStateChange(callback: StateChangeCallback): void {
+    this.stateChangeListeners.remove(callback);
+  }
+
+  addOnTimeUpdate(callback: TimeUpdateCallback): void {
+    this.timeUpdateListeners.add(callback);
+  }
+
+  removeOnTimeUpdate(callback: TimeUpdateCallback): void {
+    this.timeUpdateListeners.remove(callback);
+  }
+
+  addOnSentenceChange(callback: SentenceChangeCallback): void {
+    this.sentenceChangeListeners.add(callback);
+  }
+
+  removeOnSentenceChange(callback: SentenceChangeCallback): void {
+    this.sentenceChangeListeners.remove(callback);
+  }
+
+  addOnError(callback: ErrorCallback): void {
+    this.errorListeners.add(callback);
+  }
+
+  removeOnError(callback: ErrorCallback): void {
+    this.errorListeners.remove(callback);
   }
 
   /**
@@ -81,7 +121,7 @@ export class PlayerController {
       appLogger.info('PlayerController: init completed');
     } catch (error) {
       appLogger.error('PlayerController: init failed', error);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -123,7 +163,7 @@ export class PlayerController {
     } catch (error) {
       appLogger.error('PlayerController: playScene failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -139,7 +179,7 @@ export class PlayerController {
     } catch (error) {
       appLogger.error('PlayerController: play failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -151,11 +191,14 @@ export class PlayerController {
       await this.player.pause();
       this.isPlaying = false;
       await this.stopPlaybackSession();
+      if (this.durationMs > 0) {
+        this.recordSceneProgress(Math.floor((this.currentTimeMs / this.durationMs) * 100));
+      }
       this.notifyStateChange();
     } catch (error) {
       appLogger.error('PlayerController: pause failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -295,13 +338,13 @@ export class PlayerController {
       this.updateCurrentSentence(timeMs);
       // 更新 AVSession 播放状态
       const avState: 'playing' | 'paused' | 'stopped' = this.isPlaying ? 'playing' : 'paused';
-      AVSessionManager.getInstance().updatePlaybackState(avState, timeMs, this.playbackSpeed).catch(err => {
+      AVSessionManager.getInstance().updatePlaybackState(avState, timeMs, this.playbackSpeed).catch((err: Object) => {
         appLogger.error('PlayerController: update AVSession state after seek failed', err);
       });
     } catch (error) {
       appLogger.error('PlayerController: seekTo failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -315,14 +358,14 @@ export class PlayerController {
       await this.player.setSpeed(speed);
       // 更新 AVSession 播放状态
       const avState: 'playing' | 'paused' | 'stopped' = this.isPlaying ? 'playing' : 'paused';
-      AVSessionManager.getInstance().updatePlaybackState(avState, this.currentTimeMs, speed).catch(err => {
+      AVSessionManager.getInstance().updatePlaybackState(avState, this.currentTimeMs, speed).catch((err: Object) => {
         appLogger.error('PlayerController: update AVSession state after setSpeed failed', err);
       });
       this.notifyStateChange();
     } catch (error) {
       appLogger.error('PlayerController: setSpeed failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -410,7 +453,7 @@ export class PlayerController {
     } catch (error) {
       appLogger.error('PlayerController: toggleSlowMode failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -453,7 +496,7 @@ export class PlayerController {
     } catch (error) {
       appLogger.error('PlayerController: playSentence failed', error);
       this.notifyError((error as Error).message);
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -525,15 +568,20 @@ export class PlayerController {
         } else if (state === 'paused' || state === 'completed' || state === 'stopped') {
           this.isPlaying = false;
         }
+        if (state === 'completed') {
+          this.recordSceneProgress(100);
+        }
         this.notifyStateChange();
       },
       onTimeUpdate: (currentTimeMs: number): void => {
         this.currentTimeMs = currentTimeMs;
         // 根据时间更新当前句子
         this.updateCurrentSentence(currentTimeMs);
-        if (this.onTimeUpdate) {
-          this.onTimeUpdate(currentTimeMs, this.durationMs);
-        }
+        const currentTime = currentTimeMs;
+        const duration = this.durationMs;
+        this.timeUpdateListeners.notify((callback: TimeUpdateCallback) => {
+          callback(currentTime, duration);
+        });
       },
       onDurationUpdate: (durationMs: number): void => {
         this.durationMs = durationMs;
@@ -545,8 +593,8 @@ export class PlayerController {
         this.notifyError(error.message);
         this.notifyStateChange();
       },
-      onAudioInterrupt: (event: string | object): void => {
-        appLogger.info(`PlayerController: audioInterrupt event=${JSON.stringify(event)}`);
+      onAudioInterrupt: (event: audio.InterruptEvent): void => {
+        appLogger.info(`PlayerController: audioInterrupt hintType=${event.hintType}, forceType=${event.forceType}`);
         const focusEvent = this.convertAudioInterruptEvent(event);
         AudioFocusHandler.getInstance().handleInterrupt(focusEvent);
       }
@@ -561,37 +609,37 @@ export class PlayerController {
     const avSession = AVSessionManager.getInstance();
 
     avSession.onPlay = () => {
-      this.play().catch(err => {
+      this.play().catch((err: Object) => {
         appLogger.error('PlayerController: AVSession onPlay failed', err);
       });
     };
 
     avSession.onPause = () => {
-      this.pause().catch(err => {
+      this.pause().catch((err: Object) => {
         appLogger.error('PlayerController: AVSession onPause failed', err);
       });
     };
 
     avSession.onStop = () => {
-      this.pause().catch(err => {
+      this.pause().catch((err: Object) => {
         appLogger.error('PlayerController: AVSession onStop failed', err);
       });
     };
 
     avSession.onSkipToNext = () => {
-      this.nextDialogue().catch(err => {
+      this.nextDialogue().catch((err: Object) => {
         appLogger.error('PlayerController: AVSession onSkipToNext failed', err);
       });
     };
 
     avSession.onSkipToPrevious = () => {
-      this.prevDialogue().catch(err => {
+      this.prevDialogue().catch((err: Object) => {
         appLogger.error('PlayerController: AVSession onSkipToPrevious failed', err);
       });
     };
 
     avSession.onSeek = (timeMs: number) => {
-      this.seekTo(timeMs).catch(err => {
+      this.seekTo(timeMs).catch((err: Object) => {
         appLogger.error('PlayerController: AVSession onSeek failed', err);
       });
     };
@@ -608,21 +656,21 @@ export class PlayerController {
 
     handler.onPause = () => {
       appLogger.info('PlayerController: audio focus pause, pausing playback');
-      this.pause().catch(err => {
+      this.pause().catch((err: Object) => {
         appLogger.error('PlayerController: audio focus pause failed', err);
       });
     };
 
     handler.onResume = () => {
       appLogger.info('PlayerController: audio focus resume, resuming playback');
-      this.play().catch(err => {
+      this.play().catch((err: Object) => {
         appLogger.error('PlayerController: audio focus resume failed', err);
       });
     };
 
     handler.onStop = () => {
       appLogger.info('PlayerController: audio focus stop, stopping playback');
-      this.pause().catch(err => {
+      this.pause().catch((err: Object) => {
         appLogger.error('PlayerController: audio focus stop failed', err);
       });
     };
@@ -647,6 +695,10 @@ export class PlayerController {
    * 统一处理：启动后台长时任务 + 更新 AVSession 播放状态 + 更新元数据
    */
   private async startPlaybackSession(): Promise<void> {
+    ProgressStore.getInstance().checkInIfNeeded().catch((err: Object) => {
+      appLogger.error('PlayerController: check-in failed', err);
+    });
+
     // 启动后台长时任务
     try {
       await BackgroundTaskManager.getInstance().startAudioPlayback();
@@ -708,52 +760,24 @@ export class PlayerController {
 
   /**
    * 将 AVPlayer 的 audioInterrupt 原始事件转换为 AudioFocusEvent
-   * 兼容字符串类型和 InterruptEvent 对象类型
-   * @param event 原始音频中断事件
+   * @param event 系统音频中断事件
    * @returns 转换后的 AudioFocusEvent
    */
-  private convertAudioInterruptEvent(event: string | object): AudioFocusEvent {
-    // 字符串类型（AVPlayerWrapper 简化后的回调）
-    if (typeof event === 'string') {
-      switch (event) {
-        case 'noFocus':
-          return { hint: 'pause', force: false };
-        default:
-          return { hint: 'pause', force: false };
-      }
+  private convertAudioInterruptEvent(event: audio.InterruptEvent): AudioFocusEvent {
+    // InterruptForceType: INTERRUPT_FORCE=系统已强制处理, INTERRUPT_SHARE=应用需自主处理
+    const force = event.forceType === audio.InterruptForceType.INTERRUPT_FORCE;
+    let hint: InterruptHint = 'pause';
+    if (event.hintType === audio.InterruptHint.INTERRUPT_HINT_RESUME) {
+      hint = 'resume';
+    } else if (event.hintType === audio.InterruptHint.INTERRUPT_HINT_PAUSE) {
+      hint = 'pause';
+    } else if (event.hintType === audio.InterruptHint.INTERRUPT_HINT_STOP) {
+      hint = 'stop';
+    } else if (event.hintType === audio.InterruptHint.INTERRUPT_HINT_DUCK) {
+      hint = 'duck';
+    } else if (event.hintType === audio.InterruptHint.INTERRUPT_HINT_UNDUCK) {
+      hint = 'unduck';
     }
-
-    // InterruptEvent 对象类型（HarmonyOS 原生事件）
-    const evt = event as Record<string, number>;
-    const hintType = evt.hintType;
-    const forceType = evt.forceType;
-
-    // forceType: 0=非强制(SHARE), 1=强制(INDEPENDENT)
-    const force = forceType === 1;
-
-    // hintType 映射：1=PAUSE, 2=RESUME, 3=STOP, 4=DUCK, 5=UNDUCK
-    let hint: 'pause' | 'resume' | 'stop' | 'duck' | 'unduck' = 'pause';
-    switch (hintType) {
-      case 1:
-        hint = 'pause';
-        break;
-      case 2:
-        hint = 'resume';
-        break;
-      case 3:
-        hint = 'stop';
-        break;
-      case 4:
-        hint = 'duck';
-        break;
-      case 5:
-        hint = 'unduck';
-        break;
-      default:
-        hint = 'pause';
-        break;
-    }
-
     return { hint, force };
   }
 
@@ -869,26 +893,40 @@ export class PlayerController {
    * 通知 UI 状态变化
    */
   private notifyStateChange(): void {
-    if (this.onStateChange) {
-      this.onStateChange(this.getUiState());
-    }
+    const state = this.getUiState();
+    this.stateChangeListeners.notify((callback: StateChangeCallback) => {
+      callback(state);
+    });
   }
 
   /**
    * 通知句子变化
    */
   private notifySentenceChange(sentence: Sentence): void {
-    if (this.onSentenceChange) {
-      this.onSentenceChange(sentence);
-    }
+    this.sentenceChangeListeners.notify((callback: SentenceChangeCallback) => {
+      callback(sentence);
+    });
   }
 
   /**
    * 通知错误
    */
   private notifyError(message: string): void {
-    if (this.onError) {
-      this.onError(message);
+    this.errorListeners.notify((callback: ErrorCallback) => {
+      callback(message);
+    });
+  }
+
+  /**
+   * 记录场景学习进度（0-100），达到 100 自动标记完成
+   */
+  private recordSceneProgress(percent: number): void {
+    const sceneId = this.currentScene ? this.currentScene.id : '';
+    if (!sceneId) {
+      return;
     }
+    ProgressStore.getInstance().updateSceneProgress(sceneId, percent).catch((err: Object) => {
+      appLogger.error('PlayerController: record scene progress failed', err);
+    });
   }
 }

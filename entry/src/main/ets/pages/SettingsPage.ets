@@ -11,6 +11,11 @@ import { SettingItemSwitch } from '../components/SettingItemSwitch';
 import { SettingItemSelect } from '../components/SettingItemSelect';
 import appLogger from '../utils/Logger';
 
+interface OptionItem {
+  label: string;
+  value: string;
+}
+
 @Component
 export struct SettingsPage {
   @State showRomaji: boolean = true;
@@ -91,21 +96,23 @@ export struct SettingsPage {
     }
   }
 
-  private getSpeedOptions(): { label: string; value: string }[] {
-    return AppConstants.SPEED_OPTIONS.map((speed: number) => ({
-      label: `${speed}x`,
-      value: speed.toString()
-    }));
+  private getSpeedOptions(): OptionItem[] {
+    return AppConstants.SPEED_OPTIONS.map((speed: number): OptionItem => {
+      return {
+        label: `${speed}x`,
+        value: speed.toString()
+      };
+    });
   }
 
-  private getModeOptions(): { label: string; value: string }[] {
+  private getModeOptions(): OptionItem[] {
     return [
       { label: '驾驶模式', value: 'driving' },
       { label: '驻车模式', value: 'parked' }
     ];
   }
 
-  private getThemeOptions(): { label: string; value: string }[] {
+  private getThemeOptions(): OptionItem[] {
     return [
       { label: '深色模式', value: 'dark' },
       { label: '浅色模式', value: 'light' },
@@ -178,8 +185,10 @@ export struct SettingsPage {
             this.SectionHeaderBuilder('关于');
 
             this.AboutItemBuilder('版本号', '1.0.0');
-            this.AboutItemBuilder('应用介绍', '和风朱音 - 车载日语学习')
-              .margin({ bottom: 24 });
+            Column() {
+              this.AboutItemBuilder('应用介绍', '和风朱音 - 车载日语学习');
+            }
+            .margin({ bottom: 24 });
 
             // 底部说明
             Text('© 2026 朱音日语. 保留所有权利.')

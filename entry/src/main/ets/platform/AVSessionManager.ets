@@ -59,11 +59,13 @@ export class AVSessionManager {
       this.context = context;
 
       // 1. 创建 audio 类型的会话
-      this.session = await avSession.createAVSession(context, 'audio');
+      const session = await avSession.createAVSession(context, 'AkaneJapanese', 'audio');
+      this.session = session;
       appLogger.info('AVSessionManager: AVSession created');
 
       // 2. 设置初始元数据
-      await this.session.setAVMetadata({
+      await session.setAVMetadata({
+        assetId: 'akane_japanese',
         title: '',
         artist: '',
         album: '',
@@ -71,9 +73,8 @@ export class AVSessionManager {
       });
 
       // 3. 设置初始播放状态
-      await this.session.setPlaybackState({
-        state: avSession.PlaybackState.PLAYBACK_STATE_STOPPED,
-        position: 0,
+      await session.setAVPlaybackState({
+        state: avSession.PlaybackState.PLAYBACK_STATE_STOP,
         speed: 1.0
       });
 
@@ -81,13 +82,13 @@ export class AVSessionManager {
       this.registerControlCallbacks();
 
       // 5. 激活会话
-      await this.session.activate();
+      await session.activate();
       this.isInitialized = true;
       appLogger.info('AVSessionManager: AVSession activated');
     } catch (error) {
       appLogger.error('AVSessionManager: init failed', error);
       this.session = null;
-      throw error;
+      throw error as Error;
     }
   }
 
@@ -110,21 +111,24 @@ export class AVSessionManager {
       let playbackState: avSession.PlaybackState;
       switch (state) {
         case 'playing':
-          playbackState = avSession.PlaybackState.PLAYBACK_STATE_PLAYING;
+          playbackState = avSession.PlaybackState.PLAYBACK_STATE_PLAY;
           break;
         case 'paused':
-          playbackState = avSession.PlaybackState.PLAYBACK_STATE_PAUSED;
+          playbackState = avSession.PlaybackState.PLAYBACK_STATE_PAUSE;
           break;
         case 'stopped':
         default:
-          playbackState = avSession.PlaybackState.PLAYBACK_STATE_STOPPED;
+          playbackState = avSession.PlaybackState.PLAYBACK_STATE_STOP;
           break;
       }
 
-      await this.session.setPlaybackState({
+      await this.session.setAVPlaybackState({
         state: playbackState,
-        position: positionMs,
-        speed: speed
+        speed: speed,
+        position: {
+          elapsedTime: positionMs,
+          updateTime: new Date().getTime()
+        }
       });
 
       appLogger.debug(
@@ -154,6 +158,7 @@ export class AVSessionManager {
 
     try {
       await this.session.setAVMetadata({
+        assetId: 'akane_japanese',
         title: title,
         artist: artist,
         album: album,
@@ -201,8 +206,8 @@ export class AVSessionManager {
    * 注册系统播控中心的控制命令回调
    * 注意：HarmonyOS AVSession 的控制命令事件名
    * - play / pause / stop
-   * - skipToNext / skipToPrevious
-   * - seekTo（回调参数为毫秒时间戳）
+   * - playNext / playPrevious
+   * - seek（回调参数为毫秒时间）
    */
   private registerControlCallbacks(): void {
     if (!this.session) {
@@ -228,21 +233,21 @@ export class AVSessionManager {
     });
 
     // 下一曲
-    this.session.on('skipToNext', () => {
-      appLogger.info('AVSessionManager: received skipToNext command from system');
+    this.session.on('playNext', () => {
+      appLogger.info('AVSessionManager: received playNext command from system');
       this.onSkipToNext?.();
     });
 
     // 上一曲
-    this.session.on('skipToPrevious', () => {
-      appLogger.info('AVSessionManager: received skipToPrevious command from system');
+    this.session.on('playPrevious', () => {
+      appLogger.info('AVSessionManager: received playPrevious command from system');
       this.onSkipToPrevious?.();
     });
 
     // 跳转进度
-    // NOTE: seekTo 回调参数为毫秒时间戳（HarmonyOS API 26）
-    this.session.on('seekTo', (timeMs: number) => {
-      appLogger.info(`AVSessionManager: received seekTo command from system, time=${timeMs}ms`);
+    // NOTE: seek 回调参数为毫秒时间（HarmonyOS AVSessionKit）
+    this.session.on('seek', (timeMs: number) => {
+      appLogger.info(`AVSessionManager: received seek command from system, time=${timeMs}ms`);
       this.onSeek?.(timeMs);
     });
   }

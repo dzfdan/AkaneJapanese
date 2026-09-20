@@ -12,6 +12,7 @@ import { QuizItem } from '../model/QuizItem';
 import { SceneRepository } from '../service/SceneRepository';
 import { SettingsStore } from '../service/SettingsStore';
 import { ProgressStore } from '../service/ProgressStore';
+import { PlayerController, PlayerUiState } from '../service/PlayerController';
 import { SentenceItem } from '../components/SentenceItem';
 import { QuizCard } from '../components/QuizCard';
 import { PlayerBar } from '../components/PlayerBar';
@@ -36,7 +37,8 @@ export struct StudyPage {
 
   // 播放相关状态
   @State isPlaying: boolean = false;
-  @State currentSentenceIndex: number = 0;
+  @State playerDialogueIndex: number = -1;
+  @State playerSentenceIndex: number = -1;
   @State currentTimeMs: number = 0;
   @State durationMs: number = 0;
 
@@ -52,8 +54,43 @@ export struct StudyPage {
   // 屏幕宽度断点
   @State screenWidth: number = 600;
 
+  private playerStateCallback: ((state: PlayerUiState) => void) | null = null;
+  private playerTimeCallback: ((currentTimeMs: number, durationMs: number) => void) | null = null;
+
   aboutToAppear(): void {
     this.loadData();
+
+    this.playerStateCallback = (state: PlayerUiState) => {
+      if (state.sceneId === this.sceneId) {
+        this.isPlaying = state.isPlaying;
+        this.playerDialogueIndex = state.dialogueIndex;
+        this.playerSentenceIndex = state.sentenceIndex;
+      } else {
+        this.isPlaying = false;
+        this.playerDialogueIndex = -1;
+        this.playerSentenceIndex = -1;
+      }
+      this.currentTimeMs = state.currentTimeMs;
+      this.durationMs = state.durationMs;
+    };
+    PlayerController.getInstance().addOnStateChange(this.playerStateCallback);
+
+    this.playerTimeCallback = (currentTimeMs: number, durationMs: number) => {
+      this.currentTimeMs = currentTimeMs;
+      this.durationMs = durationMs;
+    };
+    PlayerController.getInstance().addOnTimeUpdate(this.playerTimeCallback);
+  }
+
+  aboutToDisappear(): void {
+    if (this.playerStateCallback) {
+      PlayerController.getInstance().removeOnStateChange(this.playerStateCallback);
+      this.playerStateCallback = null;
+    }
+    if (this.playerTimeCallback) {
+      PlayerController.getInstance().removeOnTimeUpdate(this.playerTimeCallback);
+      this.playerTimeCallback = null;
+    }
   }
 
   private async loadData(): Promise<void> {
@@ -89,13 +126,14 @@ export struct StudyPage {
       const progress = progressStore.getProgress();
       this.favorites = new Set(progress.favoriteSentences);
 
-      // 初始化播放时长
-      if (this.scene && this.currentDialogue) {
-        const sentences = this.currentDialogue.sentences;
-        if (sentences.length > 0) {
-          const lastSentence = sentences[sentences.length - 1];
-          this.durationMs = lastSentence.endTime * 1000;
-        }
+      // 从 PlayerController 同步播放状态（返回本页时音频可能已在播放）
+      const uiState = PlayerController.getInstance().getUiState();
+      if (uiState.sceneId === this.sceneId) {
+        this.isPlaying = uiState.isPlaying;
+        this.playerDialogueIndex = uiState.dialogueIndex;
+        this.playerSentenceIndex = uiState.sentenceIndex;
+        this.currentTimeMs = uiState.currentTimeMs;
+        this.durationMs = uiState.durationMs;
       }
     } catch (error) {
       this.loadError = '数据加载失败，请稍后重试';
@@ -121,10 +159,20 @@ export struct StudyPage {
   }
 
   private handlePlaySentence(dialogueIdx: number, sentenceIdx: number): void {
-    this.currentSentenceIndex = sentenceIdx;
-    this.isPlaying = !this.isPlaying;
-    // 实际播放逻辑由 PlayerController 处理，此处仅更新 UI 状态
-    appLogger.debug(`StudyPage: play sentence ${sentenceIdx} in dialogue ${dialogueIdx}`);
+    const scene = this.scene;
+    if (!scene) {
+      return;
+    }
+    const controller = PlayerController.getInstance();
+    if (this.playerDialogueIndex === dialogueIdx && this.playerSentenceIndex === sentenceIdx) {
+      controller.togglePlay().catch((err: Object) => {
+        appLogger.error('StudyPage: toggle play failed', err);
+      });
+    } else {
+      controller.playSentence(scene, dialogueIdx, sentenceIdx).catch((err: Object) => {
+        appLogger.error('StudyPage: play sentence failed', err);
+      });
+    }
   }
 
   private async handleToggleFavorite(dialogueIdx: number, sentenceIdx: number): Promise<void> {
@@ -142,20 +190,33 @@ export struct StudyPage {
   }
 
   private handlePlayPause(): void {
-    this.isPlaying = !this.isPlaying;
+    const scene = this.scene;
+    if (!scene) {
+      return;
+    }
+    const controller = PlayerController.getInstance();
+    const uiState = controller.getUiState();
+    if (uiState.sceneId === this.sceneId) {
+      controller.togglePlay().catch((err: Object) => {
+        appLogger.error('StudyPage: toggle play failed', err);
+      });
+    } else {
+      controller.playSentence(scene, this.currentDialogueIndex, 0).catch((err: Object) => {
+        appLogger.error('StudyPage: play sentence failed', err);
+      });
+    }
   }
 
   private handlePrevSentence(): void {
-    if (this.currentSentenceIndex > 0) {
-      this.currentSentenceIndex -= 1;
-    }
+    PlayerController.getInstance().prevSentence().catch((err: Object) => {
+      appLogger.error('StudyPage: prev sentence failed', err);
+    });
   }
 
   private handleNextSentence(): void {
-    const dialogue = this.currentDialogue;
-    if (dialogue && this.currentSentenceIndex < dialogue.sentences.length - 1) {
-      this.currentSentenceIndex += 1;
-    }
+    PlayerController.getInstance().nextSentence().catch((err: Object) => {
+      appLogger.error('StudyPage: next sentence failed', err);
+    });
   }
 
   // ---- 跟读练习相关 ----
@@ -181,11 +242,28 @@ export struct StudyPage {
   }
 
   private handlePracticePlay(): void {
-    appLogger.debug('StudyPage: play original audio for practice');
+    this.playPracticeSentence(false);
   }
 
   private handlePracticeSlow(): void {
-    appLogger.debug('StudyPage: play slow audio for practice');
+    this.playPracticeSentence(true);
+  }
+
+  private playPracticeSentence(slow: boolean): void {
+    const scene = this.scene;
+    if (!scene) {
+      return;
+    }
+    const controller = PlayerController.getInstance();
+    controller.playSentence(scene, this.currentDialogueIndex, this.practiceSentenceIndex).then(() => {
+      const uiState = controller.getUiState();
+      if (uiState.sceneId === scene.id && slow !== uiState.isSlowMode) {
+        return controller.toggleSlowMode();
+      }
+      return Promise.resolve();
+    }).catch((err: Object) => {
+      appLogger.error('StudyPage: practice play failed', err);
+    });
   }
 
   // ---- 测验相关 ----
@@ -234,8 +312,10 @@ export struct StudyPage {
         this.TabBarBuilder();
 
         // 主体内容
-        this.ContentBuilder()
-          .layoutWeight(1);
+        Column() {
+          this.ContentBuilder();
+        }
+        .layoutWeight(1);
 
         // 底部 PlayerBar
         PlayerBar({
@@ -348,13 +428,17 @@ export struct StudyPage {
       // 宽屏：左右分栏
       Row() {
         // 左侧：对话列表
-        this.DialogueListBuilder()
-          .width('35%')
-          .margin({ right: 12 });
+        Column() {
+          this.DialogueListBuilder();
+        }
+        .width('35%')
+        .margin({ right: 12 });
 
         // 右侧：句子列表
-        this.SentenceListBuilder()
-          .layoutWeight(1);
+        Column() {
+          this.SentenceListBuilder();
+        }
+        .layoutWeight(1);
       }
       .width('100%')
       .height('100%');
@@ -362,12 +446,16 @@ export struct StudyPage {
       // 窄屏：上下结构
       Column() {
         // 对话选择器（横滑）
-        this.DialogueScrollBuilder()
-          .margin({ bottom: 12 });
+        Column() {
+          this.DialogueScrollBuilder();
+        }
+        .margin({ bottom: 12 });
 
         // 句子列表
-        this.SentenceListBuilder()
-          .layoutWeight(1);
+        Column() {
+          this.SentenceListBuilder();
+        }
+        .layoutWeight(1);
       }
       .width('100%')
       .height('100%');
@@ -425,7 +513,6 @@ export struct StudyPage {
     .margin({ bottom: 6 })
     .onClick(() => {
       this.currentDialogueIndex = index;
-      this.currentSentenceIndex = 0;
       this.practiceSentenceIndex = 0;
       this.handleQuizReset();
     });
@@ -454,7 +541,6 @@ export struct StudyPage {
           .margin({ right: index < this.scene!.dialogues.length - 1 ? 8 : 0 })
           .onClick(() => {
             this.currentDialogueIndex = index;
-            this.currentSentenceIndex = 0;
             this.practiceSentenceIndex = 0;
             this.handleQuizReset();
           });
@@ -469,8 +555,7 @@ export struct StudyPage {
   // ---- 句子列表 ----
   @Builder
   SentenceListBuilder() {
-    const dialogue = this.currentDialogue;
-    if (!dialogue || dialogue.sentences.length === 0) {
+    if (!this.currentDialogue || this.currentDialogue.sentences.length === 0) {
       Column() {
         Text('暂无对话内容')
           .fontSize(14)
@@ -481,19 +566,20 @@ export struct StudyPage {
       .justifyContent(FlexAlign.Center);
     } else {
       List() {
-        ForEach(dialogue.sentences, (sentence: Sentence, sIndex: number) => {
+        ForEach(this.currentDialogue!.sentences, (sentence: Sentence, sIndex: number) => {
           ListItem() {
             SentenceItem({
               sentence: sentence,
               showRomaji: this.showRomaji,
               showTranslation: this.showTranslation,
               isFavorite: this.favorites.has(this.getSentenceKey(this.currentDialogueIndex, sIndex)),
-              isPlaying: this.isPlaying && this.currentSentenceIndex === sIndex,
+              isPlaying: this.isPlaying && this.playerDialogueIndex === this.currentDialogueIndex
+                && this.playerSentenceIndex === sIndex,
               onPlay: () => this.handlePlaySentence(this.currentDialogueIndex, sIndex),
               onToggleFavorite: () => this.handleToggleFavorite(this.currentDialogueIndex, sIndex)
             });
           }
-          .margin({ bottom: sIndex < dialogue.sentences.length - 1 ? 8 : 0 });
+          .margin({ bottom: sIndex < this.currentDialogue!.sentences.length - 1 ? 8 : 0 });
         }, (sentence: Sentence) => sentence.id);
       }
       .width('100%')
@@ -504,8 +590,7 @@ export struct StudyPage {
   // ---- 跟读练习 Tab ----
   @Builder
   buildPracticeTab() {
-    const sentence = this.practiceSentence;
-    if (!sentence) {
+    if (!this.practiceSentence) {
       Column() {
         Text('暂无练习内容')
           .fontSize(14)
@@ -523,14 +608,14 @@ export struct StudyPage {
           .margin({ bottom: 24 });
 
         // 说话人
-        Text(sentence.speakerRoleZh)
+        Text(this.practiceSentence!.speakerRoleZh)
           .fontSize(12)
           .fontColor(ThemeColors.primary)
           .fontWeight(600)
           .margin({ bottom: 12 });
 
         // 日文原文（放大显示）
-        Text(sentence.japanese)
+        Text(this.practiceSentence!.japanese)
           .fontSize(24)
           .fontColor(ThemeColors.textPrimary)
           .fontWeight(600)
@@ -540,7 +625,7 @@ export struct StudyPage {
 
         // 罗马音
         if (this.showRomaji) {
-          Text(sentence.romaji)
+          Text(this.practiceSentence!.romaji)
             .fontSize(14)
             .fontColor(ThemeColors.textSecondary)
             .textAlign(TextAlign.Center)
@@ -550,7 +635,7 @@ export struct StudyPage {
 
         // 中文翻译
         if (this.showTranslation) {
-          Text(sentence.translation)
+          Text(this.practiceSentence!.translation)
             .fontSize(13)
             .fontColor(ThemeColors.textTertiary)
             .textAlign(TextAlign.Center)
@@ -601,8 +686,7 @@ export struct StudyPage {
   // ---- 测验 Tab ----
   @Builder
   buildQuizTab() {
-    const quiz = this.currentQuiz;
-    if (!quiz) {
+    if (!this.currentQuiz) {
       Column() {
         Text('暂无测验题目')
           .fontSize(14)
@@ -615,7 +699,7 @@ export struct StudyPage {
       Column() {
         // 测验卡片
         QuizCard({
-          quiz: quiz,
+          quiz: this.currentQuiz!,
           selectedIndex: this.quizSelectedIndex,
           showResult: this.quizShowResult,
           onSelect: (index: number) => this.handleQuizSelect(index)
@@ -719,9 +803,13 @@ export struct StudyPage {
   // ---- 辅助方法 ----
   private getCurrentSentenceJapanese(): string {
     const dialogue = this.currentDialogue;
-    if (!dialogue || this.currentSentenceIndex < 0 || this.currentSentenceIndex >= dialogue.sentences.length) {
+    if (!dialogue) {
       return '';
     }
-    return dialogue.sentences[this.currentSentenceIndex].japanese;
+    if (this.playerDialogueIndex === this.currentDialogueIndex
+      && this.playerSentenceIndex >= 0 && this.playerSentenceIndex < dialogue.sentences.length) {
+      return dialogue.sentences[this.playerSentenceIndex].japanese;
+    }
+    return '';
   }
 }

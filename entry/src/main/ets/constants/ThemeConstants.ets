@@ -55,4 +55,4 @@ export const ThemeColors: ThemeColorsType = {
   success: '#7CB342',
   warning: '#FFB74D',
   error: '#EF5350'
-} as const;
+};

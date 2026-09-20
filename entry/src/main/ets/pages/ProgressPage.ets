@@ -145,8 +145,10 @@ export struct ProgressPage {
         this.LoadingBuilder();
       } else {
         // 统计卡片（2列网格）
-        this.StatsGridBuilder()
-          .margin({ bottom: 24 });
+        Column() {
+          this.StatsGridBuilder();
+        }
+        .margin({ bottom: 24 });
 
         // 最近学习场景列表
         Text('最近学习')
@@ -188,21 +190,25 @@ export struct ProgressPage {
     Column() {
       // 第一行
       Row() {
-        this.StatCardBuilder(
-          '连续打卡',
-          `${this.streakDays} 天`,
-          '🔥',
-          ThemeColors.warning
-        )
+        Column() {
+          this.StatCardBuilder(
+            '连续打卡',
+            `${this.streakDays} 天`,
+            '🔥',
+            ThemeColors.warning
+          );
+        }
         .layoutWeight(1)
         .margin({ right: 10 });
 
-        this.StatCardBuilder(
-          '累计学习',
-          formatTotalMinutes(this.totalMinutes),
-          '📚',
-          ThemeColors.primary
-        )
+        Column() {
+          this.StatCardBuilder(
+            '累计学习',
+            formatTotalMinutes(this.totalMinutes),
+            '📚',
+            ThemeColors.primary
+          );
+        }
         .layoutWeight(1);
       }
       .width('100%')
@@ -210,21 +216,25 @@ export struct ProgressPage {
 
       // 第二行
       Row() {
-        this.StatCardBuilder(
-          '已完成场景',
-          `${this.completedCount} / ${this.totalScenes}`,
-          '✓',
-          ThemeColors.success
-        )
+        Column() {
+          this.StatCardBuilder(
+            '已完成场景',
+            `${this.completedCount} / ${this.totalScenes}`,
+            '✓',
+            ThemeColors.success
+          );
+        }
         .layoutWeight(1)
         .margin({ right: 10 });
 
-        this.StatCardBuilder(
-          '今日学习',
-          `${this.todayMinutes} 分钟`,
-          '⏱',
-          ThemeColors.primaryLight
-        )
+        Column() {
+          this.StatCardBuilder(
+            '今日学习',
+            `${this.todayMinutes} 分钟`,
+            '⏱',
+            ThemeColors.primaryLight
+          );
+        }
         .layoutWeight(1);
       }
       .width('100%');

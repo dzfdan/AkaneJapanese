@@ -8,8 +8,15 @@ import { Sentence } from '../model/Sentence';
 import { Scene } from '../model/Scene';
 import { ProgressStore } from '../service/ProgressStore';
 import { SceneRepository } from '../service/SceneRepository';
+import { PlayerController } from '../service/PlayerController';
 import { SentenceItem } from '../components/SentenceItem';
 import appLogger from '../utils/Logger';
+
+interface FavoriteKeyInfo {
+  sceneId: string;
+  dialogueIndex: number;
+  sentenceIndex: number;
+}
 
 interface FavoriteSentenceItem {
   key: string;
@@ -56,7 +63,9 @@ export struct FavoritePage {
           continue;
         }
 
-        const { sceneId, dialogueIndex, sentenceIndex } = parsed;
+        const sceneId = parsed.sceneId;
+        const dialogueIndex = parsed.dialogueIndex;
+        const sentenceIndex = parsed.sentenceIndex;
         const scene = allScenes.find((s: Scene): boolean => s.id === sceneId);
 
         if (!scene || !scene.dialogues[dialogueIndex]) {
@@ -90,7 +99,7 @@ export struct FavoritePage {
    * 解析收藏 key
    * 格式：sceneId:dialogueIndex:sentenceIndex
    */
-  private parseFavoriteKey(key: string): { sceneId: string; dialogueIndex: number; sentenceIndex: number } | null {
+  private parseFavoriteKey(key: string): FavoriteKeyInfo | null {
     const parts = key.split(':');
     if (parts.length !== 3) {
       return null;
@@ -118,8 +127,14 @@ export struct FavoritePage {
   }
 
   private handlePlaySentence(item: FavoriteSentenceItem): void {
-    appLogger.debug(`FavoritePage: play sentence ${item.key}`);
-    // 实际播放逻辑可跳转到对应场景
+    const scene = SceneRepository.getInstance().getSceneById(item.sceneId);
+    if (!scene) {
+      appLogger.error(`FavoritePage: scene ${item.sceneId} not found`);
+      return;
+    }
+    PlayerController.getInstance().playSentence(scene, item.dialogueIndex, item.sentenceIndex).catch((err: Object) => {
+      appLogger.error('FavoritePage: play sentence failed', err);
+    });
   }
 
   build() {

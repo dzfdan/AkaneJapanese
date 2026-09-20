@@ -39,7 +39,7 @@ export struct SceneListPage {
       SceneRepository.getInstance().loadAll().then((loadedScenes: Scene[]) => {
         this.scenes = loadedScenes;
         appLogger.info(`SceneListPage: loaded ${loadedScenes.length} scenes`);
-      }).catch(err => {
+      }).catch((err: Object) => {
         appLogger.error('SceneListPage: load scenes failed', err);
       });
     }
@@ -51,14 +51,14 @@ export struct SceneListPage {
     this.progressCallback = (progress: UserProgress) => {
       this.updateProgressMap(progress);
     };
-    ProgressStore.getInstance().onProgressChange = this.progressCallback;
+    ProgressStore.getInstance().addOnProgressChange(this.progressCallback);
   }
 
   aboutToDisappear() {
     appLogger.info('SceneListPage aboutToDisappear');
     // 取消订阅
-    if (ProgressStore.getInstance().onProgressChange === this.progressCallback) {
-      ProgressStore.getInstance().onProgressChange = undefined;
+    if (this.progressCallback) {
+      ProgressStore.getInstance().removeOnProgressChange(this.progressCallback);
     }
     this.progressCallback = null;
   }
@@ -77,7 +77,11 @@ export struct SceneListPage {
     this.completedMap = completed;
 
     // 更新进度映射
-    this.progressMap = { ...progress.sceneProgress };
+    const progressMap: Record<string, number> = {};
+    for (const sceneId of Object.keys(progress.sceneProgress)) {
+      progressMap[sceneId] = progress.sceneProgress[sceneId];
+    }
+    this.progressMap = progressMap;
   }
 
   private getFilteredScenes(): Scene[] {
@@ -166,7 +170,7 @@ export struct SceneListPage {
                 scene: scene,
                 progressPercent: this.progressMap[scene.id] || 0,
                 isCompleted: !!this.completedMap[scene.id],
-                onClick: () => {
+                onCardClick: () => {
                   this.onSceneClick(scene.id);
                 }
               })

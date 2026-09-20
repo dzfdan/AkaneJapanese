@@ -1,4 +1,5 @@
 import { AppConstants } from '../constants/AppConstants';
+import { CallbackList } from '../utils/CallbackList';
 import appLogger from '../utils/Logger';
 
 /**
@@ -17,8 +18,8 @@ export class ModeManager {
   private static instance: ModeManager | null = null;
   private currentMode: AppMode = AppConstants.DEFAULT_MODE;
 
-  /** 模式切换回调（UI 层订阅） */
-  onModeChange?: (mode: AppMode) => void;
+  private modeChangeListeners: CallbackList<(mode: AppMode) => void> =
+    new CallbackList<(mode: AppMode) => void>();
 
   private constructor() {
   }
@@ -32,6 +33,22 @@ export class ModeManager {
       ModeManager.instance = new ModeManager();
     }
     return ModeManager.instance;
+  }
+
+  /**
+   * 订阅模式变化（支持多个订阅者，需与 removeOnModeChange 成对使用）
+   * @param callback 模式变化回调
+   */
+  addOnModeChange(callback: (mode: AppMode) => void): void {
+    this.modeChangeListeners.add(callback);
+  }
+
+  /**
+   * 取消订阅模式变化
+   * @param callback 已注册的回调
+   */
+  removeOnModeChange(callback: (mode: AppMode) => void): void {
+    this.modeChangeListeners.remove(callback);
   }
 
   /**
@@ -53,9 +70,9 @@ export class ModeManager {
     }
     this.currentMode = mode;
     appLogger.info(`ModeManager: mode changed to ${mode}`);
-    if (this.onModeChange) {
-      this.onModeChange(mode);
-    }
+    this.modeChangeListeners.notify((callback: (mode: AppMode) => void) => {
+      callback(mode);
+    });
   }
 
   /**

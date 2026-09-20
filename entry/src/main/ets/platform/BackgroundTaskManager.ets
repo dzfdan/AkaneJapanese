@@ -1,5 +1,5 @@
 import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
-import { wantAgent, OperationType } from '@kit.AbilityKit';
+import { wantAgent, common } from '@kit.AbilityKit';
 import appLogger from '../utils/Logger';
 
 /**
@@ -57,16 +57,17 @@ export class BackgroundTaskManager {
 
     try {
       // 1. 创建 WantAgent（点击通知时跳转回应用）
+      const abilityContext = this.context as common.UIAbilityContext;
       const wantAgentInfo: wantAgent.WantAgentInfo = {
         wants: [
           {
-            bundleName: this.context.abilityInfo.bundleName,
-            abilityName: this.context.abilityInfo.name
+            bundleName: abilityContext.abilityInfo.bundleName,
+            abilityName: abilityContext.abilityInfo.name
           }
         ],
-        operationType: OperationType.START_ABILITY,
+        actionType: wantAgent.OperationType.START_ABILITY,
         requestCode: 0,
-        wantAgentFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG]
+        actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG]
       };
 
       const agent = await wantAgent.getWantAgent(wantAgentInfo);
@@ -84,7 +85,7 @@ export class BackgroundTaskManager {
       appLogger.info('BackgroundTaskManager: audioPlayback background task started');
     } catch (error) {
       appLogger.error('BackgroundTaskManager: startAudioPlayback failed', error);
-      throw error;
+      throw error as Error;
     }
   }
 

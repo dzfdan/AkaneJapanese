@@ -6,7 +6,6 @@
       "name": "default",
       "runtimeOS": "HarmonyOS"
     }
-  ],
-  "compileSdkVersion": "26.0.0",
-  "compatibleSdkVersion": "26.0.0"
+  ]
 }
+
