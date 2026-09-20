@@ -1,0 +1,894 @@
+import { Scene } from '../model/Scene';
+import { Dialogue } from '../model/Dialogue';
+import { Sentence } from '../model/Sentence';
+import { AVPlayerWrapper } from '../platform/AVPlayerWrapper';
+import { AVSessionManager } from '../platform/AVSessionManager';
+import { BackgroundTaskManager } from '../platform/BackgroundTaskManager';
+import { AudioFocusHandler, AudioFocusEvent } from './AudioFocusHandler';
+import { SceneRepository } from './SceneRepository';
+import { AppConstants } from '../constants/AppConstants';
+import appLogger from '../utils/Logger';
+
+/**
+ * 播放器 UI 状态（供 UI 层订阅展示）
+ */
+export interface PlayerUiState {
+  isPlaying: boolean;
+  sceneId: string | null;
+  sceneTitle: string;
+  dialogueIndex: number;
+  dialogueTitle: string;
+  sentenceIndex: number;
+  currentSentence: Sentence | null;
+  currentTimeMs: number;
+  durationMs: number;
+  speed: number;
+  isSlowMode: boolean;
+}
+
+/**
+ * 播放控制器
+ * 管理 AVPlayerWrapper 和播放状态，提供场景/对话/句子级别的播放控制
+ * 单例模式
+ */
+export class PlayerController {
+  private static instance: PlayerController | null = null;
+  private player: AVPlayerWrapper;
+  private currentScene: Scene | null = null;
+  private currentDialogueIndex: number = 0;
+  private currentSentenceIndex: number = 0;
+  private isSlowMode: boolean = false;
+  private playbackSpeed: number = AppConstants.DEFAULT_SPEED;
+  private currentTimeMs: number = 0;
+  private durationMs: number = 0;
+  private isPlaying: boolean = false;
+
+  // 状态回调（UI 层订阅）
+  onStateChange?: (state: PlayerUiState) => void;
+  onTimeUpdate?: (currentTimeMs: number, durationMs: number) => void;
+  onSentenceChange?: (sentence: Sentence) => void;
+  onError?: (message: string) => void;
+
+  private constructor() {
+    this.player = new AVPlayerWrapper();
+    this.bindPlayerCallbacks();
+  }
+
+  /**
+   * 获取单例实例
+   * @returns PlayerController 实例
+   */
+  static getInstance(): PlayerController {
+    if (!PlayerController.instance) {
+      PlayerController.instance = new PlayerController();
+    }
+    return PlayerController.instance;
+  }
+
+  /**
+   * 初始化播放器控制器
+   * 初始化 AVSession、BackgroundTaskManager 和 AudioFocusHandler
+   * @param context UIAbility 的 Context
+   */
+  static async init(context: Context): Promise<void> {
+    try {
+      await AVSessionManager.getInstance().init(context);
+      BackgroundTaskManager.getInstance().init(context);
+
+      const controller = PlayerController.getInstance();
+      controller.bindAVSessionCallbacks();
+      controller.bindAudioFocusCallbacks();
+      appLogger.info('PlayerController: init completed');
+    } catch (error) {
+      appLogger.error('PlayerController: init failed', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 播放指定场景的指定对话
+   * @param scene 场景对象
+   * @param dialogueIndex 对话索引，默认 0
+   */
+  async playScene(scene: Scene, dialogueIndex: number = 0): Promise<void> {
+    try {
+      appLogger.info(`PlayerController: playScene ${scene.id}, dialogue=${dialogueIndex}, slowMode=${this.isSlowMode}`);
+
+      this.currentScene = scene;
+      this.currentDialogueIndex = this.clampDialogueIndex(dialogueIndex);
+      this.currentSentenceIndex = 0;
+
+      // 获取音频 fd
+      const audioFile = this.isSlowMode ? scene.audioSlow : scene.audioNormal;
+      const fdInfo = await SceneRepository.getInstance().getAudioFd(audioFile);
+
+      // 设置播放器源
+      await this.player.setFdSource(fdInfo.fd, fdInfo.offset, fdInfo.length);
+      await this.player.prepare();
+
+      // 设置速度
+      await this.player.setSpeed(this.playbackSpeed);
+
+      // 获取对话起始时间并 seek
+      const startTimeMs = this.getDialogueStartTimeMs(this.currentDialogueIndex);
+      await this.player.seek(startTimeMs);
+
+      // 开始播放
+      await this.player.play();
+      this.isPlaying = true;
+      await this.startPlaybackSession();
+
+      // 通知 UI 状态变化
+      this.notifyStateChange();
+    } catch (error) {
+      appLogger.error('PlayerController: playScene failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 开始播放
+   */
+  async play(): Promise<void> {
+    try {
+      await this.player.play();
+      this.isPlaying = true;
+      await this.startPlaybackSession();
+      this.notifyStateChange();
+    } catch (error) {
+      appLogger.error('PlayerController: play failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 暂停播放
+   */
+  async pause(): Promise<void> {
+    try {
+      await this.player.pause();
+      this.isPlaying = false;
+      await this.stopPlaybackSession();
+      this.notifyStateChange();
+    } catch (error) {
+      appLogger.error('PlayerController: pause failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 切换播放/暂停
+   */
+  async togglePlay(): Promise<void> {
+    if (this.isPlaying) {
+      await this.pause();
+    } else {
+      await this.play();
+    }
+  }
+
+  /**
+   * 跳到下一句
+   */
+  async nextSentence(): Promise<void> {
+    if (!this.currentScene) {
+      return;
+    }
+
+    const dialogue = this.getCurrentDialogue();
+    if (!dialogue) {
+      return;
+    }
+
+    if (this.currentSentenceIndex < dialogue.sentences.length - 1) {
+      // 同一对话内下一句
+      this.currentSentenceIndex++;
+    } else if (this.currentDialogueIndex < this.currentScene.dialogues.length - 1) {
+      // 跳到下一对话的第一句
+      this.currentDialogueIndex++;
+      this.currentSentenceIndex = 0;
+    } else {
+      // 已经是最后一句，不做处理
+      appLogger.debug('PlayerController: nextSentence reached end');
+      return;
+    }
+
+    const sentence = this.getCurrentSentence();
+    if (sentence) {
+      const startTimeMs = this.getSentenceStartTimeMs(sentence);
+      await this.player.seek(startTimeMs);
+      this.notifySentenceChange(sentence);
+      this.notifyStateChange();
+    }
+  }
+
+  /**
+   * 跳到上一句
+   */
+  async prevSentence(): Promise<void> {
+    if (!this.currentScene) {
+      return;
+    }
+
+    if (this.currentSentenceIndex > 0) {
+      // 同一对话内上一句
+      this.currentSentenceIndex--;
+    } else if (this.currentDialogueIndex > 0) {
+      // 跳到上一对话的最后一句
+      this.currentDialogueIndex--;
+      const prevDialogue = this.getCurrentDialogue();
+      if (prevDialogue) {
+        this.currentSentenceIndex = prevDialogue.sentences.length - 1;
+      }
+    } else {
+      // 已经是第一句，seek 到开头
+      const sentence = this.getCurrentSentence();
+      if (sentence) {
+        const startTimeMs = this.getSentenceStartTimeMs(sentence);
+        await this.player.seek(startTimeMs);
+      }
+      return;
+    }
+
+    const sentence = this.getCurrentSentence();
+    if (sentence) {
+      const startTimeMs = this.getSentenceStartTimeMs(sentence);
+      await this.player.seek(startTimeMs);
+      this.notifySentenceChange(sentence);
+      this.notifyStateChange();
+    }
+  }
+
+  /**
+   * 跳到下一组对话
+   */
+  async nextDialogue(): Promise<void> {
+    if (!this.currentScene) {
+      return;
+    }
+
+    if (this.currentDialogueIndex < this.currentScene.dialogues.length - 1) {
+      this.currentDialogueIndex++;
+      this.currentSentenceIndex = 0;
+      const sentence = this.getCurrentSentence();
+      if (sentence) {
+        const startTimeMs = this.getSentenceStartTimeMs(sentence);
+        await this.player.seek(startTimeMs);
+        this.notifySentenceChange(sentence);
+        this.notifyStateChange();
+      }
+    }
+  }
+
+  /**
+   * 跳到上一组对话
+   */
+  async prevDialogue(): Promise<void> {
+    if (!this.currentScene) {
+      return;
+    }
+
+    if (this.currentDialogueIndex > 0) {
+      this.currentDialogueIndex--;
+      this.currentSentenceIndex = 0;
+      const sentence = this.getCurrentSentence();
+      if (sentence) {
+        const startTimeMs = this.getSentenceStartTimeMs(sentence);
+        await this.player.seek(startTimeMs);
+        this.notifySentenceChange(sentence);
+        this.notifyStateChange();
+      }
+    }
+  }
+
+  /**
+   * 跳转到指定时间
+   * @param timeMs 目标时间（毫秒）
+   */
+  async seekTo(timeMs: number): Promise<void> {
+    try {
+      await this.player.seek(timeMs);
+      // seek 后更新当前句子
+      this.updateCurrentSentence(timeMs);
+      // 更新 AVSession 播放状态
+      const avState: 'playing' | 'paused' | 'stopped' = this.isPlaying ? 'playing' : 'paused';
+      AVSessionManager.getInstance().updatePlaybackState(avState, timeMs, this.playbackSpeed).catch(err => {
+        appLogger.error('PlayerController: update AVSession state after seek failed', err);
+      });
+    } catch (error) {
+      appLogger.error('PlayerController: seekTo failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 设置播放速度
+   * @param speed 播放速度（0.75 / 1.0 / 1.25）
+   */
+  async setSpeed(speed: number): Promise<void> {
+    try {
+      this.playbackSpeed = speed;
+      await this.player.setSpeed(speed);
+      // 更新 AVSession 播放状态
+      const avState: 'playing' | 'paused' | 'stopped' = this.isPlaying ? 'playing' : 'paused';
+      AVSessionManager.getInstance().updatePlaybackState(avState, this.currentTimeMs, speed).catch(err => {
+        appLogger.error('PlayerController: update AVSession state after setSpeed failed', err);
+      });
+      this.notifyStateChange();
+    } catch (error) {
+      appLogger.error('PlayerController: setSpeed failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 切换慢速模式
+   * 切换时保存当前进度，切换音频文件后 seek 到对应位置
+   */
+  async toggleSlowMode(): Promise<void> {
+    if (!this.currentScene) {
+      appLogger.warn('PlayerController: toggleSlowMode called without scene');
+      return;
+    }
+
+    try {
+      const wasPlaying = this.isPlaying;
+
+      // 先暂停
+      if (wasPlaying) {
+        await this.player.pause();
+        this.isPlaying = false;
+      }
+
+      // 计算当前时间在句子中的相对位置
+      const currentSentence = this.getCurrentSentence();
+      const currentTimeSec = this.currentTimeMs / 1000;
+      let targetTimeMs: number = 0;
+
+      if (currentSentence) {
+        let sentenceStart: number;
+        let sentenceEnd: number;
+        let targetSentenceStart: number;
+        let targetSentenceEnd: number;
+
+        if (this.isSlowMode) {
+          // 当前是慢速，切换到正常速
+          sentenceStart = currentSentence.slowStartTime;
+          sentenceEnd = currentSentence.slowEndTime;
+          targetSentenceStart = currentSentence.startTime;
+          targetSentenceEnd = currentSentence.endTime;
+        } else {
+          // 当前是正常速，切换到慢速
+          sentenceStart = currentSentence.startTime;
+          sentenceEnd = currentSentence.endTime;
+          targetSentenceStart = currentSentence.slowStartTime;
+          targetSentenceEnd = currentSentence.slowEndTime;
+        }
+
+        const sentenceDuration = sentenceEnd - sentenceStart;
+        const targetSentenceDuration = targetSentenceEnd - targetSentenceStart;
+
+        if (sentenceDuration > 0) {
+          // 计算在句子中的相对进度（0-1）
+          const progress = (currentTimeSec - sentenceStart) / sentenceDuration;
+          const clampedProgress = Math.max(0, Math.min(1, progress));
+          targetTimeMs = Math.floor((targetSentenceStart + clampedProgress * targetSentenceDuration) * 1000);
+        } else {
+          targetTimeMs = Math.floor(targetSentenceStart * 1000);
+        }
+      } else {
+        // 没有当前句子，直接按比例换算
+        const ratio = this.durationMs > 0 ? this.currentTimeMs / this.durationMs : 0;
+        targetTimeMs = Math.floor(ratio * this.durationMs);
+      }
+
+      // 切换慢速模式标记
+      this.isSlowMode = !this.isSlowMode;
+
+      // 切换音频源
+      const audioFile = this.isSlowMode ? this.currentScene.audioSlow : this.currentScene.audioNormal;
+      const fdInfo = await SceneRepository.getInstance().getAudioFd(audioFile);
+
+      await this.player.setFdSource(fdInfo.fd, fdInfo.offset, fdInfo.length);
+      await this.player.prepare();
+      await this.player.setSpeed(this.playbackSpeed);
+      await this.player.seek(targetTimeMs);
+
+      // 如果之前在播放，恢复播放
+      if (wasPlaying) {
+        await this.player.play();
+        this.isPlaying = true;
+      }
+
+      appLogger.info(`PlayerController: toggleSlowMode -> slowMode=${this.isSlowMode}, targetTime=${targetTimeMs}ms`);
+      this.notifyStateChange();
+    } catch (error) {
+      appLogger.error('PlayerController: toggleSlowMode failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 播放指定场景的指定对话中的指定句子
+   * @param scene 场景对象
+   * @param dialogueIndex 对话索引
+   * @param sentenceIndex 句子索引
+   */
+  async playSentence(scene: Scene, dialogueIndex: number, sentenceIndex: number): Promise<void> {
+    try {
+      // 如果场景不同，先加载场景
+      if (!this.currentScene || this.currentScene.id !== scene.id) {
+        this.currentScene = scene;
+        const audioFile = this.isSlowMode ? scene.audioSlow : scene.audioNormal;
+        const fdInfo = await SceneRepository.getInstance().getAudioFd(audioFile);
+        await this.player.setFdSource(fdInfo.fd, fdInfo.offset, fdInfo.length);
+        await this.player.prepare();
+        await this.player.setSpeed(this.playbackSpeed);
+      }
+
+      this.currentDialogueIndex = this.clampDialogueIndex(dialogueIndex);
+
+      const dialogue = this.getCurrentDialogue();
+      if (!dialogue) {
+        throw new Error(`Dialogue at index ${dialogueIndex} not found`);
+      }
+
+      this.currentSentenceIndex = Math.max(0, Math.min(sentenceIndex, dialogue.sentences.length - 1));
+
+      const sentence = this.getCurrentSentence();
+      if (sentence) {
+        const startTimeMs = this.getSentenceStartTimeMs(sentence);
+        await this.player.seek(startTimeMs);
+        await this.player.play();
+        this.isPlaying = true;
+        this.notifySentenceChange(sentence);
+        this.notifyStateChange();
+      }
+    } catch (error) {
+      appLogger.error('PlayerController: playSentence failed', error);
+      this.notifyError((error as Error).message);
+      throw error;
+    }
+  }
+
+  /**
+   * 获取当前 UI 状态
+   * @returns PlayerUiState 对象
+   */
+  getUiState(): PlayerUiState {
+    const dialogue = this.getCurrentDialogue();
+    const sentence = this.getCurrentSentence();
+
+    return {
+      isPlaying: this.isPlaying,
+      sceneId: this.currentScene ? this.currentScene.id : null,
+      sceneTitle: this.currentScene ? this.currentScene.titleZh : '',
+      dialogueIndex: this.currentDialogueIndex,
+      dialogueTitle: dialogue ? dialogue.titleZh : '',
+      sentenceIndex: this.currentSentenceIndex,
+      currentSentence: sentence,
+      currentTimeMs: this.currentTimeMs,
+      durationMs: this.durationMs,
+      speed: this.playbackSpeed,
+      isSlowMode: this.isSlowMode
+    };
+  }
+
+  /**
+   * 释放播放器资源
+   */
+  async release(): Promise<void> {
+    try {
+      this.isPlaying = false;
+      // 先停止后台任务
+      try {
+        await BackgroundTaskManager.getInstance().stopAudioPlayback();
+      } catch (err) {
+        appLogger.error('PlayerController: stop background task failed during release', err);
+      }
+      // 释放 AVSession
+      try {
+        await AVSessionManager.getInstance().release();
+      } catch (err) {
+        appLogger.error('PlayerController: release AVSession failed', err);
+      }
+      this.currentScene = null;
+      this.currentDialogueIndex = 0;
+      this.currentSentenceIndex = 0;
+      this.currentTimeMs = 0;
+      this.durationMs = 0;
+      await this.player.release();
+      this.notifyStateChange();
+      appLogger.info('PlayerController: released');
+    } catch (error) {
+      appLogger.error('PlayerController: release failed', error);
+    }
+  }
+
+  // ============== 私有方法 ==============
+
+  /**
+   * 绑定播放器事件回调
+   */
+  private bindPlayerCallbacks(): void {
+    this.player.setCallbacks({
+      onStateChange: (state: string): void => {
+        appLogger.debug(`PlayerController: player state = ${state}`);
+        if (state === 'playing') {
+          this.isPlaying = true;
+        } else if (state === 'paused' || state === 'completed' || state === 'stopped') {
+          this.isPlaying = false;
+        }
+        this.notifyStateChange();
+      },
+      onTimeUpdate: (currentTimeMs: number): void => {
+        this.currentTimeMs = currentTimeMs;
+        // 根据时间更新当前句子
+        this.updateCurrentSentence(currentTimeMs);
+        if (this.onTimeUpdate) {
+          this.onTimeUpdate(currentTimeMs, this.durationMs);
+        }
+      },
+      onDurationUpdate: (durationMs: number): void => {
+        this.durationMs = durationMs;
+        this.notifyStateChange();
+      },
+      onError: (error: Error): void => {
+        appLogger.error('PlayerController: player error', error);
+        this.isPlaying = false;
+        this.notifyError(error.message);
+        this.notifyStateChange();
+      },
+      onAudioInterrupt: (event: string | object): void => {
+        appLogger.info(`PlayerController: audioInterrupt event=${JSON.stringify(event)}`);
+        const focusEvent = this.convertAudioInterruptEvent(event);
+        AudioFocusHandler.getInstance().handleInterrupt(focusEvent);
+      }
+    });
+  }
+
+  /**
+   * 绑定 AVSession 控制命令回调
+   * 将系统播控中心的控制命令映射到 PlayerController 的对应方法
+   */
+  private bindAVSessionCallbacks(): void {
+    const avSession = AVSessionManager.getInstance();
+
+    avSession.onPlay = () => {
+      this.play().catch(err => {
+        appLogger.error('PlayerController: AVSession onPlay failed', err);
+      });
+    };
+
+    avSession.onPause = () => {
+      this.pause().catch(err => {
+        appLogger.error('PlayerController: AVSession onPause failed', err);
+      });
+    };
+
+    avSession.onStop = () => {
+      this.pause().catch(err => {
+        appLogger.error('PlayerController: AVSession onStop failed', err);
+      });
+    };
+
+    avSession.onSkipToNext = () => {
+      this.nextDialogue().catch(err => {
+        appLogger.error('PlayerController: AVSession onSkipToNext failed', err);
+      });
+    };
+
+    avSession.onSkipToPrevious = () => {
+      this.prevDialogue().catch(err => {
+        appLogger.error('PlayerController: AVSession onSkipToPrevious failed', err);
+      });
+    };
+
+    avSession.onSeek = (timeMs: number) => {
+      this.seekTo(timeMs).catch(err => {
+        appLogger.error('PlayerController: AVSession onSeek failed', err);
+      });
+    };
+
+    appLogger.info('PlayerController: AVSession callbacks bound');
+  }
+
+  /**
+   * 绑定 AudioFocusHandler 回调
+   * 处理音频焦点变化的业务逻辑
+   */
+  private bindAudioFocusCallbacks(): void {
+    const handler = AudioFocusHandler.getInstance();
+
+    handler.onPause = () => {
+      appLogger.info('PlayerController: audio focus pause, pausing playback');
+      this.pause().catch(err => {
+        appLogger.error('PlayerController: audio focus pause failed', err);
+      });
+    };
+
+    handler.onResume = () => {
+      appLogger.info('PlayerController: audio focus resume, resuming playback');
+      this.play().catch(err => {
+        appLogger.error('PlayerController: audio focus resume failed', err);
+      });
+    };
+
+    handler.onStop = () => {
+      appLogger.info('PlayerController: audio focus stop, stopping playback');
+      this.pause().catch(err => {
+        appLogger.error('PlayerController: audio focus stop failed', err);
+      });
+    };
+
+    handler.onDuck = () => {
+      appLogger.info('PlayerController: audio focus duck, updating UI');
+      // DUCK 由系统自动处理音量，此处仅通知 UI 状态变化
+      this.notifyStateChange();
+    };
+
+    handler.onUnduck = () => {
+      appLogger.info('PlayerController: audio focus unduck, updating UI');
+      // UNDUCK 由系统自动处理音量，此处仅通知 UI 状态变化
+      this.notifyStateChange();
+    };
+
+    appLogger.info('PlayerController: AudioFocus callbacks bound');
+  }
+
+  /**
+   * 启动播放会话
+   * 统一处理：启动后台长时任务 + 更新 AVSession 播放状态 + 更新元数据
+   */
+  private async startPlaybackSession(): Promise<void> {
+    // 启动后台长时任务
+    try {
+      await BackgroundTaskManager.getInstance().startAudioPlayback();
+    } catch (error) {
+      appLogger.error('PlayerController: startAudioPlayback failed', error);
+      // 后台任务启动失败不影响播放，仅记录错误
+    }
+
+    // 更新 AVSession 播放状态
+    try {
+      await AVSessionManager.getInstance().updatePlaybackState(
+        'playing',
+        this.currentTimeMs,
+        this.playbackSpeed
+      );
+    } catch (error) {
+      appLogger.error('PlayerController: update AVSession playback state failed', error);
+    }
+
+    // 更新 AVSession 媒体元数据
+    if (this.currentScene) {
+      try {
+        await AVSessionManager.getInstance().updateMetadata(
+          this.currentScene.titleZh,
+          '',
+          '',
+          this.durationMs
+        );
+      } catch (error) {
+        appLogger.error('PlayerController: update AVSession metadata failed', error);
+      }
+    }
+  }
+
+  /**
+   * 停止播放会话
+   * 统一处理：更新 AVSession 播放状态为暂停 + 停止后台长时任务
+   * 注意：必须先暂停播放器再调用此方法
+   */
+  private async stopPlaybackSession(): Promise<void> {
+    // 更新 AVSession 播放状态为暂停
+    try {
+      await AVSessionManager.getInstance().updatePlaybackState(
+        'paused',
+        this.currentTimeMs,
+        this.playbackSpeed
+      );
+    } catch (error) {
+      appLogger.error('PlayerController: update AVSession paused state failed', error);
+    }
+
+    // 停止后台长时任务
+    try {
+      await BackgroundTaskManager.getInstance().stopAudioPlayback();
+    } catch (error) {
+      appLogger.error('PlayerController: stopAudioPlayback failed', error);
+    }
+  }
+
+  /**
+   * 将 AVPlayer 的 audioInterrupt 原始事件转换为 AudioFocusEvent
+   * 兼容字符串类型和 InterruptEvent 对象类型
+   * @param event 原始音频中断事件
+   * @returns 转换后的 AudioFocusEvent
+   */
+  private convertAudioInterruptEvent(event: string | object): AudioFocusEvent {
+    // 字符串类型（AVPlayerWrapper 简化后的回调）
+    if (typeof event === 'string') {
+      switch (event) {
+        case 'noFocus':
+          return { hint: 'pause', force: false };
+        default:
+          return { hint: 'pause', force: false };
+      }
+    }
+
+    // InterruptEvent 对象类型（HarmonyOS 原生事件）
+    const evt = event as Record<string, number>;
+    const hintType = evt.hintType;
+    const forceType = evt.forceType;
+
+    // forceType: 0=非强制(SHARE), 1=强制(INDEPENDENT)
+    const force = forceType === 1;
+
+    // hintType 映射：1=PAUSE, 2=RESUME, 3=STOP, 4=DUCK, 5=UNDUCK
+    let hint: 'pause' | 'resume' | 'stop' | 'duck' | 'unduck' = 'pause';
+    switch (hintType) {
+      case 1:
+        hint = 'pause';
+        break;
+      case 2:
+        hint = 'resume';
+        break;
+      case 3:
+        hint = 'stop';
+        break;
+      case 4:
+        hint = 'duck';
+        break;
+      case 5:
+        hint = 'unduck';
+        break;
+      default:
+        hint = 'pause';
+        break;
+    }
+
+    return { hint, force };
+  }
+
+  /**
+   * 根据当前播放时间更新当前句子索引
+   * @param timeMs 当前播放时间（毫秒）
+   */
+  private updateCurrentSentence(timeMs: number): void {
+    const dialogue = this.getCurrentDialogue();
+    if (!dialogue || dialogue.sentences.length === 0) {
+      return;
+    }
+
+    const timeSec = timeMs / 1000;
+    let foundIndex = -1;
+
+    for (let i = 0; i < dialogue.sentences.length; i++) {
+      const sentence = dialogue.sentences[i];
+      const startTime = this.isSlowMode ? sentence.slowStartTime : sentence.startTime;
+      const endTime = this.isSlowMode ? sentence.slowEndTime : sentence.endTime;
+
+      if (timeSec >= startTime && timeSec < endTime) {
+        foundIndex = i;
+        break;
+      }
+    }
+
+    // 如果没找到精确匹配，尝试找最接近的（处理边界情况）
+    if (foundIndex === -1) {
+      for (let i = 0; i < dialogue.sentences.length; i++) {
+        const sentence = dialogue.sentences[i];
+        const startTime = this.isSlowMode ? sentence.slowStartTime : sentence.startTime;
+        const endTime = this.isSlowMode ? sentence.slowEndTime : sentence.endTime;
+        // 允许 200ms 的容差
+        if (timeSec >= startTime - 0.2 && timeSec <= endTime + 0.2) {
+          foundIndex = i;
+          break;
+        }
+      }
+    }
+
+    if (foundIndex !== -1 && foundIndex !== this.currentSentenceIndex) {
+      this.currentSentenceIndex = foundIndex;
+      const sentence = this.getCurrentSentence();
+      if (sentence) {
+        this.notifySentenceChange(sentence);
+      }
+      this.notifyStateChange();
+    }
+  }
+
+  /**
+   * 获取当前对话
+   */
+  private getCurrentDialogue(): Dialogue | null {
+    if (!this.currentScene) {
+      return null;
+    }
+    if (this.currentDialogueIndex < 0 || this.currentDialogueIndex >= this.currentScene.dialogues.length) {
+      return null;
+    }
+    return this.currentScene.dialogues[this.currentDialogueIndex];
+  }
+
+  /**
+   * 获取当前句子
+   */
+  private getCurrentSentence(): Sentence | null {
+    const dialogue = this.getCurrentDialogue();
+    if (!dialogue) {
+      return null;
+    }
+    if (this.currentSentenceIndex < 0 || this.currentSentenceIndex >= dialogue.sentences.length) {
+      return null;
+    }
+    return dialogue.sentences[this.currentSentenceIndex];
+  }
+
+  /**
+   * 获取指定对话的起始时间（毫秒）
+   */
+  private getDialogueStartTimeMs(dialogueIndex: number): number {
+    if (!this.currentScene) {
+      return 0;
+    }
+    const dialogue = this.currentScene.dialogues[dialogueIndex];
+    if (!dialogue || dialogue.sentences.length === 0) {
+      return 0;
+    }
+    const firstSentence = dialogue.sentences[0];
+    return this.getSentenceStartTimeMs(firstSentence);
+  }
+
+  /**
+   * 获取句子的起始时间（毫秒），根据是否慢速模式选择对应时间戳
+   */
+  private getSentenceStartTimeMs(sentence: Sentence): number {
+    const startTimeSec = this.isSlowMode ? sentence.slowStartTime : sentence.startTime;
+    return Math.floor(startTimeSec * 1000);
+  }
+
+  /**
+   * 限制对话索引在有效范围内
+   */
+  private clampDialogueIndex(index: number): number {
+    if (!this.currentScene) {
+      return 0;
+    }
+    return Math.max(0, Math.min(index, this.currentScene.dialogues.length - 1));
+  }
+
+  /**
+   * 通知 UI 状态变化
+   */
+  private notifyStateChange(): void {
+    if (this.onStateChange) {
+      this.onStateChange(this.getUiState());
+    }
+  }
+
+  /**
+   * 通知句子变化
+   */
+  private notifySentenceChange(sentence: Sentence): void {
+    if (this.onSentenceChange) {
+      this.onSentenceChange(sentence);
+    }
+  }
+
+  /**
+   * 通知错误
+   */
+  private notifyError(message: string): void {
+    if (this.onError) {
+      this.onError(message);
+    }
+  }
+}

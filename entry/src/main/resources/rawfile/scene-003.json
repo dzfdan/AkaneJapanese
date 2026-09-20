@@ -1,0 +1,282 @@
+{
+  "id": "scene-003",
+  "titleJa": "コンビニで買い物",
+  "titleZh": "便利店购物",
+  "level": "N5",
+  "category": "日常生活",
+  "descriptionZh": "在日本便利店购物的基础场景。包含购买便当、饮料、支付等简单表达。",
+  "audioNormal": "scene-003-normal.m4a",
+  "audioSlow": "scene-003-slow.m4a",
+  "dialogues": [
+    {
+      "id": "dlg-003-1",
+      "titleJa": "お弁当を買う",
+      "titleZh": "买便当",
+      "sentences": [
+        {
+          "id": "s-003-1-1",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "いらっしゃいませ。",
+          "romaji": "irasshaimase.",
+          "translation": "欢迎光临。",
+          "startTime": 0.0,
+          "endTime": 2.0,
+          "slowStartTime": 0.0,
+          "slowEndTime": 2.6
+        },
+        {
+          "id": "s-003-1-2",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "すみません、このお弁当をください。",
+          "romaji": "sumimasen, kono obentou o kudasai.",
+          "translation": "不好意思，请给我这个便当。",
+          "startTime": 2.5,
+          "endTime": 6.0,
+          "slowStartTime": 3.3,
+          "slowEndTime": 7.8
+        },
+        {
+          "id": "s-003-1-3",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "はい。温めますか？",
+          "romaji": "hai. atatamemasu ka?",
+          "translation": "好的。需要加热吗？",
+          "startTime": 6.5,
+          "endTime": 9.0,
+          "slowStartTime": 8.5,
+          "slowEndTime": 11.7
+        },
+        {
+          "id": "s-003-1-4",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "はい、お願いします。",
+          "romaji": "hai, onegai shimasu.",
+          "translation": "好的，麻烦了。",
+          "startTime": 9.5,
+          "endTime": 11.5,
+          "slowStartTime": 12.4,
+          "slowEndTime": 15.0
+        },
+        {
+          "id": "s-003-1-5",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "少々お待ちください。",
+          "romaji": "shoushou omachi kudasai.",
+          "translation": "请稍等。",
+          "startTime": 12.0,
+          "endTime": 14.5,
+          "slowStartTime": 15.6,
+          "slowEndTime": 18.9
+        }
+      ],
+      "quiz": [
+        {
+          "id": "q-003-1-1",
+          "type": "listening",
+          "questionZh": "顾客要买什么？",
+          "options": ["面包", "便当", "饮料", "饭团"],
+          "correctIndex": 1,
+          "explanationZh": "顾客说「このお弁当をください」，意思是请给我这个便当。"
+        },
+        {
+          "id": "q-003-1-2",
+          "type": "meaning",
+          "questionZh": "「温めますか」是什么意思？",
+          "options": ["需要袋子吗", "需要加热吗", "需要筷子吗", "需要收据吗"],
+          "correctIndex": 1,
+          "explanationZh": "「温める（あたためる）」是「加热、温一下」的意思，「温めますか」即「需要加热吗？」。"
+        }
+      ]
+    },
+    {
+      "id": "dlg-003-2",
+      "titleJa": "飲み物を選ぶ",
+      "titleZh": "挑选饮料",
+      "sentences": [
+        {
+          "id": "s-003-2-1",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "あの、水はどこにありますか？",
+          "romaji": "ano, mizu wa doko ni arimasu ka?",
+          "translation": "请问，水在哪里？",
+          "startTime": 16.0,
+          "endTime": 19.0,
+          "slowStartTime": 20.8,
+          "slowEndTime": 24.7
+        },
+        {
+          "id": "s-003-2-2",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "水ですか？あちらの冷蔵庫にあります。",
+          "romaji": "mizu desu ka? achira no reizouko ni arimasu.",
+          "translation": "水吗？在那边的冰箱里。",
+          "startTime": 19.5,
+          "endTime": 23.5,
+          "slowStartTime": 25.4,
+          "slowEndTime": 30.6
+        },
+        {
+          "id": "s-003-2-3",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "わかりました。ありがとうございます。",
+          "romaji": "wakarimashita. arigatou gozaimasu.",
+          "translation": "明白了。谢谢。",
+          "startTime": 24.0,
+          "endTime": 27.0,
+          "slowStartTime": 31.2,
+          "slowEndTime": 35.1
+        },
+        {
+          "id": "s-003-2-4",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "他に何か必要ですか？",
+          "romaji": "hoka ni nanika hitsuyou desu ka?",
+          "translation": "还需要别的吗？",
+          "startTime": 27.5,
+          "endTime": 30.5,
+          "slowStartTime": 35.8,
+          "slowEndTime": 39.7
+        },
+        {
+          "id": "s-003-2-5",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "いいえ、大丈夫です。",
+          "romaji": "iie, daijoubu desu.",
+          "translation": "不用了，就这些。",
+          "startTime": 31.0,
+          "endTime": 33.5,
+          "slowStartTime": 40.3,
+          "slowEndTime": 43.6
+        }
+      ],
+      "quiz": [
+        {
+          "id": "q-003-2-1",
+          "type": "listening",
+          "questionZh": "水放在哪里？",
+          "options": ["收银台旁边", "那边的冰箱里", "货架上", "门口附近"],
+          "correctIndex": 1,
+          "explanationZh": "店员说「あちらの冷蔵庫にあります」，意思是在那边的冰箱里。"
+        },
+        {
+          "id": "q-003-2-2",
+          "type": "meaning",
+          "questionZh": "「大丈夫です」在对话中是什么意思？",
+          "options": ["我很健康", "不用了/没关系", "非常好", "请等一下"],
+          "correctIndex": 1,
+          "explanationZh": "「大丈夫です」在被询问是否需要其他东西时，表示「不用了、不需要了」。"
+        }
+      ]
+    },
+    {
+      "id": "dlg-003-3",
+      "titleJa": "レジで支払う",
+      "titleZh": "收银台付款",
+      "sentences": [
+        {
+          "id": "s-003-3-1",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "全部で五百円です。",
+          "romaji": "zenbu de gohyakuen desu.",
+          "translation": "一共五百日元。",
+          "startTime": 35.0,
+          "endTime": 38.0,
+          "slowStartTime": 45.5,
+          "slowEndTime": 49.4
+        },
+        {
+          "id": "s-003-3-2",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "はい、千円札でお願いします。",
+          "romaji": "hai, satsugatsu de onegai shimasu.",
+          "translation": "好的，用一千日元付。",
+          "startTime": 38.5,
+          "endTime": 42.0,
+          "slowStartTime": 50.1,
+          "slowEndTime": 54.6
+        },
+        {
+          "id": "s-003-3-3",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "千円お預かりします。五百円のお返しです。",
+          "romaji": "sen en oazukari shimasu. gohyakuen no okaeshi desu.",
+          "translation": "收您一千日元。找您五百日元。",
+          "startTime": 42.5,
+          "endTime": 47.5,
+          "slowStartTime": 55.3,
+          "slowEndTime": 61.8
+        },
+        {
+          "id": "s-003-3-4",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "ありがとうございます。",
+          "romaji": "arigatou gozaimasu.",
+          "translation": "谢谢。",
+          "startTime": 48.0,
+          "endTime": 50.0,
+          "slowStartTime": 62.4,
+          "slowEndTime": 65.0
+        },
+        {
+          "id": "s-003-3-5",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "ありがとうございました。またどうぞ。",
+          "romaji": "arigatou gozaimashita. mata douzo.",
+          "translation": "谢谢惠顾。欢迎再来。",
+          "startTime": 50.5,
+          "endTime": 53.5,
+          "slowStartTime": 65.7,
+          "slowEndTime": 69.6
+        }
+      ],
+      "quiz": [
+        {
+          "id": "q-003-3-1",
+          "type": "listening",
+          "questionZh": "顾客付了多少钱？",
+          "options": ["五百日元", "一千日元", "一万日元", "一百日元"],
+          "correctIndex": 1,
+          "explanationZh": "顾客说「千円札でお願いします」，即用一千日元纸币支付。"
+        },
+        {
+          "id": "q-003-3-2",
+          "type": "meaning",
+          "questionZh": "「お返し」是什么意思？",
+          "options": ["礼物", "找零", "退货", "回礼"],
+          "correctIndex": 1,
+          "explanationZh": "「お返し（おかえし）」在购物场景中指「找零、找回的钱」。"
+        }
+      ]
+    }
+  ]
+}

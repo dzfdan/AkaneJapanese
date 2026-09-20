@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "scenes": [
+    {
+      "id": "scene-001",
+      "titleJa": "道を尋ねる",
+      "titleZh": "问路",
+      "level": "N4",
+      "category": "日常生活",
+      "dialogueCount": 3,
+      "durationSec": 71,
+      "file": "scene-001.json"
+    },
+    {
+      "id": "scene-002",
+      "titleJa": "レストランで注文",
+      "titleZh": "餐厅点餐",
+      "level": "N4",
+      "category": "饮食",
+      "dialogueCount": 3,
+      "durationSec": 71,
+      "file": "scene-002.json"
+    },
+    {
+      "id": "scene-003",
+      "titleJa": "コンビニで買い物",
+      "titleZh": "便利店购物",
+      "level": "N5",
+      "category": "日常生活",
+      "dialogueCount": 3,
+      "durationSec": 54,
+      "file": "scene-003.json"
+    }
+  ]
+}

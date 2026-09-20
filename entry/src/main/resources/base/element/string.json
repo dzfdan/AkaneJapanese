@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "朱音日语 - 沉浸式日语学习应用"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "朱音日语主入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "朱音日语"
+    },
+    {
+      "name": "permission_background_reason",
+      "value": "用于后台播放日语音频，保障学习连续性"
+    },
+    {
+      "name": "permission_internet_reason",
+      "value": "用于获取在线学习资源和更新课程内容"
+    }
+  ]
+}

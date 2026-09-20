@@ -1,0 +1,12 @@
+{
+  "name": "AkaneJapanese",
+  "version": "1.0.0",
+  "description": "朱音日语 - 沉浸式日语学习应用",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {},
+  "devDependencies": {
+    "@ohos/hvigor-ohos-plugin": "26.0.0"
+  }
+}

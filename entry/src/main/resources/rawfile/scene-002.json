@@ -1,0 +1,295 @@
+{
+  "id": "scene-002",
+  "titleJa": "レストランで注文",
+  "titleZh": "餐厅点餐",
+  "level": "N4",
+  "category": "饮食",
+  "descriptionZh": "在日本餐厅点餐的实用场景。包含进店就座、点餐、结账等常用表达。",
+  "audioNormal": "scene-002-normal.m4a",
+  "audioSlow": "scene-002-slow.m4a",
+  "dialogues": [
+    {
+      "id": "dlg-002-1",
+      "titleJa": "入店と着席",
+      "titleZh": "进店与就座",
+      "sentences": [
+        {
+          "id": "s-002-1-1",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "いらっしゃいませ。何名様ですか？",
+          "romaji": "irasshaimase. nanmeisama desu ka?",
+          "translation": "欢迎光临。请问几位？",
+          "startTime": 0.0,
+          "endTime": 3.5,
+          "slowStartTime": 0.0,
+          "slowEndTime": 4.6
+        },
+        {
+          "id": "s-002-1-2",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "二人です。禁煙席をお願いします。",
+          "romaji": "futari desu. kinenseki o onegai shimasu.",
+          "translation": "两位。请安排禁烟席。",
+          "startTime": 4.0,
+          "endTime": 7.5,
+          "slowStartTime": 5.2,
+          "slowEndTime": 9.8
+        },
+        {
+          "id": "s-002-1-3",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "かしこまりました。こちらへどうぞ。",
+          "romaji": "kashikomarimashita. kochira e douzo.",
+          "translation": "好的。这边请。",
+          "startTime": 8.0,
+          "endTime": 11.0,
+          "slowStartTime": 10.4,
+          "slowEndTime": 14.3
+        },
+        {
+          "id": "s-002-1-4",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "ありがとうございます。メニューをください。",
+          "romaji": "arigatou gozaimasu. menyuu o kudasai.",
+          "translation": "谢谢。请给我菜单。",
+          "startTime": 11.5,
+          "endTime": 15.0,
+          "slowStartTime": 15.0,
+          "slowEndTime": 19.5
+        },
+        {
+          "id": "s-002-1-5",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "はい、すぐお持ちします。",
+          "romaji": "hai, sugu omochi shimasu.",
+          "translation": "好的，马上给您拿来。",
+          "startTime": 15.5,
+          "endTime": 18.0,
+          "slowStartTime": 20.2,
+          "slowEndTime": 23.4
+        }
+      ],
+      "quiz": [
+        {
+          "id": "q-002-1-1",
+          "type": "listening",
+          "questionZh": "顾客想要什么样的座位？",
+          "options": ["吸烟席", "禁烟席", "靠窗席", "包厢"],
+          "correctIndex": 1,
+          "explanationZh": "顾客说「禁煙席をお願いします」，意思是请安排禁烟席。"
+        },
+        {
+          "id": "q-002-1-2",
+          "type": "meaning",
+          "questionZh": "「かしこまりました」是什么意思？",
+          "options": ["我知道了（自谦语）", "欢迎光临", "请慢用", "不好意思"],
+          "correctIndex": 0,
+          "explanationZh": "「かしこまりました」是「わかりました」的自谦语，服务业常用，表示「明白了、遵命」。"
+        }
+      ]
+    },
+    {
+      "id": "dlg-002-2",
+      "titleJa": "料理を注文する",
+      "titleZh": "点餐",
+      "sentences": [
+        {
+          "id": "s-002-2-1",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "ご注文はお決まりですか？",
+          "romaji": "gochuumon wa okimari desu ka?",
+          "translation": "您决定好要点什么了吗？",
+          "startTime": 20.0,
+          "endTime": 23.5,
+          "slowStartTime": 26.0,
+          "slowEndTime": 30.6
+        },
+        {
+          "id": "s-002-2-2",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "ええと、天ぷら定食を一つと、刺身定食を一つお願いします。",
+          "romaji": "eeto, tenpura teishoku o hitotsu to, sashimi teishoku o hitotsu onegai shimasu.",
+          "translation": "嗯，我要一份天妇罗套餐和一份刺身套餐。",
+          "startTime": 24.0,
+          "endTime": 30.0,
+          "slowStartTime": 31.2,
+          "slowEndTime": 39.0
+        },
+        {
+          "id": "s-002-2-3",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "かしこまりました。お飲み物はいかがいたしましょう？",
+          "romaji": "kashikomarimashita. onomimono wa ikaga itashimashou?",
+          "translation": "好的。饮料您要点什么呢？",
+          "startTime": 30.5,
+          "endTime": 35.0,
+          "slowStartTime": 39.7,
+          "slowEndTime": 45.5
+        },
+        {
+          "id": "s-002-2-4",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "ビールを二本と、お茶を一つください。",
+          "romaji": "biiru o nihon to, ocha o hitotsu kudasai.",
+          "translation": "请给我两瓶啤酒和一杯茶。",
+          "startTime": 35.5,
+          "endTime": 39.5,
+          "slowStartTime": 46.2,
+          "slowEndTime": 51.4
+        },
+        {
+          "id": "s-002-2-5",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "承知いたしました。少々お待ちくださいませ。",
+          "romaji": "shouchi itashimashita. shoushou omachi kudasaimase.",
+          "translation": "好的。请稍等。",
+          "startTime": 40.0,
+          "endTime": 43.5,
+          "slowStartTime": 52.0,
+          "slowEndTime": 56.6
+        }
+      ],
+      "quiz": [
+        {
+          "id": "q-002-2-1",
+          "type": "listening",
+          "questionZh": "顾客点了什么餐？",
+          "options": ["天妇罗套餐和寿司套餐", "天妇罗套餐和刺身套餐", "拉面和饺子", "鳗鱼饭和刺身"],
+          "correctIndex": 1,
+          "explanationZh": "顾客说「天ぷら定食を一つと、刺身定食を一つお願いします」，即天妇罗套餐和刺身套餐各一份。"
+        },
+        {
+          "id": "q-002-2-2",
+          "type": "reading",
+          "questionZh": "「お飲み物はいかがいたしましょう」中的「いかが」是什么意思？",
+          "options": ["多少钱", "怎么样（如何）", "在哪里", "什么时候"],
+          "correctIndex": 1,
+          "explanationZh": "「いかが」是「どう」的敬语表达，意思是「怎么样、如何」，用于礼貌地询问对方意愿。"
+        }
+      ]
+    },
+    {
+      "id": "dlg-002-3",
+      "titleJa": "会計をする",
+      "titleZh": "结账",
+      "sentences": [
+        {
+          "id": "s-002-3-1",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "すみません、お会計をお願いします。",
+          "romaji": "sumimasen, okaikei o onegai shimasu.",
+          "translation": "不好意思，请结账。",
+          "startTime": 45.0,
+          "endTime": 48.0,
+          "slowStartTime": 58.5,
+          "slowEndTime": 62.4
+        },
+        {
+          "id": "s-002-3-2",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "はい、お待たせいたしました。合計で三千五百円になります。",
+          "romaji": "hai, omatase itashimashita. goukei de sanzen gohyakuen ni narimasu.",
+          "translation": "好的，让您久等了。一共三千五百日元。",
+          "startTime": 48.5,
+          "endTime": 54.0,
+          "slowStartTime": 63.1,
+          "slowEndTime": 70.2
+        },
+        {
+          "id": "s-002-3-3",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "クレジットカードは使えますか？",
+          "romaji": "kurejitto kaado wa tsukaemasu ka?",
+          "translation": "可以用信用卡吗？",
+          "startTime": 54.5,
+          "endTime": 57.5,
+          "slowStartTime": 70.9,
+          "slowEndTime": 74.8
+        },
+        {
+          "id": "s-002-3-4",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "はい、使えます。Visa と Master がご利用いただけます。",
+          "romaji": "hai, tsukaemasu. visa to master ga goriyou itadakemasu.",
+          "translation": "是的，可以用。Visa 和 Master 都可以使用。",
+          "startTime": 58.0,
+          "endTime": 63.0,
+          "slowStartTime": 75.4,
+          "slowEndTime": 81.9
+        },
+        {
+          "id": "s-002-3-5",
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "じゃ、カードでお願いします。",
+          "romaji": "ja, kaado de onegai shimasu.",
+          "translation": "那用卡付吧。",
+          "startTime": 63.5,
+          "endTime": 66.0,
+          "slowStartTime": 82.6,
+          "slowEndTime": 85.8
+        },
+        {
+          "id": "s-002-3-6",
+          "speaker": "A",
+          "speakerRoleJa": "店員",
+          "speakerRoleZh": "店员",
+          "japanese": "ありがとうございました。またお越しくださいませ。",
+          "romaji": "arigatou gozaimashita. mata okoshi kudasaimase.",
+          "translation": "非常感谢。欢迎再次光临。",
+          "startTime": 66.5,
+          "endTime": 70.5,
+          "slowStartTime": 86.5,
+          "slowEndTime": 91.7
+        }
+      ],
+      "quiz": [
+        {
+          "id": "q-002-3-1",
+          "type": "listening",
+          "questionZh": "账单总共多少钱？",
+          "options": ["2500 日元", "3000 日元", "3500 日元", "4500 日元"],
+          "correctIndex": 2,
+          "explanationZh": "店员说「合計で三千五百円になります」，即总共 3500 日元。"
+        },
+        {
+          "id": "q-002-3-2",
+          "type": "meaning",
+          "questionZh": "「お会計」是什么意思？",
+          "options": ["菜单", "结账、账单", "预约", "外卖"],
+          "correctIndex": 1,
+          "explanationZh": "「お会計（おかいけい）」是「结账、账单」的意思，「お会計をお願いします」即「请结账」。"
+        }
+      ]
+    }
+  ]
+}
