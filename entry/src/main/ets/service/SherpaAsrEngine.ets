@@ -72,9 +72,9 @@ export class SherpaAsrEngine {
 
       // 构建 OfflineRecognizer 配置（Zipformer ja 离线 transducer）
       const transducer = new OfflineTransducerModelConfig();
-      transducer.encoder = `${zipformerDir}/encoder-epoch-99-avg-1.onnx`;
-      transducer.decoder = `${zipformerDir}/decoder-epoch-99-avg-1.onnx`;
-      transducer.joiner = `${zipformerDir}/joiner-epoch-99-avg-1.onnx`;
+      transducer.encoder = `${zipformerDir}/encoder-epoch-99-avg-1.int8.onnx`;
+      transducer.decoder = `${zipformerDir}/decoder-epoch-99-avg-1.int8.onnx`;
+      transducer.joiner = `${zipformerDir}/joiner-epoch-99-avg-1.int8.onnx`;
 
       const modelConfig = new OfflineModelConfig();
       modelConfig.transducer = transducer;
@@ -165,9 +165,9 @@ export class SherpaAsrEngine {
     // 列文件需用 rawfile 描述符方式；此处用已知文件名列表（PoC 简化）
     const files: string[] = [
       'asr/silero_vad.onnx',
-      'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/encoder-epoch-99-avg-1.onnx',
-      'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/decoder-epoch-99-avg-1.onnx',
-      'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/joiner-epoch-99-avg-1.onnx',
+      'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/encoder-epoch-99-avg-1.int8.onnx',
+      'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/decoder-epoch-99-avg-1.int8.onnx',
+      'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/joiner-epoch-99-avg-1.int8.onnx',
       'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/tokens.txt',
     ];
     for (const f of files) {
