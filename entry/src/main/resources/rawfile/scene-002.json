@@ -21,6 +21,11 @@
           "japanese": "いらっしゃいませ。何名様ですか？",
           "romaji": "irasshaimase. nanmeisama desu ka?",
           "translation": "欢迎光临。请问几位？",
+          "segments": [
+            {"text": "いらっしゃいませ。"},
+            {"text": "何名様", "kana": "なんめいさま"},
+            {"text": "ですか？"}
+          ],
           "startTime": 0.0,
           "endTime": 3.5,
           "slowStartTime": 0.0,
@@ -34,6 +39,14 @@
           "japanese": "二人です。禁煙席をお願いします。",
           "romaji": "futari desu. kinenseki o onegai shimasu.",
           "translation": "两位。请安排禁烟席。",
+          "segments": [
+            {"text": "二人", "kana": "ふたり"},
+            {"text": "です。"},
+            {"text": "禁煙席", "kana": "きんえんせき"},
+            {"text": "をお"},
+            {"text": "願", "kana": "ねが"},
+            {"text": "いします。"}
+          ],
           "startTime": 4.0,
           "endTime": 7.5,
           "slowStartTime": 5.2,
@@ -47,6 +60,9 @@
           "japanese": "かしこまりました。こちらへどうぞ。",
           "romaji": "kashikomarimashita. kochira e douzo.",
           "translation": "好的。这边请。",
+          "segments": [
+            {"text": "かしこまりました。こちらへどうぞ。"}
+          ],
           "startTime": 8.0,
           "endTime": 11.0,
           "slowStartTime": 10.4,
@@ -60,6 +76,9 @@
           "japanese": "ありがとうございます。メニューをください。",
           "romaji": "arigatou gozaimasu. menyuu o kudasai.",
           "translation": "谢谢。请给我菜单。",
+          "segments": [
+            {"text": "ありがとうございます。メニューをください。"}
+          ],
           "startTime": 11.5,
           "endTime": 15.0,
           "slowStartTime": 15.0,
@@ -73,6 +92,11 @@
           "japanese": "はい、すぐお持ちします。",
           "romaji": "hai, sugu omochi shimasu.",
           "translation": "好的，马上给您拿来。",
+          "segments": [
+            {"text": "はい、すぐお"},
+            {"text": "持", "kana": "も"},
+            {"text": "ちします。"}
+          ],
           "startTime": 15.5,
           "endTime": 18.0,
           "slowStartTime": 20.2,
@@ -111,6 +135,13 @@
           "japanese": "ご注文はお決まりですか？",
           "romaji": "gochuumon wa okimari desu ka?",
           "translation": "您决定好要点什么了吗？",
+          "segments": [
+            {"text": "ご"},
+            {"text": "注文", "kana": "ちゅうもん"},
+            {"text": "はお"},
+            {"text": "決", "kana": "き"},
+            {"text": "まりですか？"}
+          ],
           "startTime": 20.0,
           "endTime": 23.5,
           "slowStartTime": 26.0,
@@ -124,6 +155,22 @@
           "japanese": "ええと、天ぷら定食を一つと、刺身定食を一つお願いします。",
           "romaji": "eeto, tenpura teishoku o hitotsu to, sashimi teishoku o hitotsu onegai shimasu.",
           "translation": "嗯，我要一份天妇罗套餐和一份刺身套餐。",
+          "segments": [
+            {"text": "ええと、"},
+            {"text": "天", "kana": "てん"},
+            {"text": "ぷら"},
+            {"text": "定食", "kana": "ていしょく"},
+            {"text": "を"},
+            {"text": "一", "kana": "ひと"},
+            {"text": "つと、"},
+            {"text": "刺身", "kana": "さしみ"},
+            {"text": "定食", "kana": "ていしょく"},
+            {"text": "を"},
+            {"text": "一", "kana": "ひと"},
+            {"text": "つお"},
+            {"text": "願", "kana": "ねが"},
+            {"text": "いします。"}
+          ],
           "startTime": 24.0,
           "endTime": 30.0,
           "slowStartTime": 31.2,
@@ -137,6 +184,13 @@
           "japanese": "かしこまりました。お飲み物はいかがいたしましょう？",
           "romaji": "kashikomarimashita. onomimono wa ikaga itashimashou?",
           "translation": "好的。饮料您要点什么呢？",
+          "segments": [
+            {"text": "かしこまりました。お"},
+            {"text": "飲", "kana": "の"},
+            {"text": "み"},
+            {"text": "物", "kana": "もの"},
+            {"text": "はいかがいたしましょう？"}
+          ],
           "startTime": 30.5,
           "endTime": 35.0,
           "slowStartTime": 39.7,
@@ -150,6 +204,16 @@
           "japanese": "ビールを二本と、お茶を一つください。",
           "romaji": "biiru o nihon to, ocha o hitotsu kudasai.",
           "translation": "请给我两瓶啤酒和一杯茶。",
+          "segments": [
+            {"text": "ビールを"},
+            {"text": "二", "kana": "に"},
+            {"text": "本", "kana": "ほん"},
+            {"text": "と、お"},
+            {"text": "茶", "kana": "ちゃ"},
+            {"text": "を"},
+            {"text": "一", "kana": "ひと"},
+            {"text": "つください。"}
+          ],
           "startTime": 35.5,
           "endTime": 39.5,
           "slowStartTime": 46.2,
@@ -163,6 +227,12 @@
           "japanese": "承知いたしました。少々お待ちくださいませ。",
           "romaji": "shouchi itashimashita. shoushou omachi kudasaimase.",
           "translation": "好的。请稍等。",
+          "segments": [
+            {"text": "承知", "kana": "しょうち"},
+            {"text": "いたしました。少々お"},
+            {"text": "待", "kana": "ま"},
+            {"text": "ちくださいませ。"}
+          ],
           "startTime": 40.0,
           "endTime": 43.5,
           "slowStartTime": 52.0,
@@ -201,6 +271,13 @@
           "japanese": "すみません、お会計をお願いします。",
           "romaji": "sumimasen, okaikei o onegai shimasu.",
           "translation": "不好意思，请结账。",
+          "segments": [
+            {"text": "すみません、お"},
+            {"text": "会計", "kana": "かいけい"},
+            {"text": "をお"},
+            {"text": "願", "kana": "ねが"},
+            {"text": "いします。"}
+          ],
           "startTime": 45.0,
           "endTime": 48.0,
           "slowStartTime": 58.5,
@@ -214,6 +291,15 @@
           "japanese": "はい、お待たせいたしました。合計で三千五百円になります。",
           "romaji": "hai, omatase itashimashita. goukei de sanzen gohyakuen ni narimasu.",
           "translation": "好的，让您久等了。一共三千五百日元。",
+          "segments": [
+            {"text": "はい、お"},
+            {"text": "待", "kana": "ま"},
+            {"text": "たせいたしました。"},
+            {"text": "合計", "kana": "ごうけい"},
+            {"text": "で"},
+            {"text": "三千五百円", "kana": "さんぜんごひゃくえん"},
+            {"text": "になります。"}
+          ],
           "startTime": 48.5,
           "endTime": 54.0,
           "slowStartTime": 63.1,
@@ -227,6 +313,11 @@
           "japanese": "クレジットカードは使えますか？",
           "romaji": "kurejitto kaado wa tsukaemasu ka?",
           "translation": "可以用信用卡吗？",
+          "segments": [
+            {"text": "クレジットカードは"},
+            {"text": "使", "kana": "つか"},
+            {"text": "えますか？"}
+          ],
           "startTime": 54.5,
           "endTime": 57.5,
           "slowStartTime": 70.9,
@@ -238,8 +329,15 @@
           "speakerRoleJa": "店員",
           "speakerRoleZh": "店员",
           "japanese": "はい、使えます。Visa と Master がご利用いただけます。",
-          "romaji": "hai, tsukaemasu. visa to master ga goriyou itadakemasu.",
+          "romaji": "hai, tsukaemasu. visa to master ga goriyou itadakemesu.",
           "translation": "是的，可以用。Visa 和 Master 都可以使用。",
+          "segments": [
+            {"text": "はい、"},
+            {"text": "使", "kana": "つか"},
+            {"text": "えます。Visa と Master がご"},
+            {"text": "利用", "kana": "りよう"},
+            {"text": "いただけます。"}
+          ],
           "startTime": 58.0,
           "endTime": 63.0,
           "slowStartTime": 75.4,
@@ -253,6 +351,11 @@
           "japanese": "じゃ、カードでお願いします。",
           "romaji": "ja, kaado de onegai shimasu.",
           "translation": "那用卡付吧。",
+          "segments": [
+            {"text": "じゃ、カードでお"},
+            {"text": "願", "kana": "ねが"},
+            {"text": "いします。"}
+          ],
           "startTime": 63.5,
           "endTime": 66.0,
           "slowStartTime": 82.6,
@@ -266,6 +369,11 @@
           "japanese": "ありがとうございました。またお越しくださいませ。",
           "romaji": "arigatou gozaimashita. mata okoshi kudasaimase.",
           "translation": "非常感谢。欢迎再次光临。",
+          "segments": [
+            {"text": "ありがとうございました。またお"},
+            {"text": "越", "kana": "こ"},
+            {"text": "しくださいませ。"}
+          ],
           "startTime": 66.5,
           "endTime": 70.5,
           "slowStartTime": 86.5,

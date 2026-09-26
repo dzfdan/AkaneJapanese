@@ -5,6 +5,7 @@
 
 import { ThemeColors } from '../constants/ThemeConstants';
 import { Sentence } from '../model/Sentence';
+import { FuriganaText } from '../components/FuriganaText';
 
 @Component
 export struct SentenceItem {
@@ -25,11 +26,14 @@ export struct SentenceItem {
         .fontWeight(600)
         .width('100%');
 
-      // 日文原文
-      Text(this.sentence.japanese)
-        .fontSize(15)
-        .fontColor(ThemeColors.textPrimary)
-        .width('100%')
+      // 日文原文（含振假名注音）
+      FuriganaText({
+        segments: this.sentence.segments || [],
+        japanese: this.sentence.japanese,
+        fontSize: 15,
+        fontColor: ThemeColors.textPrimary,
+        containerWidth: '100%'
+      })
         .margin({ top: 4 });
 
       // 罗马音

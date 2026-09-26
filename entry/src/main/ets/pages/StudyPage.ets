@@ -8,6 +8,7 @@ import { AppConstants } from '../constants/AppConstants';
 import { Scene } from '../model/Scene';
 import { Dialogue } from '../model/Dialogue';
 import { Sentence } from '../model/Sentence';
+import { FuriganaText } from '../components/FuriganaText';
 import { QuizItem } from '../model/QuizItem';
 import { SceneRepository } from '../service/SceneRepository';
 import { SettingsStore } from '../service/SettingsStore';
@@ -614,13 +615,16 @@ export struct StudyPage {
           .fontWeight(600)
           .margin({ bottom: 12 });
 
-        // 日文原文（放大显示）
-        Text(this.practiceSentence!.japanese)
-          .fontSize(24)
-          .fontColor(ThemeColors.textPrimary)
-          .fontWeight(600)
-          .textAlign(TextAlign.Center)
-          .width('100%')
+        // 日文原文（放大显示，含振假名注音）
+        FuriganaText({
+          segments: this.practiceSentence!.segments || [],
+          japanese: this.practiceSentence!.japanese,
+          fontSize: 24,
+          fontColor: ThemeColors.textPrimary,
+          fontWeight: 600,
+          textAlign: TextAlign.Center,
+          containerWidth: '100%'
+        })
           .margin({ bottom: 12 });
 
         // 罗马音

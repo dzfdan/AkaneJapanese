@@ -21,6 +21,9 @@
           "japanese": "いらっしゃいませ。",
           "romaji": "irasshaimase.",
           "translation": "欢迎光临。",
+          "segments": [
+            {"text": "いらっしゃいませ。"}
+          ],
           "startTime": 0.0,
           "endTime": 2.0,
           "slowStartTime": 0.0,
@@ -34,6 +37,11 @@
           "japanese": "すみません、このお弁当をください。",
           "romaji": "sumimasen, kono obentou o kudasai.",
           "translation": "不好意思，请给我这个便当。",
+          "segments": [
+            {"text": "すみません、このお"},
+            {"text": "弁当", "kana": "べんとう"},
+            {"text": "をください。"}
+          ],
           "startTime": 2.5,
           "endTime": 6.0,
           "slowStartTime": 3.3,
@@ -45,8 +53,13 @@
           "speakerRoleJa": "店員",
           "speakerRoleZh": "店员",
           "japanese": "はい。温めますか？",
-          "romaji": "hai. atatamemasu ka?",
+          "romaji": "hai. atatamemesu ka?",
           "translation": "好的。需要加热吗？",
+          "segments": [
+            {"text": "はい。"},
+            {"text": "温", "kana": "あたた"},
+            {"text": "めますか？"}
+          ],
           "startTime": 6.5,
           "endTime": 9.0,
           "slowStartTime": 8.5,
@@ -60,6 +73,11 @@
           "japanese": "はい、お願いします。",
           "romaji": "hai, onegai shimasu.",
           "translation": "好的，麻烦了。",
+          "segments": [
+            {"text": "はい、お"},
+            {"text": "願", "kana": "ねが"},
+            {"text": "いします。"}
+          ],
           "startTime": 9.5,
           "endTime": 11.5,
           "slowStartTime": 12.4,
@@ -73,6 +91,11 @@
           "japanese": "少々お待ちください。",
           "romaji": "shoushou omachi kudasai.",
           "translation": "请稍等。",
+          "segments": [
+            {"text": "少々お"},
+            {"text": "待", "kana": "ま"},
+            {"text": "ちください。"}
+          ],
           "startTime": 12.0,
           "endTime": 14.5,
           "slowStartTime": 15.6,
@@ -111,6 +134,11 @@
           "japanese": "あの、水はどこにありますか？",
           "romaji": "ano, mizu wa doko ni arimasu ka?",
           "translation": "请问，水在哪里？",
+          "segments": [
+            {"text": "あの、"},
+            {"text": "水", "kana": "みず"},
+            {"text": "はどこにありますか？"}
+          ],
           "startTime": 16.0,
           "endTime": 19.0,
           "slowStartTime": 20.8,
@@ -124,6 +152,12 @@
           "japanese": "水ですか？あちらの冷蔵庫にあります。",
           "romaji": "mizu desu ka? achira no reizouko ni arimasu.",
           "translation": "水吗？在那边的冰箱里。",
+          "segments": [
+            {"text": "水", "kana": "みず"},
+            {"text": "ですか？あちらの"},
+            {"text": "冷蔵庫", "kana": "れいぞうこ"},
+            {"text": "にあります。"}
+          ],
           "startTime": 19.5,
           "endTime": 23.5,
           "slowStartTime": 25.4,
@@ -137,6 +171,9 @@
           "japanese": "わかりました。ありがとうございます。",
           "romaji": "wakarimashita. arigatou gozaimasu.",
           "translation": "明白了。谢谢。",
+          "segments": [
+            {"text": "わかりました。ありがとうございます。"}
+          ],
           "startTime": 24.0,
           "endTime": 27.0,
           "slowStartTime": 31.2,
@@ -150,6 +187,14 @@
           "japanese": "他に何か必要ですか？",
           "romaji": "hoka ni nanika hitsuyou desu ka?",
           "translation": "还需要别的吗？",
+          "segments": [
+            {"text": "他", "kana": "ほか"},
+            {"text": "に"},
+            {"text": "何", "kana": "なに"},
+            {"text": "か"},
+            {"text": "必要", "kana": "ひつよう"},
+            {"text": "ですか？"}
+          ],
           "startTime": 27.5,
           "endTime": 30.5,
           "slowStartTime": 35.8,
@@ -163,6 +208,11 @@
           "japanese": "いいえ、大丈夫です。",
           "romaji": "iie, daijoubu desu.",
           "translation": "不用了，就这些。",
+          "segments": [
+            {"text": "いいえ、"},
+            {"text": "大丈夫", "kana": "だいじょうぶ"},
+            {"text": "です。"}
+          ],
           "startTime": 31.0,
           "endTime": 33.5,
           "slowStartTime": 40.3,
@@ -201,6 +251,12 @@
           "japanese": "全部で五百円です。",
           "romaji": "zenbu de gohyakuen desu.",
           "translation": "一共五百日元。",
+          "segments": [
+            {"text": "全部", "kana": "ぜんぶ"},
+            {"text": "で"},
+            {"text": "五百円", "kana": "ごひゃくえん"},
+            {"text": "です。"}
+          ],
           "startTime": 35.0,
           "endTime": 38.0,
           "slowStartTime": 45.5,
@@ -214,6 +270,13 @@
           "japanese": "はい、千円札でお願いします。",
           "romaji": "hai, satsugatsu de onegai shimasu.",
           "translation": "好的，用一千日元付。",
+          "segments": [
+            {"text": "はい、"},
+            {"text": "千円札", "kana": "せんえんさつ"},
+            {"text": "でお"},
+            {"text": "願", "kana": "ねが"},
+            {"text": "いします。"}
+          ],
           "startTime": 38.5,
           "endTime": 42.0,
           "slowStartTime": 50.1,
@@ -227,6 +290,16 @@
           "japanese": "千円お預かりします。五百円のお返しです。",
           "romaji": "sen en oazukari shimasu. gohyakuen no okaeshi desu.",
           "translation": "收您一千日元。找您五百日元。",
+          "segments": [
+            {"text": "千円", "kana": "せんえん"},
+            {"text": "お"},
+            {"text": "預", "kana": "あず"},
+            {"text": "かりします。"},
+            {"text": "五百円", "kana": "ごひゃくえん"},
+            {"text": "のお"},
+            {"text": "返", "kana": "かえ"},
+            {"text": "しです。"}
+          ],
           "startTime": 42.5,
           "endTime": 47.5,
           "slowStartTime": 55.3,
@@ -240,6 +313,9 @@
           "japanese": "ありがとうございます。",
           "romaji": "arigatou gozaimasu.",
           "translation": "谢谢。",
+          "segments": [
+            {"text": "ありがとうございます。"}
+          ],
           "startTime": 48.0,
           "endTime": 50.0,
           "slowStartTime": 62.4,
@@ -253,6 +329,9 @@
           "japanese": "ありがとうございました。またどうぞ。",
           "romaji": "arigatou gozaimashita. mata douzo.",
           "translation": "谢谢惠顾。欢迎再来。",
+          "segments": [
+            {"text": "ありがとうございました。またどうぞ。"}
+          ],
           "startTime": 50.5,
           "endTime": 53.5,
           "slowStartTime": 65.7,
@@ -280,3 +359,4 @@
     }
   ]
 }
+

@@ -9,7 +9,8 @@ import { PlayerController, PlayerUiState } from '../service/PlayerController';
 import { SceneRepository } from '../service/SceneRepository';
 import { SettingsStore } from '../service/SettingsStore';
 import { UserSettings } from '../model/UserSettings';
-import { Sentence } from '../model/Sentence';
+import { Sentence, Segment } from '../model/Sentence';
+import { FuriganaText } from '../components/FuriganaText';
 import { formatDuration } from '../utils/TimeUtil';
 import appLogger from '../utils/Logger';
 
@@ -21,6 +22,7 @@ export struct PlayerPage {
   @State sceneTitle: string = '';
   @State dialogueTitle: string = '';
   @State japanese: string = '';
+  @State currentSegments: Segment[] = [];
   @State romaji: string = '';
   @State translation: string = '';
   @State isPlaying: boolean = false;
@@ -99,11 +101,13 @@ export struct PlayerPage {
 
     if (state.currentSentence) {
       this.japanese = state.currentSentence.japanese;
+      this.currentSegments = state.currentSentence.segments || [];
       this.romaji = state.currentSentence.romaji;
       this.translation = state.currentSentence.translation;
       this.sentenceIndex = state.sentenceIndex + 1;
     } else {
       this.japanese = '';
+      this.currentSegments = [];
       this.romaji = '';
       this.translation = '';
       this.sentenceIndex = 0;
@@ -189,14 +193,16 @@ export struct PlayerPage {
 
       // 中部：当前句子内容
       Column() {
-        // 日文（大字号，居中）
-        Text(this.japanese || '—')
-          .fontSize(32)
-          .fontColor(ThemeColors.textPrimary)
-          .fontWeight(500)
-          .textAlign(TextAlign.Center)
-          .width('100%')
-          .lineHeight(48);
+        // 日文（大字号，居中，含振假名注音）
+        FuriganaText({
+          segments: this.currentSegments,
+          japanese: this.japanese || '—',
+          fontSize: 32,
+          fontColor: ThemeColors.textPrimary,
+          fontWeight: 500,
+          textAlign: TextAlign.Center,
+          containerWidth: '100%'
+        });
 
         // 罗马音
         if (this.showRomaji && this.romaji) {

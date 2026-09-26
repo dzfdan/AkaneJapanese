@@ -21,6 +21,13 @@
           "japanese": "すみません、この近くに駅がありますか？",
           "romaji": "sumimasen, kono chikaku ni eki ga arimasu ka?",
           "translation": "请问，这附近有车站吗？",
+          "segments": [
+            {"text": "すみません、この"},
+            {"text": "近", "kana": "ちか"},
+            {"text": "くに"},
+            {"text": "駅", "kana": "えき"},
+            {"text": "がありますか？"}
+          ],
           "startTime": 0.0,
           "endTime": 3.5,
           "slowStartTime": 0.0,
@@ -34,6 +41,13 @@
           "japanese": "ええ、ありますよ。この道をまっすぐ行ってください。",
           "romaji": "ee, arimasu yo. kono michi o massugu itte kudasai.",
           "translation": "嗯，有的哦。请沿着这条路直走。",
+          "segments": [
+            {"text": "ええ、ありますよ。この"},
+            {"text": "道", "kana": "みち"},
+            {"text": "をまっすぐ"},
+            {"text": "行", "kana": "い"},
+            {"text": "ってください。"}
+          ],
           "startTime": 4.0,
           "endTime": 8.0,
           "slowStartTime": 5.2,
@@ -47,6 +61,20 @@
           "japanese": "二つ目の信号を右に曲がると、左側にあります。",
           "romaji": "futatsume no shingou o migi ni magaru to, hidarigawa ni arimasu.",
           "translation": "在第二个红绿灯右转，车站就在左侧。",
+          "segments": [
+            {"text": "二", "kana": "ふた"},
+            {"text": "つ"},
+            {"text": "目", "kana": "め"},
+            {"text": "の"},
+            {"text": "信号", "kana": "しんごう"},
+            {"text": "を"},
+            {"text": "右", "kana": "みぎ"},
+            {"text": "に"},
+            {"text": "曲", "kana": "まが"},
+            {"text": "ると、"},
+            {"text": "左側", "kana": "ひだりがわ"},
+            {"text": "にあります。"}
+          ],
           "startTime": 8.5,
           "endTime": 13.0,
           "slowStartTime": 11.1,
@@ -60,6 +88,9 @@
           "japanese": "わかりました。ここからどのくらいかかりますか？",
           "romaji": "wakarimashita. koko kara dono kurai kakarimasu ka?",
           "translation": "明白了。从这里大概需要多长时间？",
+          "segments": [
+            {"text": "わかりました。ここからどのくらいかかりますか？"}
+          ],
           "startTime": 13.5,
           "endTime": 17.5,
           "slowStartTime": 17.6,
@@ -73,6 +104,13 @@
           "japanese": "歩いて五分ぐらいです。",
           "romaji": "aruite gofun gurai desu.",
           "translation": "走路大约五分钟。",
+          "segments": [
+            {"text": "歩", "kana": "ある"},
+            {"text": "いて"},
+            {"text": "五", "kana": "ご"},
+            {"text": "分", "kana": "ふん"},
+            {"text": "ぐらいです。"}
+          ],
           "startTime": 18.0,
           "endTime": 20.5,
           "slowStartTime": 23.4,
@@ -111,6 +149,11 @@
           "japanese": "あのう、この辺にコンビニはありますか？",
           "romaji": "anou, kono hen ni konbini wa arimasu ka?",
           "translation": "请问，这附近有便利店吗？",
+          "segments": [
+            {"text": "あのう、この"},
+            {"text": "辺", "kana": "へん"},
+            {"text": "にコンビニはありますか？"}
+          ],
           "startTime": 22.0,
           "endTime": 25.5,
           "slowStartTime": 28.6,
@@ -124,6 +167,17 @@
           "japanese": "コンビニですか？この道を渡って、左に行くとありますよ。",
           "romaji": "konbini desu ka? kono michi o watatte, hidari ni iku to arimasu yo.",
           "translation": "便利店吗？过了这条马路往左走就有哦。",
+          "segments": [
+            {"text": "コンビニですか？この"},
+            {"text": "道", "kana": "みち"},
+            {"text": "を"},
+            {"text": "渡", "kana": "わた"},
+            {"text": "って、"},
+            {"text": "左", "kana": "ひだり"},
+            {"text": "に"},
+            {"text": "行", "kana": "い"},
+            {"text": "くとありますよ。"}
+          ],
           "startTime": 26.0,
           "endTime": 31.0,
           "slowStartTime": 33.8,
@@ -137,6 +191,10 @@
           "japanese": "横断歩道はどこですか？",
           "romaji": "oudanhodou wa doko desu ka?",
           "translation": "人行横道在哪里？",
+          "segments": [
+            {"text": "横断歩道", "kana": "おうだんほどう"},
+            {"text": "はどこですか？"}
+          ],
           "startTime": 31.5,
           "endTime": 34.5,
           "slowStartTime": 41.0,
@@ -150,6 +208,15 @@
           "japanese": "あそこにありますよ。見えますか？青い信号のところです。",
           "romaji": "asoko ni arimasu yo. miemasu ka? aoi shingou no tokoro desu.",
           "translation": "就在那里哦。能看到吗？蓝色信号灯的地方。",
+          "segments": [
+            {"text": "あそこにありますよ。"},
+            {"text": "見", "kana": "み"},
+            {"text": "えますか？"},
+            {"text": "青", "kana": "あお"},
+            {"text": "い"},
+            {"text": "信号", "kana": "しんごう"},
+            {"text": "のところです。"}
+          ],
           "startTime": 35.0,
           "endTime": 40.0,
           "slowStartTime": 45.5,
@@ -163,6 +230,11 @@
           "japanese": "はい、見えます。ありがとうございます！",
           "romaji": "hai, miemasu. arigatou gozaimasu!",
           "translation": "好的，看到了。非常感谢！",
+          "segments": [
+            {"text": "はい、"},
+            {"text": "見", "kana": "み"},
+            {"text": "えます。ありがとうございます！"}
+          ],
           "startTime": 40.5,
           "endTime": 43.5,
           "slowStartTime": 52.7,
@@ -201,6 +273,17 @@
           "japanese": "すみません、新宿まで行きたいんですが、どこで乗り換えたらいいですか？",
           "romaji": "sumimasen, shinjuku made ikitai n desu ga, doko de norikaetara ii desu ka?",
           "translation": "请问，我想去新宿，在哪里换乘比较好呢？",
+          "segments": [
+            {"text": "すみません、"},
+            {"text": "新宿", "kana": "しんじゅく"},
+            {"text": "まで"},
+            {"text": "行", "kana": "い"},
+            {"text": "きたいんですが、どこで"},
+            {"text": "乗", "kana": "の"},
+            {"text": "り"},
+            {"text": "換", "kana": "か"},
+            {"text": "えたらいいですか？"}
+          ],
           "startTime": 45.0,
           "endTime": 50.5,
           "slowStartTime": 58.5,
@@ -214,6 +297,20 @@
           "japanese": "新宿ですか。次の渋谷駅で山手線に乗り換えてください。",
           "romaji": "shinjuku desu ka. tsugi no shibuya eki de yamanotesen ni norikaete kudasai.",
           "translation": "新宿吗。请在下一站涩谷站换乘山手线。",
+          "segments": [
+            {"text": "新宿", "kana": "しんじゅく"},
+            {"text": "ですか。"},
+            {"text": "次", "kana": "つぎ"},
+            {"text": "の"},
+            {"text": "渋谷駅", "kana": "しぶやえき"},
+            {"text": "で"},
+            {"text": "山手線", "kana": "やまのてせん"},
+            {"text": "に"},
+            {"text": "乗", "kana": "の"},
+            {"text": "り"},
+            {"text": "換", "kana": "か"},
+            {"text": "えてください。"}
+          ],
           "startTime": 51.0,
           "endTime": 56.5,
           "slowStartTime": 66.3,
@@ -227,6 +324,12 @@
           "japanese": "山手線は何番線ですか？",
           "romaji": "yamanotesen wa nanbansen desu ka?",
           "translation": "山手线在几号站台？",
+          "segments": [
+            {"text": "山手線", "kana": "やまのてせん"},
+            {"text": "は"},
+            {"text": "何番線", "kana": "なんばんせん"},
+            {"text": "ですか？"}
+          ],
           "startTime": 57.0,
           "endTime": 60.0,
           "slowStartTime": 74.1,
@@ -240,6 +343,15 @@
           "japanese": "三番線です。外回りに乗ってください。",
           "romaji": "sanbansen desu. sotomawari ni notte kudasai.",
           "translation": "三号站台。请坐外环方向。",
+          "segments": [
+            {"text": "三番線", "kana": "さんばんせん"},
+            {"text": "です。"},
+            {"text": "外", "kana": "そと"},
+            {"text": "回", "kana": "まわ"},
+            {"text": "りに"},
+            {"text": "乗", "kana": "の"},
+            {"text": "ってください。"}
+          ],
           "startTime": 60.5,
           "endTime": 64.5,
           "slowStartTime": 78.7,
@@ -253,6 +365,11 @@
           "japanese": "外回りですね。ありがとうございます。",
           "romaji": "sotomawari desu ne. arigatou gozaimasu.",
           "translation": "外环方向对吧。非常感谢。",
+          "segments": [
+            {"text": "外", "kana": "そと"},
+            {"text": "回", "kana": "まわ"},
+            {"text": "りですね。ありがとうございます。"}
+          ],
           "startTime": 65.0,
           "endTime": 68.0,
           "slowStartTime": 84.5,
@@ -266,6 +383,9 @@
           "japanese": "いってらっしゃいませ。",
           "romaji": "itterasshaimase.",
           "translation": "请慢走。",
+          "segments": [
+            {"text": "いってらっしゃいませ。"}
+          ],
           "startTime": 68.5,
           "endTime": 70.5,
           "slowStartTime": 89.1,

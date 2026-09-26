@@ -20,6 +20,7 @@ import { ModeManager, AppMode } from '../service/ModeManager';
 import { PlayerController, PlayerUiState } from '../service/PlayerController';
 import { SceneRepository } from '../service/SceneRepository';
 import { Scene } from '../model/Scene';
+import { Segment } from '../model/Sentence';
 import appLogger from '../utils/Logger';
 
 @Entry
@@ -32,6 +33,7 @@ struct Index {
   // 播放器状态
   @State isPlaying: boolean = false;
   @State currentSentence: string = '';
+  @State currentSegments: Segment[] = [];
   @State currentSceneTitle: string = '';
   @State currentTimeMs: number = 0;
   @State durationMs: number = 0;
@@ -113,8 +115,10 @@ struct Index {
     this.hasPlayContent = !!state.sceneId && !!state.currentSentence;
     if (state.currentSentence) {
       this.currentSentence = state.currentSentence.japanese;
+      this.currentSegments = state.currentSentence.segments || [];
     } else {
       this.currentSentence = '';
+      this.currentSegments = [];
     }
   }
 
@@ -183,6 +187,7 @@ struct Index {
             PlayerBar({
               sceneTitle: this.currentSceneTitle,
               sentenceJapanese: this.currentSentence,
+              segments: this.currentSegments,
               isPlaying: this.isPlaying,
               currentTimeMs: this.currentTimeMs,
               durationMs: this.durationMs,
@@ -207,6 +212,7 @@ struct Index {
           } else {
             MiniPlayer({
               sentenceJapanese: this.currentSentence,
+              segments: this.currentSegments,
               isPlaying: this.isPlaying,
               onPlayPause: () => {
                 PlayerController.getInstance().togglePlay();

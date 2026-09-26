@@ -4,12 +4,15 @@
  */
 
 import { ThemeColors } from '../constants/ThemeConstants';
+import { Segment } from '../model/Sentence';
+import { FuriganaText } from '../components/FuriganaText';
 import { formatDuration } from '../utils/TimeUtil';
 
 @Component
 export struct PlayerBar {
   @Prop sceneTitle: string = '';
   @Prop sentenceJapanese: string = '';
+  @Prop segments: Segment[] = [];
   @Prop isPlaying: boolean = false;
   @Prop currentTimeMs: number = 0;
   @Prop durationMs: number = 0;
@@ -30,14 +33,16 @@ export struct PlayerBar {
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .maxLines(1);
 
-        Text(this.sentenceJapanese)
-          .fontSize(14)
-          .fontColor(ThemeColors.textPrimary)
-          .fontWeight(600)
-          .width('100%')
-          .margin({ top: 2 })
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .maxLines(1);
+        FuriganaText({
+          segments: this.segments,
+          japanese: this.sentenceJapanese,
+          fontSize: 14,
+          fontColor: ThemeColors.textPrimary,
+          fontWeight: 600,
+          containerWidth: '100%',
+          compact: true
+        })
+          .margin({ top: 2 });
       }
       .layoutWeight(1)
       .alignItems(HorizontalAlign.Start)

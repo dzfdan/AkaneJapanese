@@ -4,23 +4,29 @@
  */
 
 import { ThemeColors } from '../constants/ThemeConstants';
+import { Segment } from '../model/Sentence';
+import { FuriganaText } from '../components/FuriganaText';
 
 @Component
 export struct MiniPlayer {
   @Prop sentenceJapanese: string = '';
+  @Prop segments: Segment[] = [];
   @Prop isPlaying: boolean = false;
   onPlayPause: () => void = () => {};
   onBarClick?: () => void;
 
   build() {
     Row() {
-      // 左侧：句子日文
-      Text(this.sentenceJapanese)
-        .fontSize(12)
-        .fontColor(ThemeColors.textPrimary)
+      // 左侧：句子日文（含振假名注音）
+      FuriganaText({
+        segments: this.segments,
+        japanese: this.sentenceJapanese,
+        fontSize: 12,
+        fontColor: ThemeColors.textPrimary,
+        containerWidth: '100%',
+        compact: true
+      })
         .layoutWeight(1)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
-        .maxLines(1)
         .margin({ right: 8 })
         .onClick(() => {
           if (this.onBarClick) {
