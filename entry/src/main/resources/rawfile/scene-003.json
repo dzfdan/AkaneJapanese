@@ -5,8 +5,8 @@
   "level": "N5",
   "category": "日常生活",
   "descriptionZh": "在日本便利店购物的基础场景。包含购买便当、饮料、支付等简单表达。",
-  "audioNormal": "scene-003-normal.m4a",
-  "audioSlow": "scene-003-slow.m4a",
+  "audioNormal": "scene-003-normal.wav",
+  "audioSlow": "scene-003-slow.wav",
   "dialogues": [
     {
       "id": "dlg-003-1",

@@ -5,8 +5,8 @@
   "level": "N4",
   "category": "饮食",
   "descriptionZh": "在日本餐厅点餐的实用场景。包含进店就座、点餐、结账等常用表达。",
-  "audioNormal": "scene-002-normal.m4a",
-  "audioSlow": "scene-002-slow.m4a",
+  "audioNormal": "scene-002-normal.wav",
+  "audioSlow": "scene-002-slow.wav",
   "dialogues": [
     {
       "id": "dlg-002-1",

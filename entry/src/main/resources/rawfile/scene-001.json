@@ -5,8 +5,8 @@
   "level": "N4",
   "category": "日常生活",
   "descriptionZh": "在日本街头向路人询问路线的实用场景。包含问路、指路、换乘等常见表达。",
-  "audioNormal": "scene-001-normal.m4a",
-  "audioSlow": "scene-001-slow.m4a",
+  "audioNormal": "scene-001-normal.wav",
+  "audioSlow": "scene-001-slow.wav",
   "dialogues": [
     {
       "id": "dlg-001-1",
