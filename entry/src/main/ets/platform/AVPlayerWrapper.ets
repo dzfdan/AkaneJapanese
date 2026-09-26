@@ -24,6 +24,15 @@ export interface AVPlayerCallbacks {
 }
 
 /**
+ * 状态等待器（用于 waitForState）
+ */
+interface StateWaiter {
+  target: PlayerState;
+  resolve: () => void;
+  reject: (e: Error) => void;
+}
+
+/**
  * AVPlayer 封装类
  * 对鸿蒙系统 AVPlayer 进行封装，提供更易用的接口
  * 注意：AVPlayer 是状态机驱动，必须按状态顺序操作
@@ -45,6 +54,7 @@ export class AVPlayerWrapper {
   private _currentTimeMs: number = 0;
   private _durationMs: number = 0;
   private callbacks: AVPlayerCallbacks = {};
+  private stateWaiters: StateWaiter[] = [];
 
   /**
    * 获取当前播放器状态
@@ -95,6 +105,7 @@ export class AVPlayerWrapper {
       // 重置到 idle 状态以设置新源
       if (this._state !== 'idle') {
         await this.reset();
+        await this.waitForState('idle');
       }
 
       if (offset !== undefined && length !== undefined) {
@@ -107,9 +118,8 @@ export class AVPlayerWrapper {
         this.player.fdSrc = { fd: fd };
       }
 
-      // 设置 src 后状态变为 initialized
-      this._state = 'initialized';
-      this.notifyStateChange();
+      // 等待 AVPlayer 内部状态真正变为 initialized（异步事件驱动）
+      await this.waitForState('initialized');
       appLogger.debug(`AVPlayerWrapper: setFdSource done, state=${this._state}`);
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: setFdSource failed`, error);
@@ -131,8 +141,9 @@ export class AVPlayerWrapper {
       }
 
       await this.player.prepare();
-      // stateChange 事件会更新状态
-      appLogger.debug(`AVPlayerWrapper: prepare called`);
+      // 等待 AVPlayer 内部状态真正变为 prepared
+      await this.waitForState('prepared');
+      appLogger.debug(`AVPlayerWrapper: prepare done, state=${this._state}`);
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: prepare failed`, error);
       this.notifyError(error as Error);
@@ -148,12 +159,20 @@ export class AVPlayerWrapper {
       if (!this.player) {
         throw new Error('Player not created');
       }
+      // 容错：若仍在 initialized（prepare 事件未及时更新状态），补一次 prepare
+      if (this._state === 'initialized') {
+        appLogger.warn(`AVPlayerWrapper: play called in initialized state, doing prepare first`);
+        await this.player.prepare();
+        this._state = 'prepared';
+      }
       if (this._state !== 'prepared' && this._state !== 'paused' && this._state !== 'completed') {
         throw new Error(`Invalid state for play: ${this._state}`);
       }
 
       await this.player.play();
-      appLogger.debug(`AVPlayerWrapper: play called`);
+      this._state = 'playing';
+      this.notifyStateChange();
+      appLogger.debug(`AVPlayerWrapper: play done, state=${this._state}`);
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: play failed`, error);
       this.notifyError(error as Error);
@@ -175,7 +194,9 @@ export class AVPlayerWrapper {
       }
 
       await this.player.pause();
-      appLogger.debug(`AVPlayerWrapper: pause called`);
+      this._state = 'paused';
+      this.notifyStateChange();
+      appLogger.debug(`AVPlayerWrapper: pause done, state=${this._state}`);
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: pause failed`, error);
       this.notifyError(error as Error);
@@ -197,7 +218,9 @@ export class AVPlayerWrapper {
       }
 
       await this.player.stop();
-      appLogger.debug(`AVPlayerWrapper: stop called`);
+      this._state = 'stopped';
+      this.notifyStateChange();
+      appLogger.debug(`AVPlayerWrapper: stop done, state=${this._state}`);
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: stop failed`, error);
       this.notifyError(error as Error);
@@ -220,7 +243,7 @@ export class AVPlayerWrapper {
       await this.player.reset();
       this._currentTimeMs = 0;
       this._durationMs = 0;
-      appLogger.debug(`AVPlayerWrapper: reset called`);
+      appLogger.debug(`AVPlayerWrapper: reset called, waiting for idle`);
     } catch (error) {
       appLogger.error(`AVPlayerWrapper: reset failed`, error);
       this.notifyError(error as Error);
@@ -427,7 +450,45 @@ export class AVPlayerWrapper {
   /**
    * 通知状态变化
    */
+  /**
+   * 等待播放器状态变为指定状态
+   * 依赖 stateChange 事件驱动，避免在异步状态转换未完成时执行下一步操作
+   */
+  private waitForState(target: PlayerState, timeoutMs: number = 5000): Promise<void> {
+    if (this._state === target) {
+      return Promise.resolve();
+    }
+    return new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error(`Timeout waiting for state ${target}, current=${this._state}`));
+      }, timeoutMs);
+      const waiter: StateWaiter = {
+        target: target,
+        resolve: (): void => {
+          clearTimeout(timer);
+          resolve();
+        },
+        reject: (e: Error): void => {
+          clearTimeout(timer);
+          reject(e);
+        }
+      };
+      this.stateWaiters.push(waiter);
+    });
+  }
+
   private notifyStateChange(): void {
+    // 唤醒所有等待该状态的 Promise
+    const remaining: StateWaiter[] = [];
+    for (const waiter of this.stateWaiters) {
+      if (waiter.target === this._state) {
+        waiter.resolve();
+      } else {
+        remaining.push(waiter);
+      }
+    }
+    this.stateWaiters = remaining;
+
     if (this.callbacks.onStateChange) {
       this.callbacks.onStateChange(this._state);
     }
