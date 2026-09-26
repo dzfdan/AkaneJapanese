@@ -786,41 +786,69 @@ export class PlayerController {
    * @param timeMs 当前播放时间（毫秒）
    */
   private updateCurrentSentence(timeMs: number): void {
-    const dialogue = this.getCurrentDialogue();
-    if (!dialogue || dialogue.sentences.length === 0) {
+    if (!this.currentScene || this.currentScene.dialogues.length === 0) {
       return;
     }
 
     const timeSec = timeMs / 1000;
-    let foundIndex = -1;
+    let foundDialogueIndex = -1;
+    let foundSentenceIndex = -1;
 
-    for (let i = 0; i < dialogue.sentences.length; i++) {
-      const sentence = dialogue.sentences[i];
-      const startTime = this.isSlowMode ? sentence.slowStartTime : sentence.startTime;
-      const endTime = this.isSlowMode ? sentence.slowEndTime : sentence.endTime;
-
-      if (timeSec >= startTime && timeSec < endTime) {
-        foundIndex = i;
-        break;
-      }
-    }
-
-    // 如果没找到精确匹配，尝试找最接近的（处理边界情况）
-    if (foundIndex === -1) {
+    // 精确匹配：遍历所有对话的所有句子
+    for (let d = 0; d < this.currentScene.dialogues.length; d++) {
+      const dialogue = this.currentScene.dialogues[d];
       for (let i = 0; i < dialogue.sentences.length; i++) {
         const sentence = dialogue.sentences[i];
         const startTime = this.isSlowMode ? sentence.slowStartTime : sentence.startTime;
         const endTime = this.isSlowMode ? sentence.slowEndTime : sentence.endTime;
-        // 允许 200ms 的容差
-        if (timeSec >= startTime - 0.2 && timeSec <= endTime + 0.2) {
-          foundIndex = i;
+        if (timeSec >= startTime && timeSec < endTime) {
+          foundDialogueIndex = d;
+          foundSentenceIndex = i;
           break;
         }
       }
+      if (foundDialogueIndex !== -1) break;
     }
 
-    if (foundIndex !== -1 && foundIndex !== this.currentSentenceIndex) {
-      this.currentSentenceIndex = foundIndex;
+    // 容差匹配（200ms）
+    if (foundSentenceIndex === -1) {
+      for (let d = 0; d < this.currentScene.dialogues.length; d++) {
+        const dialogue = this.currentScene.dialogues[d];
+        for (let i = 0; i < dialogue.sentences.length; i++) {
+          const sentence = dialogue.sentences[i];
+          const startTime = this.isSlowMode ? sentence.slowStartTime : sentence.startTime;
+          const endTime = this.isSlowMode ? sentence.slowEndTime : sentence.endTime;
+          if (timeSec >= startTime - 0.2 && timeSec <= endTime + 0.2) {
+            foundDialogueIndex = d;
+            foundSentenceIndex = i;
+            break;
+          }
+        }
+        if (foundDialogueIndex !== -1) break;
+      }
+    }
+
+    if (foundSentenceIndex === -1) {
+      // gap 期间不更新
+      return;
+    }
+
+    // 跨对话切换
+    if (foundDialogueIndex !== this.currentDialogueIndex) {
+      appLogger.info(`PlayerController: auto switch dialogue ${this.currentDialogueIndex} -> ${foundDialogueIndex} at ${timeSec}s`);
+      this.currentDialogueIndex = foundDialogueIndex;
+      this.currentSentenceIndex = foundSentenceIndex;
+      const sentence = this.getCurrentSentence();
+      if (sentence) {
+        this.notifySentenceChange(sentence);
+      }
+      this.notifyStateChange();
+      return;
+    }
+
+    // 同对话内切换句子
+    if (foundSentenceIndex !== this.currentSentenceIndex) {
+      this.currentSentenceIndex = foundSentenceIndex;
       const sentence = this.getCurrentSentence();
       if (sentence) {
         this.notifySentenceChange(sentence);
