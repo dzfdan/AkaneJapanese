@@ -1,13 +1,28 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\neusoft\\.ohos\\config\\default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B96DDC744E3C00C54969943FD92EBE5F68165BBA9DA40ADFDAC86392891C451DEA4B0FA920C68F1",
+          "profile": "C:\\Users\\neusoft\\.ohos\\config\\default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\neusoft\\.ohos\\config\\default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.p12",
+          "storePassword": "0000001B02DF51359062B4473851D203A37888C4C5E815951D0E21CA17C5ED8BF406BACEB841C6B9456E0E"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "26.0.0",
+        "compileSdkVersion": "26.0.0",
+        "compatibleSdkVersion": "6.1.1(24)",
         "runtimeOS": "HarmonyOS",
-        "targetSdkVersion": "26.0.0"
+        "targetSdkVersion": "6.1.1(24)"
       }
     ],
     "buildModeSet": [
