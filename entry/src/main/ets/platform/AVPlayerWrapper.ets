@@ -369,19 +369,19 @@ export class AVPlayerWrapper {
       }
     });
 
-    // 时间更新事件
+    // 时间更新事件（鸿蒙 AVPlayer 官方约定：time 单位为毫秒）
     this.player.on('timeUpdate', (time: number) => {
-      // timeUpdate 的回调参数单位为秒，转换为毫秒
-      this._currentTimeMs = Math.floor(time * 1000);
+      this._currentTimeMs = time;
+      appLogger.debug(`AVPlayerWrapper: timeUpdate raw=${time}, _currentTimeMs=${this._currentTimeMs}`);
       if (this.callbacks.onTimeUpdate) {
         this.callbacks.onTimeUpdate(this._currentTimeMs);
       }
     });
 
-    // 时长更新事件
+    // 时长更新事件（鸿蒙 AVPlayer 官方约定：duration 单位为毫秒）
     this.player.on('durationUpdate', (duration: number) => {
-      // durationUpdate 的回调参数单位为秒，转换为毫秒
-      this._durationMs = Math.floor(duration * 1000);
+      this._durationMs = duration;
+      appLogger.debug(`AVPlayerWrapper: durationUpdate raw=${duration}, _durationMs=${this._durationMs}`);
       if (this.callbacks.onDurationUpdate) {
         this.callbacks.onDurationUpdate(this._durationMs);
       }
