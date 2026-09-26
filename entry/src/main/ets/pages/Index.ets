@@ -4,6 +4,7 @@
  */
 
 import { mediaquery } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 import { ThemeColors } from '../constants/ThemeConstants';
 import { AppConstants } from '../constants/AppConstants';
 import { SideNav } from '../components/SideNav';
@@ -145,6 +146,12 @@ struct Index {
     Stack() {
       // 主界面
       Column() {
+        // PoC 临时入口按钮（Task 8 完成后删除）
+        Button('PoC ASR').position({ top: 8, right: 8 }).fontSize(12).height(28).padding(8)
+          .backgroundColor('#FF6B35').fontColor('#FFFFFF')
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/PocAsrPage' });
+          });
         // 主内容区
         if (this.isWideScreen) {
           // 宽屏模式：SideNav + 内容页

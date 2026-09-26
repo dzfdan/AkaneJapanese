@@ -1,32 +1,23 @@
-# Build output
 build/
 output/
 *.hap
 *.app
-
-# IDE
 .idea/
 .vscode/
 *.iml
 .local/
-
-# Dependency cache
 oh_modules/
 node_modules/
-
-# Logs
 *.log
 logs/
-
-# OS files
 .DS_Store
 Thumbs.db
-
-# Temp files
 *.tmp
 *.bak
 *.swp
-
-# hvigor
 .hvigor/
 oh-package-lock.json5
+entry/src/main/resources/rawfile/asr/**/*.onnx
+entry/src/main/resources/rawfile/asr/**/*.tar.bz2
+*.tar.bz2
+
