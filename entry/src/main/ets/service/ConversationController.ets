@@ -104,7 +104,9 @@ export class ConversationController {
     } catch (e) {
       appLogger.error(`[${TAG}] beginAppSpeaking failed`, e);
       this.errorMessage = '播放失败';
+      this.player.removeOnSentenceEnd(this.sentenceEndBound);
       this.setState('IDLE');
+      throw e as Error;
     }
   }
 
@@ -132,14 +134,19 @@ export class ConversationController {
     }
   }
 
-  private onAsrEndpoint(text: string): void {
+  private async onAsrEndpoint(text: string): Promise<void> {
     this.setState('RECOGNIZING');
-    this.recorder.stop().catch((e: Object) => {
+    // await 停止录音和 ASR，避免重试时 start/stop 竞态
+    try {
+      await this.recorder.stop();
+    } catch (e) {
       appLogger.error(`[${TAG}] recorder.stop failed`, e);
-    });
-    this.asr.stopListening().catch((e: Object) => {
+    }
+    try {
+      await this.asr.stopListening();
+    } catch (e) {
       appLogger.error(`[${TAG}] asr.stopListening failed`, e);
-    });
+    }
 
     const sentence = this.getCurrentSentence();
     if (!sentence) {

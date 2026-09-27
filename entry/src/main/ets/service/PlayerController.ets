@@ -199,6 +199,7 @@ export class PlayerController {
    * 暂停播放
    */
   async pause(): Promise<void> {
+    this.sentenceNotifyActive = false;
     try {
       await this.player.pause();
       this.isPlaying = false;
