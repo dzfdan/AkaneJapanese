@@ -149,7 +149,13 @@ export class ConversationController {
     }
 
     try {
-      const result = match(text || '', sentence.japanese);
+      if (!text || text.trim().length === 0) {
+        this.lastMatch = { similarity: 0, isCorrect: false, userHighlighted: [], originalHighlighted: [] };
+        this.errorMessage = '没听清，请重试';
+        this.setState('FEEDBACK');
+        return;
+      }
+      const result = match(text, sentence.japanese);
       this.lastMatch = result;
       this.setState('FEEDBACK');
     } catch (e) {

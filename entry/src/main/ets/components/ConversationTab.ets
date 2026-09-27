@@ -3,7 +3,9 @@ import { Scene } from '../model/Scene';
 import { Sentence } from '../model/Sentence';
 import { FuriganaText } from './FuriganaText';
 import { ConversationController, ConversationUiState } from '../service/ConversationController';
+import { SherpaAsrEngine } from '../service/SherpaAsrEngine';
 import { HighlightSegment } from '../service/SimilarityMatcher';
+import { abilityAccessCtrl, common } from '@kit.AbilityKit';
 import appLogger from '../utils/Logger';
 
 @Component
@@ -13,6 +15,8 @@ export struct ConversationTab {
   @Prop practiceSentenceIndex: number = 0;
 
   @State uiState: ConversationUiState | null = null;
+  @State permissionGranted: boolean = false;
+  @State modelState: 'idle' | 'loading' | 'ready' | 'failed' = 'idle';
   private stateCallback: ((s: ConversationUiState) => void) | null = null;
 
   aboutToAppear(): void {
@@ -20,6 +24,44 @@ export struct ConversationTab {
       this.uiState = s;
     };
     ConversationController.getInstance().addOnStateChange(this.stateCallback);
+    this.requestPermissionAndInitModel();
+  }
+
+  private async requestPermissionAndInitModel(): Promise<void> {
+    const context = getContext(this) as common.UIAbilityContext;
+    // 并行：请求麦克风权限 + 加载 ASR 模型
+    const permPromise = abilityAccessCtrl.createAtManager()
+      .requestPermissionsFromUser(context, ['ohos.permission.MICROPHONE'])
+      .then((res) => {
+        const granted = res.authResults && res.authResults[0] === 0;
+        this.permissionGranted = granted;
+        if (!granted) {
+          appLogger.warn('[ConversationTab] microphone permission denied');
+        }
+      })
+      .catch((e: Object) => {
+        appLogger.error('[ConversationTab] requestPermissionsFromUser failed', e);
+        this.permissionGranted = false;
+      });
+    this.modelState = 'loading';
+    const modelPromise = SherpaAsrEngine.getInstance().init(context)
+      .then(() => {
+        this.modelState = SherpaAsrEngine.getInstance().isReady ? 'ready' : 'failed';
+      })
+      .catch((e: Object) => {
+        appLogger.error('[ConversationTab] SherpaAsrEngine.init failed', e);
+        this.modelState = 'failed';
+      });
+    await Promise.all([permPromise, modelPromise]);
+  }
+
+  private openSettings(): void {
+    const context = getContext(this) as common.UIAbilityContext;
+    try {
+      context.startAbility({ action: 'action.settings' });
+    } catch (e) {
+      appLogger.error('[ConversationTab] openSettings failed', e);
+    }
   }
 
   aboutToDisappear(): void {
@@ -48,7 +90,13 @@ export struct ConversationTab {
 
   build() {
     Column() {
-      if (this.uiState === null || this.uiState.state === 'IDLE') {
+      if (!this.permissionGranted) {
+        this.buildPermissionDenied();
+      } else if (this.modelState === 'failed') {
+        this.buildModelFailed();
+      } else if (this.modelState === 'loading' || this.modelState === 'idle') {
+        this.buildModelLoading();
+      } else if (this.uiState === null || this.uiState.state === 'IDLE') {
         this.buildIdle();
       } else if (this.uiState.state === 'APP_SPEAKING') {
         this.buildAppSpeaking();
@@ -76,6 +124,40 @@ export struct ConversationTab {
         .backgroundColor(ThemeColors.primary).fontColor('#FFFFFF')
         .borderRadius(12)
         .onClick(() => this.handleStart());
+    }
+    .width('100%').height('100%').justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center);
+  }
+
+  @Builder
+  buildPermissionDenied() {
+    Column() {
+      Text('🔒').fontSize(48).margin({ bottom: 24 });
+      Text('需要麦克风权限').fontSize(18).fontWeight(700).margin({ bottom: 8 });
+      Text('对话模式需要使用麦克风进行语音识别').fontSize(12).fontColor(ThemeColors.textSecondary).margin({ bottom: 32 });
+      Button('⚙ 去设置')
+        .width('80%').height(48).fontSize(16).fontWeight(600)
+        .backgroundColor(ThemeColors.primary).fontColor('#FFFFFF')
+        .borderRadius(12)
+        .onClick(() => this.openSettings());
+    }
+    .width('100%').height('100%').justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center);
+  }
+
+  @Builder
+  buildModelFailed() {
+    Column() {
+      Text('⚠').fontSize(48).margin({ bottom: 24 });
+      Text('模型未就绪').fontSize(18).fontWeight(700).margin({ bottom: 8 });
+      Text('语音识别模型加载失败，请重启 App').fontSize(12).fontColor(ThemeColors.textSecondary);
+    }
+    .width('100%').height('100%').justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center);
+  }
+
+  @Builder
+  buildModelLoading() {
+    Column() {
+      LoadingProgress().width(48).height(48).margin({ bottom: 16 });
+      Text('⏳ 模型加载中…').fontSize(14).fontColor(ThemeColors.textSecondary);
     }
     .width('100%').height('100%').justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center);
   }
