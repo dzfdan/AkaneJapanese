@@ -243,6 +243,15 @@ export struct ConversationTab {
         .width('100%').margin({ bottom: 8 });
       }
 
+      // 错误提示（如"没听清，请重试"）
+      if (this.uiState && this.uiState.errorMessage) {
+        Text(this.uiState.errorMessage)
+          .fontSize(13)
+          .fontColor(ThemeColors.error)
+          .width('100%')
+          .margin({ bottom: 8 });
+      }
+
       // 相似度
       if (this.uiState && this.uiState.lastMatch) {
         Row() {

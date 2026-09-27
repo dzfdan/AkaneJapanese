@@ -252,7 +252,8 @@ export class SherpaAsrEngine {
       const text: string = result.text ? result.text.trim() : '';
       // 离线模式无 reset()，重建 stream 以便下一段识别
       this.stream = this.recognizer.createStream();
-      if (this.onEndpointCb && text.length > 0) {
+      // 空文本也透传给控制器，由 ConversationController 做降级处理（相似度 0% + "没听清"提示）
+      if (this.onEndpointCb) {
         appLogger.info(`[${TAG}] endpoint text="${text}"`);
         this.onEndpointCb(text);
       }
