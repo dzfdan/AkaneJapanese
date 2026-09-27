@@ -38,6 +38,7 @@ export interface PlayerUiState {
 type StateChangeCallback = (state: PlayerUiState) => void;
 type TimeUpdateCallback = (currentTimeMs: number, durationMs: number) => void;
 type SentenceChangeCallback = (sentence: Sentence) => void;
+type SentenceEndCallback = (sentence: Sentence) => void;
 type ErrorCallback = (message: string) => void;
 
 export class PlayerController {
@@ -55,6 +56,7 @@ export class PlayerController {
   private stateChangeListeners: CallbackList<StateChangeCallback> = new CallbackList<StateChangeCallback>();
   private timeUpdateListeners: CallbackList<TimeUpdateCallback> = new CallbackList<TimeUpdateCallback>();
   private sentenceChangeListeners: CallbackList<SentenceChangeCallback> = new CallbackList<SentenceChangeCallback>();
+  private sentenceEndListeners: CallbackList<SentenceEndCallback> = new CallbackList<SentenceEndCallback>();
   private errorListeners: CallbackList<ErrorCallback> = new CallbackList<ErrorCallback>();
 
   private constructor() {
@@ -103,6 +105,14 @@ export class PlayerController {
 
   removeOnError(callback: ErrorCallback): void {
     this.errorListeners.remove(callback);
+  }
+
+  addOnSentenceEnd(callback: SentenceEndCallback): void {
+    this.sentenceEndListeners.add(callback);
+  }
+
+  removeOnSentenceEnd(callback: SentenceEndCallback): void {
+    this.sentenceEndListeners.remove(callback);
   }
 
   /**
@@ -501,6 +511,17 @@ export class PlayerController {
   }
 
   /**
+   * 播放单句并在播放完成时通过 onSentenceEnd 通知监听者。
+   * 播放完成由 onStateChange 的 completed 分支触发 sentenceEndListeners。
+   * @param scene 场景对象
+   * @param dialogueIndex 对话索引
+   * @param sentenceIndex 句子索引
+   */
+  async playSentenceAndNotify(scene: Scene, dialogueIndex: number, sentenceIndex: number): Promise<void> {
+    await this.playSentence(scene, dialogueIndex, sentenceIndex);
+  }
+
+  /**
    * 获取当前 UI 状态
    * @returns PlayerUiState 对象
    */
@@ -570,6 +591,12 @@ export class PlayerController {
         }
         if (state === 'completed') {
           this.recordSceneProgress(100);
+          const sentence = this.getCurrentSentence();
+          if (sentence) {
+            this.sentenceEndListeners.notify((callback: SentenceEndCallback) => {
+              callback(sentence);
+            });
+          }
         }
         this.notifyStateChange();
       },
