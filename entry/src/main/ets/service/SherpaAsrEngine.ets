@@ -42,6 +42,10 @@ export class SherpaAsrEngine {
   private modelDir: string = '';
   public isReady: boolean = false;
 
+  // ======== VAD 流水线状态 ========
+  private isListening: boolean = false;
+  private onEndpointCb: ((text: string) => void) | null = null;
+
   private constructor() {}
 
   static getInstance(): SherpaAsrEngine {
@@ -149,6 +153,107 @@ export class SherpaAsrEngine {
     } catch (e) {
       appLogger.error(`[${TAG}] recognizeFromPcm failed`, e);
       throw e as Error;
+    }
+  }
+
+  /**
+   * 启动 VAD 监听。
+   * @param onEndpoint 检测到完整语音段端点时回调，参数为识别文本
+   */
+  async startListening(onEndpoint: (text: string) => void): Promise<void> {
+    if (!this.isReady) {
+      throw new Error('SherpaAsrEngine not initialized');
+    }
+    this.onEndpointCb = onEndpoint;
+    this.isListening = true;
+    appLogger.info(`[${TAG}] startListening`);
+  }
+
+  /**
+   * 停止 VAD 监听，flush 残留音频并识别。
+   */
+  async stopListening(): Promise<void> {
+    this.isListening = false;
+    if (this.vad) {
+      try {
+        this.vad.flush();
+        this.drainVadSegments();
+      } catch (e) {
+        appLogger.error(`[${TAG}] stopListening flush failed`, e);
+      }
+    }
+    this.onEndpointCb = null;
+    appLogger.info(`[${TAG}] stopListening`);
+  }
+
+  /**
+   * 喂 PCM 块给 VAD（同步方法，由 AudioRecorder.onData 回调触发）。
+   * VAD 检测到端点后取出语音段，喂 OfflineStream 解码并回调识别文本。
+   * @param samples 16-bit PCM 样本（Int16Array），采样率必须为 16000
+   */
+  feedPcmChunk(samples: Int16Array): void {
+    if (!this.vad || !this.isListening) {
+      return;
+    }
+    try {
+      // Int16 -> Float32 [-1, 1]
+      const floatSamples = new Float32Array(samples.length);
+      for (let i = 0; i < samples.length; i++) {
+        floatSamples[i] = samples[i] / 32768.0;
+      }
+      this.vad.acceptWaveform(floatSamples);
+      this.drainVadSegments();
+    } catch (e) {
+      appLogger.error(`[${TAG}] feedPcmChunk failed`, e);
+    }
+  }
+
+  /**
+   * 取出 VAD 队列中已检测到的所有语音段，逐段识别。
+   * 仅在 vad.isDetected() 为 true 且 !vad.isEmpty() 时处理。
+   */
+  private drainVadSegments(): void {
+    if (!this.vad) {
+      return;
+    }
+    if (!this.vad.isDetected()) {
+      return;
+    }
+    while (!this.vad.isEmpty()) {
+      const segment = this.vad.front();
+      this.vad.pop();
+      this.processSegment(segment.samples);
+    }
+  }
+
+  /**
+   * 识别单个语音段。
+   * 离线 recognizer 无 reset()，每段识别后重建 stream。
+   */
+  private processSegment(samples: Float32Array): void {
+    if (!this.recognizer || !this.stream) {
+      return;
+    }
+    const stream = this.stream;
+    try {
+      stream.acceptWaveform({ samples: samples, sampleRate: 16000 });
+      this.recognizer.decode(stream);
+      const result = this.recognizer.getResult(stream);
+      const text: string = result.text ? result.text.trim() : '';
+      // 离线模式无 reset()，重建 stream 以便下一段识别
+      this.stream = this.recognizer.createStream();
+      if (this.onEndpointCb && text.length > 0) {
+        appLogger.info(`[${TAG}] endpoint text="${text}"`);
+        this.onEndpointCb(text);
+      }
+    } catch (e) {
+      appLogger.error(`[${TAG}] processSegment failed`, e);
+      // 出错也重建 stream，避免脏状态
+      try {
+        this.stream = this.recognizer.createStream();
+      } catch (e2) {
+        appLogger.error(`[${TAG}] recreate stream after failure failed`, e2);
+      }
     }
   }
 
