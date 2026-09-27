@@ -1,50 +1,62 @@
 /**
- * sherpa-onnx ASR 引擎封装（PoC 版本）
+ * sherpa-onnx ASR 引擎封装（Worker 代理版本）
  *
- * PoC 通过条件：
- * 1. init() 不抛异常，isReady = true
- * 2. recognizeFromPcm() 返回非空字符串，且包含可识别的日文字符
- * 3. 单次识别耗时 < 5s
+ * 所有 native 操作（OfflineRecognizer/Vad 构造、acceptWaveform、decode、getResult）
+ * 都在 AsrWorker 子线程执行，主线程不阻塞，避免 AppFreeze (THREAD_BLOCK_6S)。
  *
- * 实际 HAR 1.13.3 API（与 plan/corrigenda 假设的差异，PoC 阶段已修正）：
- * - 使用 `new OfflineRecognizer(config)` 而非 `sherpaOnnx.createOfflineRecognizer(config)`
- * - 配置结构：featConfig / modelConfig{transducer{encoder,decoder,joiner}, tokens, numThreads, provider}
- * - VAD 用 `new Vad(new VadConfig(new SileroVadConfig(...), new TenVadConfig('', 0, 0, 0, 0), sampleRate, debug, numThreads, provider))`
- * - `stream.acceptWaveform({samples, sampleRate})` 接受对象形式（Samples 接口），不是两个独立参数
- * - `recognizer.getResult(stream).text` 而非 `stream.result.text` 或 `stream.getResult().text`
- * - 离线模式无 reset()，重建 stream 即可（this.stream = recognizer.createStream()）
+ * 根因：OfflineRecognizer/Vad 构造是同步 native 调用，加载 ONNX 模型阻塞 6s+，
+ * 在主线程触发会触发鸿蒙 watchdog THREAD_BLOCK_3S -> THREAD_BLOCK_6S -> 系统杀进程。
+ * 延迟初始化方案无效（点击按钮时仍阻塞主线程），唯一可靠方案是 Worker 子线程。
  *
- * ArkTS 严格类型：禁止 any/unknown，所有字段必须用 HAR 实际导出的类类型
+ * 对外接口不变：init / startListening / feedPcmChunk / stopListening / recognizeFromPcm / isReady
  */
 import { common } from '@kit.AbilityKit';
 import { fileIo } from '@kit.CoreFileKit';
-import {
-  OfflineRecognizer,
-  OfflineRecognizerConfig,
-  OfflineTransducerModelConfig,
-  OfflineModelConfig,
-  FeatureConfig,
-  OfflineStream,
-  Vad,
-  VadConfig,
-  SileroVadConfig,
-  TenVadConfig,
-} from 'sherpa_onnx';
+import { ErrorEvent, MessageEvents, worker } from '@kit.ArkTS';
 import appLogger from '../utils/Logger';
 
 const TAG = 'SherpaAsrEngine';
 
+// ======== 主线程 -> Worker 请求消息 ========
+interface InitReqMsg {
+  type: 'init';
+  modelDir: string;
+  destAsrDir: string;
+}
+interface StartReqMsg { type: 'start'; }
+interface FeedReqMsg {
+  type: 'feed';
+  samples: ArrayBuffer;
+}
+interface StopReqMsg { type: 'stop'; }
+interface RecognizeReqMsg {
+  type: 'recognize';
+  samples: ArrayBuffer;
+}
+interface MsgWithType { type: string; }
+
+// ======== Worker -> 主线程 回复消息 ========
+interface InitDoneMsg { type: 'init_done'; }
+interface InitFailedMsg { type: 'init_failed'; error: string; }
+interface EndpointMsg { type: 'endpoint'; text: string; }
+interface StopDoneMsg { type: 'stop_done'; }
+interface RecognizeDoneMsg { type: 'recognize_done'; text: string; }
+
 export class SherpaAsrEngine {
   private static instance: SherpaAsrEngine | null = null;
-  private recognizer: OfflineRecognizer | null = null;
-  private vad: Vad | null = null;
-  private stream: OfflineStream | null = null;
+  private wk: worker.ThreadWorker | null = null;
   private modelDir: string = '';
   public isReady: boolean = false;
 
   // ======== VAD 流水线状态 ========
   private isListening: boolean = false;
   private onEndpointCb: ((text: string) => void) | null = null;
+
+  // ======== Promise 等待回调 ========
+  private pendingInitResolve: (() => void) | null = null;
+  private pendingInitReject: ((e: Error) => void) | null = null;
+  private pendingStopResolve: (() => void) | null = null;
+  private pendingRecognizeResolve: ((text: string) => void) | null = null;
 
   private constructor() {}
 
@@ -56,10 +68,9 @@ export class SherpaAsrEngine {
   }
 
   /**
-   * 初始化：首次复制模型到 getFilesDir()/asr/，加载 recognizer + vad
+   * 初始化：首次复制模型到 getFilesDir()/asr/，创建 Worker 在子线程加载 native 模型
    */
   async init(context: common.Context): Promise<void> {
-    // 幂等保护：已初始化则跳过，避免重复创建 recognizer/vad
     if (this.isReady) {
       appLogger.info(`[${TAG}] already initialized, skip`);
       return;
@@ -80,48 +91,84 @@ export class SherpaAsrEngine {
       }
       this.modelDir = zipformerDir;
 
-      // 构建 OfflineRecognizer 配置（Zipformer ja 离线 transducer）
-      const transducer = new OfflineTransducerModelConfig();
-      transducer.encoder = `${zipformerDir}/encoder-epoch-99-avg-1.int8.onnx`;
-      transducer.decoder = `${zipformerDir}/decoder-epoch-99-avg-1.int8.onnx`;
-      transducer.joiner = `${zipformerDir}/joiner-epoch-99-avg-1.int8.onnx`;
+      // 创建 Worker（子线程加载 native 模型，主线程不阻塞）
+      appLogger.info(`[${TAG}] creating Worker...`);
+      this.wk = new worker.ThreadWorker('entry/ets/workers/AsrWorker.ets');
+      this.wk.onmessage = (e: MessageEvents): void => this.onWorkerMessage(e);
+      this.wk.onerror = (e: ErrorEvent): void => {
+        appLogger.error(`[${TAG}] Worker error`, e);
+      };
 
-      const modelConfig = new OfflineModelConfig();
-      modelConfig.transducer = transducer;
-      modelConfig.tokens = `${zipformerDir}/tokens.txt`;
-      modelConfig.numThreads = 1;
-      modelConfig.provider = 'cpu';
+      // 发送 init，等待子线程加载完成
+      await new Promise<void>((resolve, reject): void => {
+        this.pendingInitResolve = resolve;
+        this.pendingInitReject = reject;
+        const wk = this.wk;
+        if (wk) {
+          const initMsg: InitReqMsg = { type: 'init', modelDir: zipformerDir, destAsrDir: destAsrDir };
+          wk.postMessage(initMsg);
+        } else {
+          reject(new Error('worker not created'));
+        }
+      });
 
-      const featConfig = new FeatureConfig();
-      featConfig.sampleRate = 16000;
-      featConfig.featureDim = 80;
-
-      const recognizerConfig = new OfflineRecognizerConfig();
-      recognizerConfig.featConfig = featConfig;
-      recognizerConfig.modelConfig = modelConfig;
-
-      // 创建 recognizer（Zipformer ja 离线 transducer）
-      this.recognizer = new OfflineRecognizer(recognizerConfig);
-
-      // 创建 VAD（silero）；tenVad 占位（model 留空，native 库会跳过 ten 路径）
-      const silero = new SileroVadConfig(
-        `${destAsrDir}/silero_vad.onnx`,
-        0.5,    // threshold
-        100,    // minSpeechDuration ms
-        1500,   // minSilenceDuration ms
-        512,    // windowSize
-      );
-      const tenVad = new TenVadConfig('', 0, 0, 0, 0);
-      const vadConfig = new VadConfig(silero, tenVad, 16000, false, 1, 'cpu');
-      this.vad = new Vad(vadConfig);
-
-      this.stream = this.recognizer.createStream();
       this.isReady = true;
       appLogger.info(`[${TAG}] init done in ${Date.now() - t0}ms, isReady=${this.isReady}`);
     } catch (e) {
       appLogger.error(`[${TAG}] init failed`, e);
       this.isReady = false;
       throw e as Error;
+    }
+  }
+
+  private onWorkerMessage(e: MessageEvents): void {
+    const data = e.data as MsgWithType;
+    const type: string = data.type;
+    switch (type) {
+      case 'init_done': {
+        const r = this.pendingInitResolve;
+        this.pendingInitResolve = null;
+        this.pendingInitReject = null;
+        if (r) {
+          r();
+        }
+        break;
+      }
+      case 'init_failed': {
+        const rej = this.pendingInitReject;
+        this.pendingInitResolve = null;
+        this.pendingInitReject = null;
+        if (rej) {
+          rej(new Error((data as InitFailedMsg).error));
+        }
+        break;
+      }
+      case 'endpoint': {
+        if (this.isListening && this.onEndpointCb) {
+          const text: string = (data as EndpointMsg).text;
+          appLogger.info(`[${TAG}] endpoint text="${text}"`);
+          this.onEndpointCb(text);
+        }
+        break;
+      }
+      case 'stop_done': {
+        const r = this.pendingStopResolve;
+        this.pendingStopResolve = null;
+        if (r) {
+          r();
+        }
+        break;
+      }
+      case 'recognize_done': {
+        const r = this.pendingRecognizeResolve;
+        this.pendingRecognizeResolve = null;
+        if (r) {
+          r((data as RecognizeDoneMsg).text);
+        }
+        break;
+      }
+      default:
+        break;
     }
   }
 
@@ -132,33 +179,17 @@ export class SherpaAsrEngine {
    * @returns 识别文本
    */
   async recognizeFromPcm(samples: Int16Array, sampleRate: number): Promise<string> {
-    const recognizer: OfflineRecognizer | null = this.recognizer;
-    let stream: OfflineStream | null = this.stream;
-    if (!recognizer || !stream) {
+    const wk = this.wk;
+    if (!wk || !this.isReady) {
       throw new Error('SherpaAsrEngine not initialized');
     }
-    const t0 = Date.now();
-    try {
-      // 转换 Int16 -> Float32 [-1, 1]
-      const floatSamples = new Float32Array(samples.length);
-      for (let i = 0; i < samples.length; i++) {
-        floatSamples[i] = samples[i] / 32768.0;
-      }
-      // OfflineStream.acceptWaveform 接受 Samples 对象 {samples, sampleRate}
-      stream.acceptWaveform({ samples: floatSamples, sampleRate: sampleRate });
-      recognizer.decode(stream);
-      // 实际 API: recognizer.getResult(stream).text（OfflineStream 自身无 result 字段或方法）
-      const result = recognizer.getResult(stream);
-      const text: string = result.text ? result.text.trim() : '';
-      appLogger.info(`[${TAG}] recognizeFromPcm done in ${Date.now() - t0}ms, text="${text}"`);
-      // 离线模式无 reset()，重建 stream 以便下次识别
-      stream = recognizer.createStream();
-      this.stream = stream;
-      return text;
-    } catch (e) {
-      appLogger.error(`[${TAG}] recognizeFromPcm failed`, e);
-      throw e as Error;
-    }
+    // 复制 buffer 避免转移所有权影响调用方
+    const buf: ArrayBuffer = samples.buffer.slice(samples.byteOffset, samples.byteOffset + samples.byteLength);
+    return new Promise<string>((resolve): void => {
+      this.pendingRecognizeResolve = resolve;
+      const msg: RecognizeReqMsg = { type: 'recognize', samples: buf };
+      wk.postMessage(msg);
+    });
   }
 
   /**
@@ -166,105 +197,54 @@ export class SherpaAsrEngine {
    * @param onEndpoint 检测到完整语音段端点时回调，参数为识别文本
    */
   async startListening(onEndpoint: (text: string) => void): Promise<void> {
-    if (!this.isReady) {
+    const wk = this.wk;
+    if (!wk || !this.isReady) {
       throw new Error('SherpaAsrEngine not initialized');
     }
     this.onEndpointCb = onEndpoint;
     this.isListening = true;
     appLogger.info(`[${TAG}] startListening`);
+    const msg: StartReqMsg = { type: 'start' };
+    wk.postMessage(msg);
   }
 
   /**
    * 停止 VAD 监听，flush 残留音频并识别。
    */
   async stopListening(): Promise<void> {
+    const wk = this.wk;
     this.isListening = false;
-    if (this.vad) {
-      try {
-        this.vad.flush();
-        // flush 强制输出残留段，但可能不触发 isDetected()，此处直接排空队列
-        while (!this.vad.isEmpty()) {
-          const segment = this.vad.front();
-          this.vad.pop();
-          this.processSegment(segment.samples);
-        }
-      } catch (e) {
-        appLogger.error(`[${TAG}] stopListening flush failed`, e);
-      }
+    if (!wk) {
+      this.onEndpointCb = null;
+      appLogger.info(`[${TAG}] stopListening (no worker)`);
+      return;
     }
+    await new Promise<void>((resolve): void => {
+      this.pendingStopResolve = resolve;
+      const msg: StopReqMsg = { type: 'stop' };
+      wk.postMessage(msg);
+    });
     this.onEndpointCb = null;
     appLogger.info(`[${TAG}] stopListening`);
   }
 
   /**
-   * 喂 PCM 块给 VAD（同步方法，由 AudioRecorder.onData 回调触发）。
-   * VAD 检测到端点后取出语音段，喂 OfflineStream 解码并回调识别文本。
+   * 喂 PCM 块给 Worker（同步方法，由 AudioRecorder.onData 回调触发）。
+   * Worker 中 VAD 检测到端点后取出语音段，解码并回调识别文本。
    * @param samples 16-bit PCM 样本（Int16Array），采样率必须为 16000
    */
   feedPcmChunk(samples: Int16Array): void {
-    if (!this.vad || !this.isListening) {
+    const wk = this.wk;
+    if (!wk || !this.isListening) {
       return;
     }
     try {
-      // Int16 -> Float32 [-1, 1]
-      const floatSamples = new Float32Array(samples.length);
-      for (let i = 0; i < samples.length; i++) {
-        floatSamples[i] = samples[i] / 32768.0;
-      }
-      this.vad.acceptWaveform(floatSamples);
-      this.drainVadSegments();
+      // 复制 buffer 避免转移所有权影响 AudioRecorder 后续使用
+      const buf: ArrayBuffer = samples.buffer.slice(samples.byteOffset, samples.byteOffset + samples.byteLength);
+      const msg: FeedReqMsg = { type: 'feed', samples: buf };
+      wk.postMessage(msg);
     } catch (e) {
       appLogger.error(`[${TAG}] feedPcmChunk failed`, e);
-    }
-  }
-
-  /**
-   * 取出 VAD 队列中已检测到的所有语音段，逐段识别。
-   * 仅在 vad.isDetected() 为 true 且 !vad.isEmpty() 时处理。
-   */
-  private drainVadSegments(): void {
-    if (!this.vad) {
-      return;
-    }
-    if (!this.vad.isDetected()) {
-      return;
-    }
-    while (!this.vad.isEmpty()) {
-      const segment = this.vad.front();
-      this.vad.pop();
-      this.processSegment(segment.samples);
-    }
-  }
-
-  /**
-   * 识别单个语音段。
-   * 离线 recognizer 无 reset()，每段识别后重建 stream。
-   */
-  private processSegment(samples: Float32Array): void {
-    if (!this.recognizer || !this.stream) {
-      return;
-    }
-    const stream = this.stream;
-    try {
-      stream.acceptWaveform({ samples: samples, sampleRate: 16000 });
-      this.recognizer.decode(stream);
-      const result = this.recognizer.getResult(stream);
-      const text: string = result.text ? result.text.trim() : '';
-      // 离线模式无 reset()，重建 stream 以便下一段识别
-      this.stream = this.recognizer.createStream();
-      // 仅在监听状态下回调，避免 stopListening flush 路径重入 onAsrEndpoint
-      if (this.isListening && this.onEndpointCb) {
-        appLogger.info(`[${TAG}] endpoint text="${text}"`);
-        this.onEndpointCb(text);
-      }
-    } catch (e) {
-      appLogger.error(`[${TAG}] processSegment failed`, e);
-      // 出错也重建 stream，避免脏状态
-      try {
-        this.stream = this.recognizer.createStream();
-      } catch (e2) {
-        appLogger.error(`[${TAG}] recreate stream after failure failed`, e2);
-      }
     }
   }
 
@@ -299,7 +279,7 @@ export class SherpaAsrEngine {
       } catch (e) {
         // 目录已存在时忽略
       }
-      // 先删除已存在的文件（避免 CREATE 模式报 "File exists"）
+      // 先删除已存在的文件（避免 CREATE 模式报 "File Exists"）
       try {
         await fileIo.unlink(dest);
       } catch (e) {
@@ -311,4 +291,3 @@ export class SherpaAsrEngine {
     }
   }
 }
-

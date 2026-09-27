@@ -24,35 +24,27 @@ export struct ConversationTab {
       this.uiState = s;
     };
     ConversationController.getInstance().addOnStateChange(this.stateCallback);
-    this.requestPermissionAndInitModel();
+    // 只请求麦克风权限，ASR 模型延迟到点击「开始对话」时初始化。
+    // 原因：sherpa_onnx 的 new OfflineRecognizer/Vad 是同步 native 调用，阻塞主线程 5-7s，
+    // 在 aboutToAppear 触发会与 Tab 切换动画叠加，触发 AppFreeze (THREAD_BLOCK_6S) 被系统杀进程。
+    this.requestPermissionOnly();
   }
 
-  private async requestPermissionAndInitModel(): Promise<void> {
+  private async requestPermissionOnly(): Promise<void> {
     const context = getContext(this) as common.UIAbilityContext;
-    // 并行：请求麦克风权限 + 加载 ASR 模型
-    const permPromise = abilityAccessCtrl.createAtManager()
-      .requestPermissionsFromUser(context, ['ohos.permission.MICROPHONE'])
-      .then((res) => {
-        const granted = res.authResults && res.authResults[0] === 0;
-        this.permissionGranted = granted;
-        if (!granted) {
-          appLogger.warn('[ConversationTab] microphone permission denied');
-        }
-      })
-      .catch((e: Object) => {
-        appLogger.error('[ConversationTab] requestPermissionsFromUser failed', e);
-        this.permissionGranted = false;
-      });
-    this.modelState = 'loading';
-    const modelPromise = SherpaAsrEngine.getInstance().init(context)
-      .then(() => {
-        this.modelState = SherpaAsrEngine.getInstance().isReady ? 'ready' : 'failed';
-      })
-      .catch((e: Object) => {
-        appLogger.error('[ConversationTab] SherpaAsrEngine.init failed', e);
-        this.modelState = 'failed';
-      });
-    await Promise.all([permPromise, modelPromise]);
+    try {
+      const res = await abilityAccessCtrl.createAtManager()
+        .requestPermissionsFromUser(context, ['ohos.permission.MICROPHONE']);
+      this.permissionGranted = !!(res.authResults && res.authResults[0] === 0);
+      if (!this.permissionGranted) {
+        appLogger.warn('[ConversationTab] microphone permission denied');
+      }
+    } catch (e) {
+      appLogger.error('[ConversationTab] requestPermissionsFromUser failed', e);
+      this.permissionGranted = false;
+    }
+    // 模型延迟到 handleStart 时初始化
+    this.modelState = SherpaAsrEngine.getInstance().isReady ? 'ready' : 'idle';
   }
 
   private openSettings(): void {
@@ -72,9 +64,22 @@ export struct ConversationTab {
     ConversationController.getInstance().stopConversation();
   }
 
-  private handleStart(): void {
+  private async handleStart(): Promise<void> {
     const scene = this.scene;
     if (!scene) return;
+    // 模型未就绪时先初始化（用户已点击按钮，UI 稳定，避免 aboutToAppear 时 AppFreeze）
+    if (!SherpaAsrEngine.getInstance().isReady) {
+      this.modelState = 'loading';
+      const context = getContext(this) as common.UIAbilityContext;
+      try {
+        await SherpaAsrEngine.getInstance().init(context);
+        this.modelState = 'ready';
+      } catch (e) {
+        appLogger.error('[ConversationTab] delayed SherpaAsrEngine.init failed', e);
+        this.modelState = 'failed';
+        return;
+      }
+    }
     ConversationController.getInstance().startConversation(scene, this.currentDialogueIndex, this.practiceSentenceIndex).catch((e: Object) => {
       appLogger.error('ConversationTab: start failed', e);
     });
@@ -94,7 +99,7 @@ export struct ConversationTab {
         this.buildPermissionDenied();
       } else if (this.modelState === 'failed') {
         this.buildModelFailed();
-      } else if (this.modelState === 'loading' || this.modelState === 'idle') {
+      } else if (this.modelState === 'loading') {
         this.buildModelLoading();
       } else if (this.uiState === null || this.uiState.state === 'IDLE') {
         this.buildIdle();

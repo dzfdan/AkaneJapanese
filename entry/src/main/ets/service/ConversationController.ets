@@ -121,8 +121,10 @@ export class ConversationController {
     try {
       await this.asr.startListening((text: string) => this.onAsrEndpoint(text));
       this.recorder.onData = (samples: Int16Array) => {
-        if (this.state === 'WAITING_USER' || this.state === 'USER_SPEAKING') {
+        if (this.state === 'WAITING_USER') {
           this.setState('USER_SPEAKING');
+        }
+        if (this.state === 'USER_SPEAKING') {
           this.asr.feedPcmChunk(samples);
         }
       };
