@@ -58,6 +58,8 @@ export class PlayerController {
   private sentenceChangeListeners: CallbackList<SentenceChangeCallback> = new CallbackList<SentenceChangeCallback>();
   private sentenceEndListeners: CallbackList<SentenceEndCallback> = new CallbackList<SentenceEndCallback>();
   private errorListeners: CallbackList<ErrorCallback> = new CallbackList<ErrorCallback>();
+  // playSentenceAndNotify 模式标记：仅在此模式下检测句子结束并触发 onSentenceEnd
+  private sentenceNotifyActive: boolean = false;
 
   private constructor() {
     this.player = new AVPlayerWrapper();
@@ -518,7 +520,12 @@ export class PlayerController {
    * @param sentenceIndex 句子索引
    */
   async playSentenceAndNotify(scene: Scene, dialogueIndex: number, sentenceIndex: number): Promise<void> {
+    this.sentenceNotifyActive = true;
     await this.playSentence(scene, dialogueIndex, sentenceIndex);
+  }
+
+  private notifySentenceEnd(sentence: Sentence): void {
+    this.sentenceEndListeners.notify((cb: SentenceEndCallback) => cb(sentence));
   }
 
   /**
@@ -591,11 +598,13 @@ export class PlayerController {
         }
         if (state === 'completed') {
           this.recordSceneProgress(100);
-          const sentence = this.getCurrentSentence();
-          if (sentence) {
-            this.sentenceEndListeners.notify((callback: SentenceEndCallback) => {
-              callback(sentence);
-            });
+          // 仅在 playSentenceAndNotify 模式下触发 onSentenceEnd，避免普通播放误触发
+          if (this.sentenceNotifyActive) {
+            this.sentenceNotifyActive = false;
+            const sentence = this.getCurrentSentence();
+            if (sentence) {
+              this.notifySentenceEnd(sentence);
+            }
           }
         }
         this.notifyStateChange();
@@ -604,6 +613,18 @@ export class PlayerController {
         this.currentTimeMs = currentTimeMs;
         // 根据时间更新当前句子
         this.updateCurrentSentence(currentTimeMs);
+        // playSentenceAndNotify 模式：检测当前句子播放完毕（到达 endTime）
+        if (this.sentenceNotifyActive) {
+          const sentence = this.getCurrentSentence();
+          if (sentence) {
+            const endTimeSec = this.isSlowMode ? sentence.slowEndTime : sentence.endTime;
+            if (currentTimeMs >= endTimeSec * 1000) {
+              this.sentenceNotifyActive = false;
+              this.player.pause().catch(() => {});
+              this.notifySentenceEnd(sentence);
+            }
+          }
+        }
         const currentTime = currentTimeMs;
         const duration = this.durationMs;
         this.timeUpdateListeners.notify((callback: TimeUpdateCallback) => {

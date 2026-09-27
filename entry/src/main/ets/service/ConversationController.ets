@@ -85,7 +85,13 @@ export class ConversationController {
     this.lastMatch = null;
     this.errorMessage = null;
     this.player.addOnSentenceEnd(this.sentenceEndBound);
-    await this.beginAppSpeaking();
+    try {
+      await this.beginAppSpeaking();
+    } catch (e) {
+      // 播放失败时移除监听器，避免残留回调误触发
+      this.player.removeOnSentenceEnd(this.sentenceEndBound);
+      throw e as Error;
+    }
   }
 
   private async beginAppSpeaking(): Promise<void> {
@@ -149,7 +155,11 @@ export class ConversationController {
     } catch (e) {
       appLogger.error(`[${TAG}] match failed`, e);
       this.errorMessage = '识别异常，请重试';
-      this.setState('WAITING_USER');
+      // 重启录音流水线（仅 setState 会导致麦克风已停但 UI 显示等待，用户卡死）
+      this.beginWaitingUser().catch((err: Object) => {
+        appLogger.error(`[${TAG}] retry after match failure failed`, err);
+        this.setState('IDLE');
+      });
     }
   }
 
@@ -199,6 +209,8 @@ export class ConversationController {
     this.recorder.stop().catch(() => {
     });
     this.asr.stopListening().catch(() => {
+    });
+    this.player.pause().catch(() => {
     });
     this.player.removeOnSentenceEnd(this.sentenceEndBound);
     this.state = 'IDLE';
