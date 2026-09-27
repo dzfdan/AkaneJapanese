@@ -177,7 +177,12 @@ export class SherpaAsrEngine {
     if (this.vad) {
       try {
         this.vad.flush();
-        this.drainVadSegments();
+        // flush 强制输出残留段，但可能不触发 isDetected()，此处直接排空队列
+        while (!this.vad.isEmpty()) {
+          const segment = this.vad.front();
+          this.vad.pop();
+          this.processSegment(segment.samples);
+        }
       } catch (e) {
         appLogger.error(`[${TAG}] stopListening flush failed`, e);
       }
