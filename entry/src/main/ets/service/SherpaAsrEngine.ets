@@ -59,6 +59,11 @@ export class SherpaAsrEngine {
    * 初始化：首次复制模型到 getFilesDir()/asr/，加载 recognizer + vad
    */
   async init(context: common.Context): Promise<void> {
+    // 幂等保护：已初始化则跳过，避免重复创建 recognizer/vad
+    if (this.isReady) {
+      appLogger.info(`[${TAG}] already initialized, skip`);
+      return;
+    }
     const t0 = Date.now();
     try {
       const filesDir = context.filesDir;
