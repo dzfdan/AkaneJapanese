@@ -223,7 +223,7 @@ export struct ConversationTab {
           fontSize: 20,
           fontColor: ThemeColors.textPrimary,
           fontWeight: 500,
-          textAlign: TextAlign.Left,
+          textAlign: TextAlign.LEFT,
           containerWidth: '100%'
         }).margin({ bottom: 16 });
       }
@@ -234,7 +234,7 @@ export struct ConversationTab {
         // 差异高亮：isDiff 标红，否则正常
         Text() {
           ForEach(this.uiState.lastMatch.userHighlighted, (seg: HighlightSegment, i: number) => {
-            Text(seg.text)
+            Span(seg.text)
               .fontSize(20)
               .fontColor(seg.isDiff ? ThemeColors.error : ThemeColors.textPrimary)
               .fontWeight(seg.isDiff ? 700 : 500);
@@ -271,7 +271,7 @@ export struct ConversationTab {
         Text('💡 应该说:').fontSize(12).fontColor(ThemeColors.textSecondary).width('100%').margin({ bottom: 4 });
         Text() {
           ForEach(this.uiState.lastMatch.originalHighlighted, (seg: HighlightSegment, i: number) => {
-            Text(seg.text)
+            Span(seg.text)
               .fontSize(18)
               .fontColor(seg.isDiff ? ThemeColors.textTertiary : ThemeColors.textSecondary)
               .fontWeight(seg.isDiff ? 400 : 500);

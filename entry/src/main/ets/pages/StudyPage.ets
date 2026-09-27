@@ -17,9 +17,11 @@ import { PlayerController, PlayerUiState } from '../service/PlayerController';
 import { SentenceItem } from '../components/SentenceItem';
 import { QuizCard } from '../components/QuizCard';
 import { PlayerBar } from '../components/PlayerBar';
+import { ConversationTab } from '../components/ConversationTab';
+import { ConversationController } from '../service/ConversationController';
 import appLogger from '../utils/Logger';
 
-type TabType = 'dialogue' | 'practice' | 'quiz';
+type TabType = 'dialogue' | 'practice' | 'conversation' | 'quiz';
 
 @Component
 export struct StudyPage {
@@ -84,6 +86,7 @@ export struct StudyPage {
   }
 
   aboutToDisappear(): void {
+    ConversationController.getInstance().stopConversation();
     if (this.playerStateCallback) {
       PlayerController.getInstance().removeOnStateChange(this.playerStateCallback);
       this.playerStateCallback = null;
@@ -384,6 +387,7 @@ export struct StudyPage {
     Row() {
       this.TabItemBuilder('对话', 'dialogue');
       this.TabItemBuilder('跟读练习', 'practice');
+      this.TabItemBuilder('对话模式', 'conversation');
       this.TabItemBuilder('测验', 'quiz');
     }
     .width('100%')
@@ -406,6 +410,9 @@ export struct StudyPage {
       .backgroundColor(this.currentTab === tab ? ThemeColors.primary : 'transparent')
       .borderRadius(8)
       .onClick(() => {
+        if (this.currentTab === 'conversation' && tab !== 'conversation') {
+          ConversationController.getInstance().stopConversation();
+        }
         this.currentTab = tab;
       });
   }
@@ -417,9 +424,21 @@ export struct StudyPage {
       this.buildDialogueTab();
     } else if (this.currentTab === 'practice') {
       this.buildPracticeTab();
+    } else if (this.currentTab === 'conversation') {
+      this.buildConversationTab();
     } else {
       this.buildQuizTab();
     }
+  }
+
+  // ---- 对话模式 Tab ----
+  @Builder
+  buildConversationTab() {
+    ConversationTab({
+      scene: this.scene,
+      currentDialogueIndex: this.currentDialogueIndex,
+      practiceSentenceIndex: this.practiceSentenceIndex
+    });
   }
 
   // ---- 对话 Tab ----
@@ -513,6 +532,7 @@ export struct StudyPage {
     })
     .margin({ bottom: 6 })
     .onClick(() => {
+      ConversationController.getInstance().stopConversation();
       this.currentDialogueIndex = index;
       this.practiceSentenceIndex = 0;
       this.handleQuizReset();
@@ -541,6 +561,7 @@ export struct StudyPage {
           .borderRadius(8)
           .margin({ right: index < this.scene!.dialogues.length - 1 ? 8 : 0 })
           .onClick(() => {
+            ConversationController.getInstance().stopConversation();
             this.currentDialogueIndex = index;
             this.practiceSentenceIndex = 0;
             this.handleQuizReset();
