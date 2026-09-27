@@ -61,12 +61,13 @@ export class SherpaAsrEngine {
       const destAsrDir = `${filesDir}/asr`;
       const zipformerDir = `${destAsrDir}/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01`;
 
-      // 首次复制（已存在则跳过）
-      if (!this.dirExists(destAsrDir)) {
+      // 首次复制（验证关键模型文件 tokens.txt 存在才算就绪，避免不完整目录被跳过）
+      const tokensPath = `${zipformerDir}/tokens.txt`;
+      if (!this.dirExists(tokensPath)) {
         appLogger.info(`[${TAG}] first-time copy rawfile/asr -> ${destAsrDir}`);
         await this.copyRawfileToFiles(context, destAsrDir);
       } else {
-        appLogger.info(`[${TAG}] model dir exists, skip copy`);
+        appLogger.info(`[${TAG}] model files exist, skip copy`);
       }
       this.modelDir = zipformerDir;
 
@@ -161,8 +162,11 @@ export class SherpaAsrEngine {
 
   private async copyRawfileToFiles(context: common.Context, destDir: string): Promise<void> {
     const rm = context.resourceManager;
-    await fileIo.mkdir(destDir, true);
-    // 列文件需用 rawfile 描述符方式；此处用已知文件名列表（PoC 简化）
+    try {
+      await fileIo.mkdir(destDir, true);
+    } catch (e) {
+      // 目录已存在时忽略
+    }
     const files: string[] = [
       'asr/silero_vad.onnx',
       'asr/sherpa-onnx-zipformer-ja-reazonspeech-2024-08-01/encoder-epoch-99-avg-1.int8.onnx',
@@ -173,6 +177,18 @@ export class SherpaAsrEngine {
     for (const f of files) {
       const content = await rm.getRawFileContent(f);
       const dest = `${context.filesDir}/${f}`;
+      const parentDir = dest.substring(0, dest.lastIndexOf('/'));
+      try {
+        await fileIo.mkdir(parentDir, true);
+      } catch (e) {
+        // 目录已存在时忽略
+      }
+      // 先删除已存在的文件（避免 CREATE 模式报 "File exists"）
+      try {
+        await fileIo.unlink(dest);
+      } catch (e) {
+        // 文件不存在时忽略
+      }
       const file = await fileIo.open(dest, fileIo.OpenMode.CREATE | fileIo.OpenMode.WRITE_ONLY);
       await fileIo.write(file.fd, content.buffer);
       await fileIo.close(file);
