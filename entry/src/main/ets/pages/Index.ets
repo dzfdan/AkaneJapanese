@@ -14,7 +14,6 @@ import { SceneListPage } from './SceneListPage';
 import { PlayerPage } from './PlayerPage';
 import { StudyPage } from './StudyPage';
 import { ProgressPage } from './ProgressPage';
-import { FavoritePage } from './FavoritePage';
 import { SettingsPage } from './SettingsPage';
 import { ModeManager, AppMode } from '../service/ModeManager';
 import { PlayerController, PlayerUiState } from '../service/PlayerController';
@@ -27,8 +26,12 @@ import appLogger from '../utils/Logger';
 @Component
 struct Index {
   @State currentTab: string = 'scenes';
-  @State currentMode: 'driving' | 'parked' = 'driving';
+  @State currentMode: 'driving' | 'parked' = 'parked';
   @State isWideScreen: boolean = false;
+  // 横屏（16:9 车机/平板）适配状态
+  @State isLandscape: boolean = false;
+  @State windowWidth: number = 0;
+  @State windowHeight: number = 0;
 
   // 播放器状态
   @State isPlaying: boolean = false;
@@ -47,6 +50,7 @@ struct Index {
   @State selectedSceneId: string = '';
 
   private mediaQueryListener: mediaquery.MediaQueryListener | null = null;
+  private orientationListener: mediaquery.MediaQueryListener | null = null;
   private modeChangeCallback: ((mode: AppMode) => void) | null = null;
   private stateChangeCallback: ((state: PlayerUiState) => void) | null = null;
   private timeUpdateCallback: ((currentTimeMs: number, durationMs: number) => void) | null = null;
@@ -105,6 +109,10 @@ struct Index {
       this.mediaQueryListener.off('change');
       this.mediaQueryListener = null;
     }
+    if (this.orientationListener) {
+      this.orientationListener.off('change');
+      this.orientationListener = null;
+    }
   }
 
   private updatePlayerState(state: PlayerUiState): void {
@@ -139,6 +147,34 @@ struct Index {
       // 默认宽屏
       this.isWideScreen = true;
     }
+
+    // 横屏（16:9）监听
+    try {
+      this.orientationListener = mediaquery.matchMediaSync('(orientation: landscape)');
+      this.isLandscape = this.orientationListener.matches;
+      this.orientationListener.on('change', (result: mediaquery.MediaQueryResult) => {
+        this.isLandscape = result.matches;
+        appLogger.info(`Orientation changed: isLandscape=${this.isLandscape}`);
+      });
+    } catch (err) {
+      appLogger.error('Orientation mediaquery init failed: ' + JSON.stringify(err));
+    }
+  }
+
+  /**
+   * 同步窗口尺寸到 AppStorage，供各页面做横屏布局判断
+   */
+  private syncWindowSize(width: number, height: number): void {
+    if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+      return;
+    }
+    if (Math.abs(width - this.windowWidth) > 0.5 || Math.abs(height - this.windowHeight) > 0.5) {
+      this.windowWidth = width;
+      this.windowHeight = height;
+      AppStorage.setOrCreate('windowWidth', width);
+      AppStorage.setOrCreate('windowHeight', height);
+      AppStorage.setOrCreate('isLandscape', width > height);
+    }
   }
 
   build() {
@@ -146,7 +182,7 @@ struct Index {
       // 主界面
       Column() {
         // 主内容区
-        if (this.isWideScreen) {
+        if (this.isWideScreen || this.isLandscape) {
           // 宽屏模式：SideNav + 内容页
           Row() {
             SideNav({
@@ -208,7 +244,7 @@ struct Index {
               }
             })
             .width('100%')
-            .padding(12);
+            .padding(this.isLandscape ? 8 : 12);
           } else {
             MiniPlayer({
               sentenceJapanese: this.currentSentence,
@@ -258,14 +294,16 @@ struct Index {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(ThemeColors.bgApp);
+    .backgroundColor(ThemeColors.bgApp)
+    .onAreaChange((_oldArea: Area, newArea: Area) => {
+      this.syncWindowSize(Number(newArea.width), Number(newArea.height));
+    });
   }
 
   @Builder
   buildContentPage() {
     if (this.currentTab === 'scenes') {
       SceneListPage({
-        currentMode: $currentMode,
         onSceneClick: (sceneId: string) => {
           this.handleSceneClick(sceneId);
         }
@@ -274,10 +312,6 @@ struct Index {
       .height('100%');
     } else if (this.currentTab === 'progress') {
       ProgressPage()
-        .width('100%')
-        .height('100%');
-    } else if (this.currentTab === 'favorites') {
-      FavoritePage()
         .width('100%')
         .height('100%');
     } else if (this.currentTab === 'settings') {

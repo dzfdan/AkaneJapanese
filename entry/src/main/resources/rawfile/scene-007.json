@@ -1,0 +1,621 @@
+{
+  "id": "scene-007",
+  "titleJa": "駅で切符を買う",
+  "titleZh": "车站购票换乘",
+  "level": "N4",
+  "category": "旅行",
+  "descriptionZh": "在日本车站购票与乘车的实用场景。包含窗口买票、询问换乘路线、列车延误应对等表达。",
+  "audioNormal": "scene-007-normal.wav",
+  "audioSlow": "scene-007-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-007-1",
+      "titleJa": "切符を買う",
+      "titleZh": "窗口买票",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "乘客",
+          "japanese": "すみません、新宿までの切符を一枚ください。",
+          "romaji": "sumimasen, shinjuku made no kippu o ichimai kudasai.",
+          "translation": "不好意思，请给我一张到新宿的车票。",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "新宿",
+              "kana": "しんじゅく"
+            },
+            {
+              "text": "までの"
+            },
+            {
+              "text": "切符",
+              "kana": "きっぷ"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "一枚",
+              "kana": "いちまい"
+            },
+            {
+              "text": "ください。"
+            }
+          ],
+          "id": "s-007-1-1",
+          "startTime": 0.5,
+          "endTime": 3.93,
+          "slowStartTime": 0.5,
+          "slowEndTime": 5.22
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "駅員",
+          "speakerRoleZh": "站务员",
+          "japanese": "新宿までは二百円です。大人ですか。",
+          "romaji": "shinjuku made wa nihyaku en desu. otona desu ka.",
+          "translation": "到新宿是200日元。是成人票吗？",
+          "segments": [
+            {
+              "text": "新宿",
+              "kana": "しんじゅく"
+            },
+            {
+              "text": "までは"
+            },
+            {
+              "text": "二百円",
+              "kana": "にひゃくえん"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "大人",
+              "kana": "おとな"
+            },
+            {
+              "text": "ですか。"
+            }
+          ],
+          "id": "s-007-1-2",
+          "startTime": 4.43,
+          "endTime": 7.95,
+          "slowStartTime": 5.72,
+          "slowEndTime": 10.58
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "乘客",
+          "japanese": "はい、大人です。千円でお願いします。",
+          "romaji": "hai, otona desu. sen en de onegai shimasu.",
+          "translation": "是的，是成人。我用1000日元支付。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "大人",
+              "kana": "おとな"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "千円",
+              "kana": "せんえん"
+            },
+            {
+              "text": "でお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            }
+          ],
+          "id": "s-007-1-3",
+          "startTime": 8.45,
+          "endTime": 12.43,
+          "slowStartTime": 11.08,
+          "slowEndTime": 16.55
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "駅員",
+          "speakerRoleZh": "站务员",
+          "japanese": "八百円のおつりです。三番線から乗ってください。",
+          "romaji": "happyaku en no otsuri desu. sanban sen kara notte kudasai.",
+          "translation": "找您800日元。请从3号站台乘车。",
+          "segments": [
+            {
+              "text": "八百円",
+              "kana": "はっぴゃくえん"
+            },
+            {
+              "text": "のおつりです。"
+            },
+            {
+              "text": "三番線",
+              "kana": "さんばんせん"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "ってください。"
+            }
+          ],
+          "id": "s-007-1-4",
+          "startTime": 12.93,
+          "endTime": 17.27,
+          "slowStartTime": 17.05,
+          "slowEndTime": 23.03
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，乘客要去哪里？",
+          "options": [
+            "东京",
+            "新宿",
+            "涩谷",
+            "池袋"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话中乘客明确说了「新宿までの切符」，意思是到新宿的车票。",
+          "id": "q-007-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「おつり」在对话中是什么意思？",
+          "options": [
+            "车票",
+            "零钱",
+            "找零",
+            "票价"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「おつり」指的是付钱后找回的零钱。乘客付了1000日元，票价200日元，所以找回800日元。",
+          "id": "q-007-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-007-2",
+      "titleJa": "乗り換えを聞く",
+      "titleZh": "询问换乘路线",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "乗客",
+          "speakerRoleZh": "乘客",
+          "japanese": "すみません、新宿まで行きたいんですが、乗り換えはありますか。",
+          "romaji": "sumimasen shinjuku made ikitai n desu ga norikae wa arimasu ka",
+          "translation": "不好意思，我想去新宿，需要换乘吗？",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "新宿",
+              "kana": "しんじゅく"
+            },
+            {
+              "text": "まで"
+            },
+            {
+              "text": "行",
+              "kana": "い"
+            },
+            {
+              "text": "きたいんですが、"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "り"
+            },
+            {
+              "text": "換",
+              "kana": "か"
+            },
+            {
+              "text": "えはありますか。"
+            }
+          ],
+          "id": "s-007-2-1",
+          "startTime": 17.77,
+          "endTime": 22.26,
+          "slowStartTime": 23.53,
+          "slowEndTime": 29.74
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "駅員",
+          "speakerRoleZh": "站务员",
+          "japanese": "はい、次の東京駅で山手線に乗り換えてください。",
+          "romaji": "hai tsugi no toukyou eki de yamanote sen ni norikaete kudasai",
+          "translation": "是的，请在下一站东京站换乘山手线。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "次",
+              "kana": "つぎ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "東京駅",
+              "kana": "とうきょうえき"
+            },
+            {
+              "text": "で"
+            },
+            {
+              "text": "山手線",
+              "kana": "やまのてせん"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "り"
+            },
+            {
+              "text": "換",
+              "kana": "か"
+            },
+            {
+              "text": "えてください。"
+            }
+          ],
+          "id": "s-007-2-2",
+          "startTime": 22.76,
+          "endTime": 26.5,
+          "slowStartTime": 30.24,
+          "slowEndTime": 35.39
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "乗客",
+          "speakerRoleZh": "乘客",
+          "japanese": "山手線は何番線のホームですか。",
+          "romaji": "yamanote sen wa nanban sen no hoomu desu ka",
+          "translation": "山手线在几号站台？",
+          "segments": [
+            {
+              "text": "山手線",
+              "kana": "やまのてせん"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "何番線",
+              "kana": "なんばんせん"
+            },
+            {
+              "text": "のホームですか。"
+            }
+          ],
+          "id": "s-007-2-3",
+          "startTime": 27.0,
+          "endTime": 29.3,
+          "slowStartTime": 35.89,
+          "slowEndTime": 39.04
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "駅員",
+          "speakerRoleZh": "站务员",
+          "japanese": "三番線です。新宿まで二十分ぐらいかかります。",
+          "romaji": "sanban sen desu shinjuku made nijuppun gurai kakarimasu",
+          "translation": "是3号线。到新宿大约需要二十分钟。",
+          "segments": [
+            {
+              "text": "三番線",
+              "kana": "さんばんせん"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "新宿",
+              "kana": "しんじゅく"
+            },
+            {
+              "text": "まで"
+            },
+            {
+              "text": "二十分",
+              "kana": "にじゅっぷん"
+            },
+            {
+              "text": "ぐらいかかります。"
+            }
+          ],
+          "id": "s-007-2-4",
+          "startTime": 29.8,
+          "endTime": 34.14,
+          "slowStartTime": 39.54,
+          "slowEndTime": 45.52
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，乘客需要换乘哪条线路？",
+          "options": [
+            "中央线",
+            "山手线",
+            "京滨东北线",
+            "总武线"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话中站务员明确说「山手線に乗り換えてください」，即请换乘山手线。",
+          "id": "q-007-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「三番線です」中的「三番線」是什么意思？",
+          "options": [
+            "第三站",
+            "3号站台",
+            "第三班列车",
+            "三条线路"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「三番線」指3号站台（3号线），是回答乘客询问站台位置的句子。",
+          "id": "q-007-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-007-3",
+      "titleJa": "電車の遅れ",
+      "titleZh": "列车延误应对",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "乗客",
+          "speakerRoleZh": "乘客",
+          "japanese": "すみません、電車が遅れているようですが、次の電車は何時に来ますか。",
+          "romaji": "sumimasen, densha ga okurete iru you desu ga, tsugi no densha wa nanji ni kimasu ka.",
+          "translation": "不好意思，电车好像晚点了，请问下一班电车几点来？",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "電車",
+              "kana": "でんしゃ"
+            },
+            {
+              "text": "が"
+            },
+            {
+              "text": "遅",
+              "kana": "おく"
+            },
+            {
+              "text": "れているようですが、"
+            },
+            {
+              "text": "次",
+              "kana": "つぎ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "電車",
+              "kana": "でんしゃ"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "何時",
+              "kana": "なんじ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "来",
+              "kana": "き"
+            },
+            {
+              "text": "ますか。"
+            }
+          ],
+          "id": "s-007-3-1",
+          "startTime": 34.64,
+          "endTime": 39.81,
+          "slowStartTime": 46.02,
+          "slowEndTime": 53.17
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "駅員",
+          "speakerRoleZh": "站务员",
+          "japanese": "申し訳ございません。事故のため、約十分遅れております。",
+          "romaji": "moushiwake gozaimasen. jiko no tame, yaku juppun okurete orimasu.",
+          "translation": "非常抱歉。因为发生了事故，电车大约晚点十分钟。",
+          "segments": [
+            {
+              "text": "申し訳",
+              "kana": "もうしわけ"
+            },
+            {
+              "text": "ございません。"
+            },
+            {
+              "text": "事故",
+              "kana": "じこ"
+            },
+            {
+              "text": "のため、"
+            },
+            {
+              "text": "約",
+              "kana": "やく"
+            },
+            {
+              "text": "十分",
+              "kana": "じゅっぷん"
+            },
+            {
+              "text": "遅",
+              "kana": "おく"
+            },
+            {
+              "text": "れております。"
+            }
+          ],
+          "id": "s-007-3-2",
+          "startTime": 40.31,
+          "endTime": 45.42,
+          "slowStartTime": 53.67,
+          "slowEndTime": 60.72
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "乗客",
+          "speakerRoleZh": "乘客",
+          "japanese": "実は、さっき寝過ごして、乗り過ごしてしまったんです。",
+          "romaji": "jitsu wa, sakki nesugoshite, norisugoshite shimattan desu.",
+          "translation": "其实，我刚才睡过头，坐过站了。",
+          "segments": [
+            {
+              "text": "実",
+              "kana": "じつ"
+            },
+            {
+              "text": "は、さっき"
+            },
+            {
+              "text": "寝過",
+              "kana": "ねす"
+            },
+            {
+              "text": "ごして、"
+            },
+            {
+              "text": "乗り過",
+              "kana": "のりす"
+            },
+            {
+              "text": "ごしてしまったんです。"
+            }
+          ],
+          "id": "s-007-3-3",
+          "startTime": 45.92,
+          "endTime": 50.07,
+          "slowStartTime": 61.22,
+          "slowEndTime": 66.95
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "駅員",
+          "speakerRoleZh": "站务员",
+          "japanese": "大丈夫ですよ。反対側のホームから戻る電車に乗ってください。",
+          "romaji": "daijoubu desu yo. hantai gawa no hoomu kara modoru densha ni notte kudasai.",
+          "translation": "没关系的。请从对面的站台乘坐返回的电车。",
+          "segments": [
+            {
+              "text": "大丈夫",
+              "kana": "だいじょうぶ"
+            },
+            {
+              "text": "ですよ。"
+            },
+            {
+              "text": "反対側",
+              "kana": "はんたいがわ"
+            },
+            {
+              "text": "のホームから"
+            },
+            {
+              "text": "戻",
+              "kana": "もど"
+            },
+            {
+              "text": "る"
+            },
+            {
+              "text": "電車",
+              "kana": "でんしゃ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "ってください。"
+            }
+          ],
+          "id": "s-007-3-4",
+          "startTime": 50.57,
+          "endTime": 55.54,
+          "slowStartTime": 67.45,
+          "slowEndTime": 74.31
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "根据对话内容，电车为什么晚点了？",
+          "options": [
+            "天气不好",
+            "发生了事故",
+            "乘客太多",
+            "司机迟到了"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "站务员在第二句中提到「事故のため」，说明电车晚点是因为发生了事故。",
+          "id": "q-007-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「乗り過ごしてしまったんです」这句话是什么意思？",
+          "options": [
+            "不小心坐过站了",
+            "没赶上电车",
+            "买错了车票",
+            "在电车上睡着了"
+          ],
+          "correctIndex": 0,
+          "explanationZh": "「乗り過ごす」意为坐过站，「てしまった」表示遗憾、不小心做了某事，整句意为不小心坐过站了。",
+          "id": "q-007-3-2"
+        }
+      ]
+    }
+  ]
+}

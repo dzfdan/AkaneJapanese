@@ -11,6 +11,7 @@ import { SettingsStore } from '../service/SettingsStore';
 import { UserSettings } from '../model/UserSettings';
 import { Sentence, Segment } from '../model/Sentence';
 import { FuriganaText } from '../components/FuriganaText';
+import { SkipBackIcon, SkipNextIcon, PlayIcon, PauseIcon } from '../components/PlayerIcons';
 import { formatDuration } from '../utils/TimeUtil';
 import appLogger from '../utils/Logger';
 
@@ -35,6 +36,8 @@ export struct PlayerPage {
   @State totalSentences: number = 0;
   @State dialogueIndex: number = 0;
   @State totalDialogues: number = 0;
+  // 横屏（16:9）适配：左右分栏
+  @StorageProp('isLandscape') isLandscape: boolean = false;
 
   private stateCallback: ((state: PlayerUiState) => void) | null = null;
   private timeCallback: ((currentTimeMs: number, durationMs: number) => void) | null = null;
@@ -147,226 +150,274 @@ export struct PlayerPage {
 
   build() {
     Column() {
-      // 顶部：返回按钮 + 场景名
-      Row() {
-        // 返回按钮
-        Stack() {
-          Circle()
-            .width(44)
-            .height(44)
-            .fill(ThemeColors.bgCardElevated);
+      this.TopBarBuilder();
 
-          Text('←')
-            .fontSize(20)
-            .fontColor(ThemeColors.textPrimary);
-        }
-        .width(44)
-        .height(44)
-        .onClick(() => {
-          this.onClose();
-        });
-
-        // 场景标题
-        Column() {
-          Text(this.sceneTitle)
-            .fontSize(16)
-            .fontColor(ThemeColors.textPrimary)
-            .fontWeight(600)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .maxLines(1);
-
-          if (this.dialogueTitle) {
-            Text(this.dialogueTitle)
-              .fontSize(12)
-              .fontColor(ThemeColors.textTertiary)
-              .margin({ top: 2 })
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .maxLines(1);
+      if (this.isLandscape) {
+        // 横屏（16:9）：左侧句子区 + 右侧控制区
+        Row() {
+          Column() {
+            this.SentenceAreaBuilder();
           }
+          .layoutWeight(1)
+          .height('100%');
+
+          Column() {
+            this.ControlAreaBuilder();
+          }
+          .width(380)
+          .height('100%')
+          .justifyContent(FlexAlign.Center);
+        }
+        .width('100%')
+        .layoutWeight(1);
+      } else {
+        // 竖屏：上下结构
+        Column() {
+          this.SentenceAreaBuilder();
         }
         .layoutWeight(1)
-        .margin({ left: 16 })
-        .alignItems(HorizontalAlign.Start);
+        .width('100%');
+
+        this.ControlAreaBuilder();
       }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 16 });
-
-      // 中部：当前句子内容
-      Column() {
-        // 日文（大字号，居中，含振假名注音）
-        FuriganaText({
-          segments: this.currentSegments,
-          japanese: this.japanese || '—',
-          fontSize: 32,
-          fontColor: ThemeColors.textPrimary,
-          fontWeight: 500,
-          textAlign: TextAlign.Center,
-          containerWidth: '100%'
-        });
-
-        // 罗马音
-        if (this.showRomaji && this.romaji) {
-          Text(this.romaji)
-            .fontSize(16)
-            .fontColor(ThemeColors.textSecondary)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-            .margin({ top: 16 });
-        }
-
-        // 翻译
-        if (this.showTranslation && this.translation) {
-          Text(this.translation)
-            .fontSize(14)
-            .fontColor(ThemeColors.textTertiary)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-            .margin({ top: 12 });
-        }
-      }
-      .layoutWeight(1)
-      .width('100%')
-      .justifyContent(FlexAlign.Center)
-      .padding({ left: 24, right: 24 });
-
-      // 下部：控制区
-      Column() {
-        // 进度条 + 时间
-        Column() {
-          // 进度条
-          Stack({ alignContent: Alignment.Start }) {
-            Rect()
-              .width('100%')
-              .height(6)
-              .fill(ThemeColors.bgCardElevated)
-              .borderRadius(3);
-
-            Rect()
-              .width(this.getProgressWidth())
-              .height(6)
-              .fill(ThemeColors.primary)
-              .borderRadius(3);
-          }
-          .width('100%');
-
-          // 时间显示
-          Row() {
-            Text(formatDuration(this.currentTimeMs / 1000))
-              .fontSize(12)
-              .fontColor(ThemeColors.textTertiary);
-
-            Blank();
-
-            Text(formatDuration(this.durationMs / 1000))
-              .fontSize(12)
-              .fontColor(ThemeColors.textTertiary);
-          }
-          .width('100%')
-          .margin({ top: 8 });
-        }
-        .width('100%')
-        .padding({ left: 24, right: 24 });
-
-        // 控制按钮：上一首 / 播放暂停 / 下一首
-        Row() {
-          // 上一首按钮（大按钮）
-          Stack() {
-            Circle()
-              .width(64)
-              .height(64)
-              .fill(ThemeColors.bgCardElevated);
-
-            Text('⏮')
-              .fontSize(28)
-              .fontColor(ThemeColors.textPrimary);
-          }
-          .width(64)
-          .height(64)
-          .onClick(() => {
-            this.handlePrev();
-          });
-
-          // 播放/暂停按钮（主按钮，更大）
-          Stack() {
-            Circle()
-              .width(88)
-              .height(88)
-              .fill(ThemeColors.primary);
-
-            Text(this.isPlaying ? '⏸' : '▶')
-              .fontSize(36)
-              .fontColor('#FFFFFF');
-          }
-          .width(88)
-          .height(88)
-          .margin({ left: 32, right: 32 })
-          .onClick(() => {
-            this.handlePlayPause();
-          });
-
-          // 下一首按钮（大按钮）
-          Stack() {
-            Circle()
-              .width(64)
-              .height(64)
-              .fill(ThemeColors.bgCardElevated);
-
-            Text('⏭')
-              .fontSize(28)
-              .fontColor(ThemeColors.textPrimary);
-          }
-          .width(64)
-          .height(64)
-          .onClick(() => {
-            this.handleNext();
-          });
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.Center)
-        .margin({ top: 28 });
-
-        // 倍速切换
-        Row() {
-          ForEach(AppConstants.SPEED_OPTIONS, (speed: number) => {
-            Text(`${speed}x`)
-              .fontSize(14)
-              .fontColor(this.speed === speed ? '#FFFFFF' : ThemeColors.textSecondary)
-              .backgroundColor(this.speed === speed ? ThemeColors.primary : ThemeColors.bgCardElevated)
-              .borderRadius(18)
-              .padding({ left: 16, right: 16, top: 8, bottom: 8 })
-              .margin({ left: 4, right: 4 })
-              .onClick(() => {
-                this.handleSpeedChange(speed);
-              });
-          }, (speed: number) => speed.toString());
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.Center)
-        .margin({ top: 24 });
-
-        // 句子导航信息
-        if (this.sentenceIndex > 0 && this.totalSentences > 0) {
-          Column() {
-            Text(`第 ${this.sentenceIndex} / ${this.totalSentences} 句`)
-              .fontSize(12)
-              .fontColor(ThemeColors.textTertiary);
-
-            if (this.totalDialogues > 1) {
-              Text(`对话 ${this.dialogueIndex + 1} / ${this.totalDialogues}`)
-                .fontSize(12)
-                .fontColor(ThemeColors.textTertiary)
-                .margin({ top: 4 });
-            }
-          }
-          .margin({ top: 16 });
-        }
-      }
-      .width('100%')
-      .padding({ left: 24, right: 24, top: 16, bottom: 32 });
     }
     .width('100%')
     .height('100%')
     .backgroundColor(ThemeColors.bgApp);
+  }
+
+  // ---- 顶部：返回按钮 + 场景名 ----
+  @Builder
+  TopBarBuilder() {
+    Row() {
+      // 返回按钮
+      Stack() {
+        Circle()
+          .width(44)
+          .height(44)
+          .fill(ThemeColors.bgCardElevated);
+
+        Text('←')
+          .fontSize(20)
+          .fontColor(ThemeColors.textPrimary);
+      }
+      .width(44)
+      .height(44)
+      .onClick(() => {
+        this.onClose();
+      });
+
+      // 场景标题
+      Column() {
+        Text(this.sceneTitle)
+          .fontSize(16)
+          .fontColor(ThemeColors.textPrimary)
+          .fontWeight(600)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .maxLines(1);
+
+        if (this.dialogueTitle) {
+          Text(this.dialogueTitle)
+            .fontSize(12)
+            .fontColor(ThemeColors.textTertiary)
+            .margin({ top: 2 })
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .maxLines(1);
+        }
+      }
+      .layoutWeight(1)
+      .margin({ left: 16 })
+      .alignItems(HorizontalAlign.Start);
+    }
+    .width('100%')
+    .padding({
+      left: 16,
+      right: 16,
+      top: this.isLandscape ? 8 : 16,
+      bottom: this.isLandscape ? 8 : 16
+    });
+  }
+
+  // ---- 中部：当前句子内容 ----
+  @Builder
+  SentenceAreaBuilder() {
+    Column() {
+      // 日文（大字号，居中，含振假名注音）
+      FuriganaText({
+        segments: this.currentSegments,
+        japanese: this.japanese || '—',
+        fontSize: this.isLandscape ? 40 : 32,
+        fontColor: ThemeColors.textPrimary,
+        fontWeight: 500,
+        textAlign: TextAlign.Center,
+        containerWidth: '100%'
+      });
+
+      // 罗马音
+      if (this.showRomaji && this.romaji) {
+        Text(this.romaji)
+          .fontSize(16)
+          .fontColor(ThemeColors.textSecondary)
+          .textAlign(TextAlign.Center)
+          .width('100%')
+          .margin({ top: this.isLandscape ? 12 : 16 });
+      }
+
+      // 翻译
+      if (this.showTranslation && this.translation) {
+        Text(this.translation)
+          .fontSize(14)
+          .fontColor(ThemeColors.textTertiary)
+          .textAlign(TextAlign.Center)
+          .width('100%')
+          .margin({ top: this.isLandscape ? 8 : 12 });
+      }
+    }
+    .width('100%')
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
+    .padding({ left: 24, right: 24 });
+  }
+
+  // ---- 下部：控制区 ----
+  @Builder
+  ControlAreaBuilder() {
+    Column() {
+      // 进度条 + 时间
+      Column() {
+        // 进度条
+        Stack({ alignContent: Alignment.Start }) {
+          Rect()
+            .width('100%')
+            .height(6)
+            .fill(ThemeColors.bgCardElevated)
+            .borderRadius(3);
+
+          Rect()
+            .width(this.getProgressWidth())
+            .height(6)
+            .fill(ThemeColors.primary)
+            .borderRadius(3);
+        }
+        .width('100%');
+
+        // 时间显示
+        Row() {
+          Text(formatDuration(this.currentTimeMs / 1000))
+            .fontSize(12)
+            .fontColor(ThemeColors.textTertiary);
+
+          Blank();
+
+          Text(formatDuration(this.durationMs / 1000))
+            .fontSize(12)
+            .fontColor(ThemeColors.textTertiary);
+        }
+        .width('100%')
+        .margin({ top: 8 });
+      }
+      .width('100%')
+      .padding({ left: this.isLandscape ? 16 : 24, right: this.isLandscape ? 16 : 24 });
+
+      // 控制按钮：上一首 / 播放暂停 / 下一首
+      Row() {
+        // 上一首按钮（大按钮）
+        Stack() {
+          Circle()
+            .width(64)
+            .height(64)
+            .fill(ThemeColors.bgCardElevated);
+
+          SkipBackIcon({ color: ThemeColors.primary, iconSize: 36 });
+        }
+        .width(64)
+        .height(64)
+        .onClick(() => {
+          this.handlePrev();
+        });
+
+        // 播放/暂停按钮（主按钮，更大）
+        Stack() {
+          Circle()
+            .width(88)
+            .height(88)
+            .fill(ThemeColors.primary);
+
+          if (this.isPlaying) {
+            PauseIcon({ color: '#FFFFFF', iconSize: 48 });
+          } else {
+            PlayIcon({ color: '#FFFFFF', iconSize: 48 });
+          }
+        }
+        .width(88)
+        .height(88)
+        .margin({ left: 32, right: 32 })
+        .onClick(() => {
+          this.handlePlayPause();
+        });
+
+        // 下一首按钮（大按钮）
+        Stack() {
+          Circle()
+            .width(64)
+            .height(64)
+            .fill(ThemeColors.bgCardElevated);
+
+          SkipNextIcon({ color: ThemeColors.primary, iconSize: 36 });
+        }
+        .width(64)
+        .height(64)
+        .onClick(() => {
+          this.handleNext();
+        });
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .margin({ top: this.isLandscape ? 20 : 28 });
+
+      // 倍速切换
+      Row() {
+        ForEach(AppConstants.SPEED_OPTIONS, (speed: number) => {
+          Text(`${speed}x`)
+            .fontSize(14)
+            .fontColor(this.speed === speed ? '#FFFFFF' : ThemeColors.textSecondary)
+            .backgroundColor(this.speed === speed ? ThemeColors.primary : ThemeColors.bgCardElevated)
+            .borderRadius(18)
+            .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+            .margin({ left: 4, right: 4 })
+            .onClick(() => {
+              this.handleSpeedChange(speed);
+            });
+        }, (speed: number) => speed.toString());
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .margin({ top: this.isLandscape ? 16 : 24 });
+
+      // 句子导航信息
+      if (this.sentenceIndex > 0 && this.totalSentences > 0) {
+        Column() {
+          Text(`第 ${this.sentenceIndex} / ${this.totalSentences} 句`)
+            .fontSize(12)
+            .fontColor(ThemeColors.textTertiary);
+
+          if (this.totalDialogues > 1) {
+            Text(`对话 ${this.dialogueIndex + 1} / ${this.totalDialogues}`)
+              .fontSize(12)
+              .fontColor(ThemeColors.textTertiary)
+              .margin({ top: 4 });
+          }
+        }
+        .margin({ top: this.isLandscape ? 12 : 16 });
+      }
+    }
+    .width('100%')
+    .padding({
+      left: this.isLandscape ? 16 : 24,
+      right: this.isLandscape ? 16 : 24,
+      top: this.isLandscape ? 8 : 16,
+      bottom: this.isLandscape ? 16 : 32
+    });
   }
 
   private getProgressWidth(): string {

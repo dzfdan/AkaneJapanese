@@ -6,6 +6,7 @@
 import { ThemeColors } from '../constants/ThemeConstants';
 import { Segment } from '../model/Sentence';
 import { FuriganaText } from '../components/FuriganaText';
+import { PlayIcon, PauseIcon } from './PlayerIcons';
 
 @Component
 export struct MiniPlayer {
@@ -41,9 +42,11 @@ export struct MiniPlayer {
           .height(36)
           .fill(ThemeColors.primary);
 
-        Text(this.isPlaying ? '⏸' : '▶')
-          .fontSize(16)
-          .fontColor('#FFFFFF');
+        if (this.isPlaying) {
+          PauseIcon({ color: '#FFFFFF', iconSize: 22 });
+        } else {
+          PlayIcon({ color: '#FFFFFF', iconSize: 22 });
+        }
       }
       .width(36)
       .height(36)

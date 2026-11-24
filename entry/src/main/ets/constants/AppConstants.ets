@@ -26,7 +26,7 @@ export const AppConstants: AppConstantsType = {
   APP_NAME: '朱音日语',
   DEFAULT_SPEED: 1.0,
   SPEED_OPTIONS: [0.75, 1.0, 1.25],
-  DEFAULT_MODE: 'driving',
+  DEFAULT_MODE: 'parked',
   BREAKPOINTS: {
     sm: 320,
     md: 600,

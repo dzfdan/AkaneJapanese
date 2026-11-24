@@ -1,0 +1,491 @@
+{
+  "id": "scene-015",
+  "titleJa": "自己紹介",
+  "titleZh": "初次见面自我介绍",
+  "level": "N5",
+  "category": "社交",
+  "descriptionZh": "初次见面时的自我介绍场景。包含课堂介绍、社团与邻里寒暄、互换联系方式，句子简单适合入门。",
+  "audioNormal": "scene-015-normal.wav",
+  "audioSlow": "scene-015-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-015-1",
+      "titleJa": "クラスでの自己紹介",
+      "titleZh": "课堂自我介绍",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "学生",
+          "speakerRoleZh": "学生",
+          "japanese": "はじめまして。田中です。",
+          "romaji": "hajimemashite. tanaka desu.",
+          "translation": "初次见面。我是田中。",
+          "segments": [
+            {
+              "text": "はじめまして。"
+            },
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "です。"
+            }
+          ],
+          "id": "s-015-1-1",
+          "startTime": 0.5,
+          "endTime": 3.04,
+          "slowStartTime": 0.5,
+          "slowEndTime": 3.99
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "学生",
+          "speakerRoleZh": "学生",
+          "japanese": "こちらこそ、よろしくおねがいします。",
+          "romaji": "kochira koso, yoroshiku onegaishimasu.",
+          "translation": "彼此彼此，请多关照。",
+          "segments": [
+            {
+              "text": "こちらこそ、"
+            },
+            {
+              "text": "よろしく"
+            },
+            {
+              "text": "おねがいします。"
+            }
+          ],
+          "id": "s-015-1-2",
+          "startTime": 3.54,
+          "endTime": 6.29,
+          "slowStartTime": 4.49,
+          "slowEndTime": 8.28
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "学生",
+          "speakerRoleZh": "学生",
+          "japanese": "わたしは中国から来ました。",
+          "romaji": "watashi wa chuugoku kara kimashita.",
+          "translation": "我来自中国。",
+          "segments": [
+            {
+              "text": "わたしは"
+            },
+            {
+              "text": "中国",
+              "kana": "ちゅうごく"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "来",
+              "kana": "き"
+            },
+            {
+              "text": "ました。"
+            }
+          ],
+          "id": "s-015-1-3",
+          "startTime": 6.79,
+          "endTime": 8.63,
+          "slowStartTime": 8.78,
+          "slowEndTime": 11.3
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "学生",
+          "speakerRoleZh": "学生",
+          "japanese": "そうですか。わたしは日本の山田です。趣味は音楽です。",
+          "romaji": "sou desu ka. watashi wa nihon no yamada desu. shumi wa ongaku desu.",
+          "translation": "是吗。我是日本的山田。爱好是音乐。",
+          "segments": [
+            {
+              "text": "そうですか。"
+            },
+            {
+              "text": "わたしは"
+            },
+            {
+              "text": "日本",
+              "kana": "にほん"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "山田",
+              "kana": "やまだ"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "趣味",
+              "kana": "しゅみ"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "音楽",
+              "kana": "おんがく"
+            },
+            {
+              "text": "です。"
+            }
+          ],
+          "id": "s-015-1-4",
+          "startTime": 9.13,
+          "endTime": 14.52,
+          "slowStartTime": 11.8,
+          "slowEndTime": 19.23
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，田中来自哪个国家？",
+          "options": [
+            "日本",
+            "中国",
+            "韩国",
+            "美国"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话中田中说「わたしは中国から来ました」，意思是我来自中国，所以选中国。",
+          "id": "q-015-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「趣味は音楽です」这句话是什么意思？",
+          "options": [
+            "喜欢运动",
+            "爱好是音乐",
+            "擅长唱歌",
+            "讨厌音乐"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「趣味」意为爱好，「音楽」意为音乐，整句意思是爱好是音乐。",
+          "id": "q-015-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-015-2",
+      "titleJa": "サークルのご挨拶",
+      "titleZh": "社团与邻里介绍",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "田中さん",
+          "speakerRoleZh": "田中（邻居）",
+          "japanese": "はじめまして。田中です。よろしくお願いします。",
+          "romaji": "hajimemashite. tanaka desu. yoroshiku onegai shimasu.",
+          "translation": "初次见面，我是田中，请多关照。",
+          "segments": [
+            {
+              "text": "はじめまして。"
+            },
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "です。よろしくお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            }
+          ],
+          "id": "s-015-2-1",
+          "startTime": 15.02,
+          "endTime": 19.93,
+          "slowStartTime": 19.73,
+          "slowEndTime": 26.5
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "李さん",
+          "speakerRoleZh": "小李（新搬来的邻居）",
+          "japanese": "李です。中国から来ました。",
+          "romaji": "ri desu. chuugoku kara kimashita.",
+          "translation": "我姓李，从中国来的。",
+          "segments": [
+            {
+              "text": "李",
+              "kana": "り"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "中国",
+              "kana": "ちゅうごく"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "来",
+              "kana": "き"
+            },
+            {
+              "text": "ました。"
+            }
+          ],
+          "id": "s-015-2-2",
+          "startTime": 20.43,
+          "endTime": 23.24,
+          "slowStartTime": 27.0,
+          "slowEndTime": 30.85
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "田中さん",
+          "speakerRoleZh": "田中（邻居）",
+          "japanese": "そうですか。どこに住んでいますか。",
+          "romaji": "sou desu ka. doko ni sunde imasu ka.",
+          "translation": "是吗？你住在哪里呢？",
+          "segments": [
+            {
+              "text": "そうですか。どこに"
+            },
+            {
+              "text": "住",
+              "kana": "す"
+            },
+            {
+              "text": "んでいますか。"
+            }
+          ],
+          "id": "s-015-2-3",
+          "startTime": 23.74,
+          "endTime": 26.67,
+          "slowStartTime": 31.35,
+          "slowEndTime": 35.37
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "李さん",
+          "speakerRoleZh": "小李（新搬来的邻居）",
+          "japanese": "駅の近くのアパートです。こちらこそ、よろしくお願いします。",
+          "romaji": "eki no chikaku no apaato desu. kochira koso, yoroshiku onegai shimasu.",
+          "translation": "住在车站附近的公寓。我才要请您多关照。",
+          "segments": [
+            {
+              "text": "駅",
+              "kana": "えき"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "近",
+              "kana": "ちか"
+            },
+            {
+              "text": "くのアパートです。こちらこそ、よろしくお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            }
+          ],
+          "id": "s-015-2-4",
+          "startTime": 27.17,
+          "endTime": 32.51,
+          "slowStartTime": 35.87,
+          "slowEndTime": 43.25
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，小李是从哪里来的？",
+          "options": [
+            "日本",
+            "中国",
+            "韩国",
+            "美国"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话中小李说「中国から来ました」，表示从中国来的，所以选 B。",
+          "id": "q-015-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「こちらこそ、よろしくお願いします」这句话是什么意思？",
+          "options": [
+            "请多多关照（回应对方）",
+            "请问你住在哪里",
+            "欢迎来到这里",
+            "很高兴认识你"
+          ],
+          "correctIndex": 0,
+          "explanationZh": "「こちらこそ」表示「我才要……」，用于回应对方的「よろしくお願いします」，意思是「我才要请您多关照」。",
+          "id": "q-015-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-015-3",
+      "titleJa": "連絡先の交換",
+      "titleZh": "互换联系方式",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "田中",
+          "speakerRoleZh": "田中",
+          "japanese": "今日はありがとうございました。LINEを交換しませんか。",
+          "romaji": "kyou wa arigatou gozaimashita. rain o koukan shimasen ka.",
+          "translation": "今天非常感谢。要不要交换一下LINE呢？",
+          "segments": [
+            {
+              "text": "今日",
+              "kana": "きょう"
+            },
+            {
+              "text": "はありがとうございました。LINEを"
+            },
+            {
+              "text": "交換",
+              "kana": "こうかん"
+            },
+            {
+              "text": "しませんか。"
+            }
+          ],
+          "id": "s-015-3-1",
+          "startTime": 33.01,
+          "endTime": 37.19,
+          "slowStartTime": 43.75,
+          "slowEndTime": 49.5
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "李",
+          "speakerRoleZh": "小李",
+          "japanese": "いいですね。QRコードを見せますね。",
+          "romaji": "ii desu ne. kyuuaaru koodo o misemasu ne.",
+          "translation": "好呀。我给你看二维码。",
+          "segments": [
+            {
+              "text": "いいですね。QRコードを"
+            },
+            {
+              "text": "見",
+              "kana": "み"
+            },
+            {
+              "text": "せますね。"
+            }
+          ],
+          "id": "s-015-3-2",
+          "startTime": 37.69,
+          "endTime": 40.81,
+          "slowStartTime": 50.0,
+          "slowEndTime": 54.29
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "田中",
+          "speakerRoleZh": "田中",
+          "japanese": "送りました。今度いっしょにカフェに行きましょう。",
+          "romaji": "okurimashita. kondo issho ni kafe ni ikimashou.",
+          "translation": "我发过去了。下次一起去咖啡店吧。",
+          "segments": [
+            {
+              "text": "送",
+              "kana": "おく"
+            },
+            {
+              "text": "りました。"
+            },
+            {
+              "text": "今度",
+              "kana": "こんど"
+            },
+            {
+              "text": "いっしょにカフェに"
+            },
+            {
+              "text": "行",
+              "kana": "い"
+            },
+            {
+              "text": "きましょう。"
+            }
+          ],
+          "id": "s-015-3-3",
+          "startTime": 41.31,
+          "endTime": 44.88,
+          "slowStartTime": 54.79,
+          "slowEndTime": 59.69
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "李",
+          "speakerRoleZh": "小李",
+          "japanese": "ぜひ。また連絡します。じゃ、またね。",
+          "romaji": "zehi. mata renraku shimasu. ja, mata ne.",
+          "translation": "一定。我会再联系你。那么，再见啦。",
+          "segments": [
+            {
+              "text": "ぜひ。また"
+            },
+            {
+              "text": "連絡",
+              "kana": "れんらく"
+            },
+            {
+              "text": "します。じゃ、またね。"
+            }
+          ],
+          "id": "s-015-3-4",
+          "startTime": 45.38,
+          "endTime": 49.83,
+          "slowStartTime": 60.19,
+          "slowEndTime": 66.32
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，田中向小李提出了什么建议？",
+          "options": [
+            "一起交换LINE",
+            "一起去车站",
+            "一起拍照",
+            "一起吃饭"
+          ],
+          "correctIndex": 0,
+          "explanationZh": "对话中田中说「LINEを交換しませんか」，是在提议交换LINE联系方式。",
+          "id": "q-015-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「じゃ、またね」这句话是什么意思？",
+          "options": [
+            "初次见面",
+            "那么，再见啦",
+            "请多关照",
+            "明天见"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「じゃ、またね」是告别时的常用口语，意思是「那么，再见啦」。",
+          "id": "q-015-3-2"
+        }
+      ]
+    }
+  ]
+}

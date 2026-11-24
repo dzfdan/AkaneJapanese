@@ -6,6 +6,7 @@
 import { ThemeColors } from '../constants/ThemeConstants';
 import { Sentence } from '../model/Sentence';
 import { FuriganaText } from '../components/FuriganaText';
+import { PlayIcon, PauseIcon } from './PlayerIcons';
 
 @Component
 export struct SentenceItem {
@@ -58,9 +59,11 @@ export struct SentenceItem {
       Row() {
         // 播放按钮
         Row() {
-          Text(this.isPlaying ? '⏸' : '▶')
-            .fontSize(12)
-            .fontColor(ThemeColors.textPrimary);
+          if (this.isPlaying) {
+            PauseIcon({ color: ThemeColors.primary, iconSize: 18 });
+          } else {
+            PlayIcon({ color: ThemeColors.primary, iconSize: 18 });
+          }
         }
         .padding(8)
         .backgroundColor(ThemeColors.bgCardElevated)
@@ -71,14 +74,6 @@ export struct SentenceItem {
 
         Blank();
 
-        // 收藏按钮
-        Text(this.isFavorite ? '♥' : '♡')
-          .fontSize(16)
-          .fontColor(this.isFavorite ? ThemeColors.primary : ThemeColors.textTertiary)
-          .padding(8)
-          .onClick(() => {
-            this.onToggleFavorite();
-          });
       }
       .width('100%')
       .margin({ top: 8 })

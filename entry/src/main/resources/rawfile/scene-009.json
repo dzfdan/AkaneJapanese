@@ -1,0 +1,558 @@
+{
+  "id": "scene-009",
+  "titleJa": "病院で診察を受ける",
+  "titleZh": "医院就诊",
+  "level": "N4",
+  "category": "生活服务",
+  "descriptionZh": "在日本医院就诊的完整流程。包含挂号描述症状、医生问诊与处方、药房取药与服药说明。",
+  "audioNormal": "scene-009-normal.wav",
+  "audioSlow": "scene-009-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-009-1",
+      "titleJa": "受付で症状を伝える",
+      "titleZh": "挂号与描述症状",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "受付の職員",
+          "speakerRoleZh": "挂号处工作人员",
+          "japanese": "こんにちは。今日はどうされましたか。",
+          "romaji": "konnichiwa. kyou wa dou saremashita ka.",
+          "translation": "您好。今天哪里不舒服？",
+          "segments": [
+            {
+              "text": "こんにちは。"
+            },
+            {
+              "text": "今日",
+              "kana": "きょう"
+            },
+            {
+              "text": "はどうされましたか。"
+            }
+          ],
+          "id": "s-009-1-1",
+          "startTime": 0.5,
+          "endTime": 3.5,
+          "slowStartTime": 0.5,
+          "slowEndTime": 4.61
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "患者",
+          "speakerRoleZh": "患者",
+          "japanese": "昨日から頭が痛くて、熱もあります。",
+          "romaji": "kinou kara atama ga itakute, netsu mo arimasu.",
+          "translation": "从昨天开始头疼，还发烧。",
+          "segments": [
+            {
+              "text": "昨日",
+              "kana": "きのう"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "頭",
+              "kana": "あたま"
+            },
+            {
+              "text": "が"
+            },
+            {
+              "text": "痛",
+              "kana": "いた"
+            },
+            {
+              "text": "くて、"
+            },
+            {
+              "text": "熱",
+              "kana": "ねつ"
+            },
+            {
+              "text": "もあります。"
+            }
+          ],
+          "id": "s-009-1-2",
+          "startTime": 4.0,
+          "endTime": 7.12,
+          "slowStartTime": 5.11,
+          "slowEndTime": 9.41
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "受付の職員",
+          "speakerRoleZh": "挂号处工作人员",
+          "japanese": "そうですか。保険証はお持ちですか。",
+          "romaji": "sou desu ka. hokenshou wa omochi desu ka.",
+          "translation": "这样啊。您带医保卡了吗？",
+          "segments": [
+            {
+              "text": "そうですか。"
+            },
+            {
+              "text": "保険証",
+              "kana": "ほけんしょう"
+            },
+            {
+              "text": "はお"
+            },
+            {
+              "text": "持",
+              "kana": "も"
+            },
+            {
+              "text": "ちですか。"
+            }
+          ],
+          "id": "s-009-1-3",
+          "startTime": 7.62,
+          "endTime": 10.78,
+          "slowStartTime": 9.91,
+          "slowEndTime": 14.24
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "患者",
+          "speakerRoleZh": "患者",
+          "japanese": "はい、持っています。こちらです。",
+          "romaji": "hai, motte imasu. kochira desu.",
+          "translation": "带了。在这里。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "持",
+              "kana": "も"
+            },
+            {
+              "text": "っています。こちらです。"
+            }
+          ],
+          "id": "s-009-1-4",
+          "startTime": 11.28,
+          "endTime": 14.61,
+          "slowStartTime": 14.74,
+          "slowEndTime": 19.32
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，患者是从什么时候开始不舒服的？",
+          "options": [
+            "今天早上",
+            "昨天晚上",
+            "昨天",
+            "一周前"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "患者说「昨日から頭が痛くて」，意思是「从昨天开始头疼」，所以正确答案是「昨天」。",
+          "id": "q-009-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "对话中「保険証はお持ちですか」是什么意思？",
+          "options": [
+            "您有预约吗",
+            "您带医保卡了吗",
+            "您哪里不舒服",
+            "您有药物过敏吗"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「保険証」是医保卡（保险证），「お持ちですか」是「持っていますか」的礼貌说法，整句意思是「您带医保卡了吗」。",
+          "id": "q-009-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-009-2",
+      "titleJa": "診察と処方箋",
+      "titleZh": "医生问诊与处方",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "医者",
+          "speakerRoleZh": "医生",
+          "japanese": "熱が高いので、まず血液検査をしましょう。",
+          "romaji": "netsu ga takai node mazu ketsueki kensa o shimashou",
+          "translation": "因为发烧很高，我们先做血液检查吧。",
+          "segments": [
+            {
+              "text": "熱",
+              "kana": "ねつ"
+            },
+            {
+              "text": "が"
+            },
+            {
+              "text": "高",
+              "kana": "たか"
+            },
+            {
+              "text": "いので、まず"
+            },
+            {
+              "text": "血液",
+              "kana": "けつえき"
+            },
+            {
+              "text": "検査",
+              "kana": "けんさ"
+            },
+            {
+              "text": "をしましょう。"
+            }
+          ],
+          "id": "s-009-2-1",
+          "startTime": 15.11,
+          "endTime": 18.5,
+          "slowStartTime": 19.82,
+          "slowEndTime": 24.5
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "患者",
+          "speakerRoleZh": "患者",
+          "japanese": "検査は痛いですか。すぐに結果が出ますか。",
+          "romaji": "kensa wa itai desu ka sugu ni kekka ga demasu ka",
+          "translation": "检查疼吗？结果马上能出来吗？",
+          "segments": [
+            {
+              "text": "検査",
+              "kana": "けんさ"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "痛",
+              "kana": "いた"
+            },
+            {
+              "text": "いですか。すぐに"
+            },
+            {
+              "text": "結果",
+              "kana": "けっか"
+            },
+            {
+              "text": "が"
+            },
+            {
+              "text": "出",
+              "kana": "で"
+            },
+            {
+              "text": "ますか。"
+            }
+          ],
+          "id": "s-009-2-2",
+          "startTime": 19.0,
+          "endTime": 22.52,
+          "slowStartTime": 25.0,
+          "slowEndTime": 29.84
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "医者",
+          "speakerRoleZh": "医生",
+          "japanese": "少しチクッとしますが、すぐ終わります。結果は三十分後に出ます。",
+          "romaji": "sukoshi chikutto shimasu ga sugu owarimasu kekka wa sanjuuppun go ni demasu",
+          "translation": "会有点刺痛，但很快就结束。结果三十分钟后出来。",
+          "segments": [
+            {
+              "text": "少",
+              "kana": "すこ"
+            },
+            {
+              "text": "しチクッとしますが、すぐ"
+            },
+            {
+              "text": "終",
+              "kana": "お"
+            },
+            {
+              "text": "わります。"
+            },
+            {
+              "text": "結果",
+              "kana": "けっか"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "三十分後",
+              "kana": "さんじゅっぷんご"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "出",
+              "kana": "で"
+            },
+            {
+              "text": "ます。"
+            }
+          ],
+          "id": "s-009-2-3",
+          "startTime": 23.02,
+          "endTime": 28.68,
+          "slowStartTime": 30.34,
+          "slowEndTime": 38.15
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "患者",
+          "speakerRoleZh": "患者",
+          "japanese": "わかりました。薬はどのように飲めばいいですか。",
+          "romaji": "wakarimashita kusuri wa dono you ni nomeba ii desu ka",
+          "translation": "明白了。药应该怎么吃呢？",
+          "segments": [
+            {
+              "text": "わかりました。"
+            },
+            {
+              "text": "薬",
+              "kana": "くすり"
+            },
+            {
+              "text": "はどのように"
+            },
+            {
+              "text": "飲",
+              "kana": "の"
+            },
+            {
+              "text": "めばいいですか。"
+            }
+          ],
+          "id": "s-009-2-4",
+          "startTime": 29.18,
+          "endTime": 32.94,
+          "slowStartTime": 38.65,
+          "slowEndTime": 43.82
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "医生提到血液检查结果什么时候出来？",
+          "options": [
+            "立刻出来",
+            "三十分钟后出来",
+            "明天出来",
+            "一周后出来"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "医生说「結果は三十分後に出ます」，即结果三十分钟后出来。",
+          "id": "q-009-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「少しチクッとします」中「チクッと」是什么意思？",
+          "options": [
+            "很疼",
+            "刺痛一下",
+            "发痒",
+            "发麻"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「チクッと」是拟声拟态词，表示像针扎一样刺痛一下，常用于描述抽血时的感觉。",
+          "id": "q-009-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-009-3",
+      "titleJa": "薬局で薬をもらう",
+      "titleZh": "取药与服药说明",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "薬剤師",
+          "speakerRoleZh": "药剂师",
+          "japanese": "田中さん、こちらがお薬です。",
+          "romaji": "tanaka san kochira ga okusuri desu",
+          "translation": "田中先生/女士，这是您的药。",
+          "segments": [
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "さん、こちらがお"
+            },
+            {
+              "text": "薬",
+              "kana": "くすり"
+            },
+            {
+              "text": "です。"
+            }
+          ],
+          "id": "s-009-3-1",
+          "startTime": 33.44,
+          "endTime": 36.0,
+          "slowStartTime": 44.32,
+          "slowEndTime": 47.84
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "患者",
+          "speakerRoleZh": "患者",
+          "japanese": "この薬は一日に何回飲みますか。",
+          "romaji": "kono kusuri wa ichinichi ni nankai nomimasu ka",
+          "translation": "这个药一天吃几次？",
+          "segments": [
+            {
+              "text": "この"
+            },
+            {
+              "text": "薬",
+              "kana": "くすり"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "一日",
+              "kana": "いちにち"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "何回",
+              "kana": "なんかい"
+            },
+            {
+              "text": "飲",
+              "kana": "の"
+            },
+            {
+              "text": "みますか。"
+            }
+          ],
+          "id": "s-009-3-2",
+          "startTime": 36.5,
+          "endTime": 39.09,
+          "slowStartTime": 48.34,
+          "slowEndTime": 51.9
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "薬剤師",
+          "speakerRoleZh": "药剂师",
+          "japanese": "一日三回、毎食後に飲んでください。",
+          "romaji": "ichinichi sankai maishokugo ni nonde kudasai",
+          "translation": "一天三次，请在每顿饭后服用。",
+          "segments": [
+            {
+              "text": "一日",
+              "kana": "いちにち"
+            },
+            {
+              "text": "三回",
+              "kana": "さんかい"
+            },
+            {
+              "text": "、"
+            },
+            {
+              "text": "毎食後",
+              "kana": "まいしょくご"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "飲",
+              "kana": "の"
+            },
+            {
+              "text": "んでください。"
+            }
+          ],
+          "id": "s-009-3-3",
+          "startTime": 39.59,
+          "endTime": 42.71,
+          "slowStartTime": 52.4,
+          "slowEndTime": 56.7
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "患者",
+          "speakerRoleZh": "患者",
+          "japanese": "わかりました。食後に忘れずに飲みます。",
+          "romaji": "wakarimashita shokugo ni wasurezu ni nomimasu",
+          "translation": "明白了。我会记得饭后服用。",
+          "segments": [
+            {
+              "text": "わかりました。"
+            },
+            {
+              "text": "食後",
+              "kana": "しょくご"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "忘",
+              "kana": "わす"
+            },
+            {
+              "text": "れずに"
+            },
+            {
+              "text": "飲",
+              "kana": "の"
+            },
+            {
+              "text": "みます。"
+            }
+          ],
+          "id": "s-009-3-4",
+          "startTime": 43.21,
+          "endTime": 46.65,
+          "slowStartTime": 57.2,
+          "slowEndTime": 61.93
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，药剂师说药应该什么时候服用？",
+          "options": [
+            "早饭前",
+            "每顿饭后",
+            "睡觉前",
+            "一天一次"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "药剂师说「毎食後に飲んでください」，即每顿饭后服用。",
+          "id": "q-009-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「一日三回」是什么意思？",
+          "options": [
+            "一天一次",
+            "一天两次",
+            "一天三次",
+            "三天一次"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「一日三回」读作いちにちさんかい，意思是一天三次。",
+          "id": "q-009-3-2"
+        }
+      ]
+    }
+  ]
+}

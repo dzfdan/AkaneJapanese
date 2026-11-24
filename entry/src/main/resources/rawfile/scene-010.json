@@ -1,0 +1,653 @@
+{
+  "id": "scene-010",
+  "titleJa": "銀行で口座を開く",
+  "titleZh": "银行开户",
+  "level": "N3",
+  "category": "生活服务",
+  "descriptionZh": "在日本银行办理业务的场景。包含申请开户、办理银行卡与网银、存取款与汇款手续。",
+  "audioNormal": "scene-010-normal.wav",
+  "audioSlow": "scene-010-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-010-1",
+      "titleJa": "口座開設の申込",
+      "titleZh": "申请开设账户",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "すみません、新しく口座を開きたいのですが。",
+          "romaji": "sumimasen, atarashiku kouza o hirakitai no desu ga.",
+          "translation": "不好意思，我想新开一个账户。",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "新",
+              "kana": "あたら"
+            },
+            {
+              "text": "しく"
+            },
+            {
+              "text": "口座",
+              "kana": "こうざ"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "開",
+              "kana": "ひら"
+            },
+            {
+              "text": "きたいのですが。"
+            }
+          ],
+          "id": "s-010-1-1",
+          "startTime": 0.5,
+          "endTime": 3.83,
+          "slowStartTime": 0.5,
+          "slowEndTime": 5.09
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "銀行員",
+          "speakerRoleZh": "银行职员",
+          "japanese": "かしこまりました。身分証明書をお持ちでしょうか。",
+          "romaji": "kashikomarimashita. mibun shoumeisho o omochi deshou ka.",
+          "translation": "好的，明白了。请问您带身份证明了吗？",
+          "segments": [
+            {
+              "text": "かしこまりました。"
+            },
+            {
+              "text": "身分証明書",
+              "kana": "みぶんしょうめいしょ"
+            },
+            {
+              "text": "をお"
+            },
+            {
+              "text": "持",
+              "kana": "も"
+            },
+            {
+              "text": "ちでしょうか。"
+            }
+          ],
+          "id": "s-010-1-2",
+          "startTime": 4.33,
+          "endTime": 8.18,
+          "slowStartTime": 5.59,
+          "slowEndTime": 10.88
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "はい、在留カードを持っています。これで大丈夫ですか。",
+          "romaji": "hai, zairyuu kaado o motte imasu. kore de daijoubu desu ka.",
+          "translation": "是的，我带了在留卡。这个可以吗？",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "在留",
+              "kana": "ざいりゅう"
+            },
+            {
+              "text": "カードを"
+            },
+            {
+              "text": "持",
+              "kana": "も"
+            },
+            {
+              "text": "っています。これで"
+            },
+            {
+              "text": "大丈夫",
+              "kana": "だいじょうぶ"
+            },
+            {
+              "text": "ですか。"
+            }
+          ],
+          "id": "s-010-1-3",
+          "startTime": 8.68,
+          "endTime": 13.31,
+          "slowStartTime": 11.38,
+          "slowEndTime": 17.76
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "銀行員",
+          "speakerRoleZh": "银行职员",
+          "japanese": "はい、結構です。口座はどのような目的でご利用になりますか。",
+          "romaji": "hai, kekkou desu. kouza wa dono you na mokuteki de goriyou ni narimasu ka.",
+          "translation": "可以，没问题。请问您开户是出于什么用途呢？",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "結構",
+              "kana": "けっこう"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "口座",
+              "kana": "こうざ"
+            },
+            {
+              "text": "はどのような"
+            },
+            {
+              "text": "目的",
+              "kana": "もくてき"
+            },
+            {
+              "text": "でご"
+            },
+            {
+              "text": "利用",
+              "kana": "りよう"
+            },
+            {
+              "text": "になりますか。"
+            }
+          ],
+          "id": "s-010-1-4",
+          "startTime": 13.81,
+          "endTime": 19.24,
+          "slowStartTime": 18.26,
+          "slowEndTime": 25.75
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，顾客首先向银行职员提出了什么请求？",
+          "options": [
+            "A. 想兑换外币",
+            "B. 想新开一个账户",
+            "C. 想申请信用卡",
+            "D. 想办理汇款"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "顾客第一句说「新しく口座を開きたいのですが」，意思是想新开一个账户，所以选 B。",
+          "id": "q-010-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「口座はどのような目的でご利用になりますか」这句话中，银行职员在询问什么？",
+          "options": [
+            "A. 账户的使用目的",
+            "B. 账户的存款金额",
+            "C. 账户的开户地点",
+            "D. 账户的密码设置"
+          ],
+          "correctIndex": 0,
+          "explanationZh": "「目的」意为目的，「ご利用になります」是「利用する」的敬语形式，整句是在询问账户的使用目的，所以选 A。",
+          "id": "q-010-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-010-2",
+      "titleJa": "キャッシュカードとネットバンキング",
+      "titleZh": "银行卡与网银",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "銀行員",
+          "speakerRoleZh": "银行职员",
+          "japanese": "キャッシュカードをお作りしますので、暗証番号を4桁でご記入ください。",
+          "romaji": "kyasshu kaado o otsukuri shimasu node, anshou bangou o yonketa de gokinyuu kudasai.",
+          "translation": "因为要为您办理银行卡，请填写4位数的密码。",
+          "segments": [
+            {
+              "text": "キャッシュカード"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "お"
+            },
+            {
+              "text": "作",
+              "kana": "つく"
+            },
+            {
+              "text": "りしますので、"
+            },
+            {
+              "text": "暗証番号",
+              "kana": "あんしょうばんごう"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "4",
+              "kana": "よん"
+            },
+            {
+              "text": "桁",
+              "kana": "けた"
+            },
+            {
+              "text": "でご"
+            },
+            {
+              "text": "記入",
+              "kana": "きにゅう"
+            },
+            {
+              "text": "ください。"
+            }
+          ],
+          "id": "s-010-2-1",
+          "startTime": 19.74,
+          "endTime": 24.65,
+          "slowStartTime": 26.25,
+          "slowEndTime": 33.04
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "はい。それから、インターネットバンキングも申し込みたいのですが。",
+          "romaji": "hai. sorekara, intaanetto bankingu mo moushikomitai no desu ga.",
+          "translation": "好的。另外，我还想申请网上银行。",
+          "segments": [
+            {
+              "text": "はい。それから、インターネットバンキングも"
+            },
+            {
+              "text": "申",
+              "kana": "もう"
+            },
+            {
+              "text": "し"
+            },
+            {
+              "text": "込",
+              "kana": "こ"
+            },
+            {
+              "text": "みたいのですが。"
+            }
+          ],
+          "id": "s-010-2-2",
+          "startTime": 25.15,
+          "endTime": 30.06,
+          "slowStartTime": 33.54,
+          "slowEndTime": 40.31
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "銀行員",
+          "speakerRoleZh": "银行职员",
+          "japanese": "かしこまりました。では、こちらの用紙にもご署名とご印鑑をお願いいたします。",
+          "romaji": "kashikomarimashita. dewa, kochira no youshi ni mo goshomei to goinkan o onegai itashimasu.",
+          "translation": "明白了。那么，也请您在这张表格上签名并盖章。",
+          "segments": [
+            {
+              "text": "かしこまりました。では、こちらの"
+            },
+            {
+              "text": "用紙",
+              "kana": "ようし"
+            },
+            {
+              "text": "にもご"
+            },
+            {
+              "text": "署名",
+              "kana": "しょめい"
+            },
+            {
+              "text": "とご"
+            },
+            {
+              "text": "印鑑",
+              "kana": "いんかん"
+            },
+            {
+              "text": "をお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いいたします。"
+            }
+          ],
+          "id": "s-010-2-3",
+          "startTime": 30.56,
+          "endTime": 36.8,
+          "slowStartTime": 40.81,
+          "slowEndTime": 49.43
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "印鑑を持っていないのですが、サインだけでも大丈夫ですか。",
+          "romaji": "inkan o motte inai no desu ga, sain dake demo daijoubu desu ka.",
+          "translation": "我没有带印章，只签名也可以吗？",
+          "segments": [
+            {
+              "text": "印鑑",
+              "kana": "いんかん"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "持",
+              "kana": "も"
+            },
+            {
+              "text": "っていないのですが、サインだけでも"
+            },
+            {
+              "text": "大丈夫",
+              "kana": "だいじょうぶ"
+            },
+            {
+              "text": "ですか。"
+            }
+          ],
+          "id": "s-010-2-4",
+          "startTime": 37.3,
+          "endTime": 41.3,
+          "slowStartTime": 49.93,
+          "slowEndTime": 55.45
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，银行职员要求顾客在表格上做什么？",
+          "options": [
+            "只填写住址",
+            "签名并盖章",
+            "支付手续费",
+            "出示护照"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "职员说「ご署名とご印鑑をお願いいたします」，即请顾客签名并盖章，因此选「签名并盖章」。",
+          "id": "q-010-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「サインだけでも大丈夫ですか」这句话的意思是什么？",
+          "options": [
+            "签名不行吗",
+            "只签名也可以吗",
+            "必须用印章吗",
+            "可以改天再来吗"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「だけでも」表示「只……也……」，顾客没带印章，询问只签名是否可以，因此选「只签名也可以吗」。",
+          "id": "q-010-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-010-3",
+      "titleJa": "入出金と送金",
+      "titleZh": "存取款与汇款",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "この口座から現金を引き出すとき、手数料はかかりますか。",
+          "romaji": "kono kouza kara genkin o hikidasu toki tesuuryou wa kakarimasu ka",
+          "translation": "从这个账户提取现金时，需要手续费吗？",
+          "segments": [
+            {
+              "text": "この"
+            },
+            {
+              "text": "口座",
+              "kana": "こうざ"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "現金",
+              "kana": "げんきん"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "引",
+              "kana": "ひ"
+            },
+            {
+              "text": "き"
+            },
+            {
+              "text": "出",
+              "kana": "だ"
+            },
+            {
+              "text": "すとき、"
+            },
+            {
+              "text": "手数料",
+              "kana": "てすうりょう"
+            },
+            {
+              "text": "はかかりますか。"
+            }
+          ],
+          "id": "s-010-3-1",
+          "startTime": 41.8,
+          "endTime": 45.98,
+          "slowStartTime": 55.95,
+          "slowEndTime": 61.73
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "銀行員",
+          "speakerRoleZh": "银行职员",
+          "japanese": "当行のATMなら無料ですが、他行のATMでは百十円かかります。",
+          "romaji": "tougyou no atm nara muryou desu ga takou no atm de wa hyaku juu en kakarimasu",
+          "translation": "使用本行的ATM免费，但使用其他银行的ATM需要110日元。",
+          "segments": [
+            {
+              "text": "当行",
+              "kana": "とうこう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "ATM",
+              "kana": "エーティーエム"
+            },
+            {
+              "text": "なら"
+            },
+            {
+              "text": "無料",
+              "kana": "むりょう"
+            },
+            {
+              "text": "ですが、"
+            },
+            {
+              "text": "他行",
+              "kana": "たこう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "ATM",
+              "kana": "エーティーエム"
+            },
+            {
+              "text": "では"
+            },
+            {
+              "text": "百十円",
+              "kana": "ひゃくじゅうえん"
+            },
+            {
+              "text": "かかります。"
+            }
+          ],
+          "id": "s-010-3-2",
+          "startTime": 46.48,
+          "endTime": 52.04,
+          "slowStartTime": 62.23,
+          "slowEndTime": 69.93
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "振込をしたいんですが、相手の口座にはいつ届きますか。",
+          "romaji": "furikomi o shitai n desu ga aite no kouza ni wa itsu todokimasu ka",
+          "translation": "我想汇款，钱什么时候能到对方账户？",
+          "segments": [
+            {
+              "text": "振込",
+              "kana": "ふりこみ"
+            },
+            {
+              "text": "をしたいんですが、"
+            },
+            {
+              "text": "相手",
+              "kana": "あいて"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "口座",
+              "kana": "こうざ"
+            },
+            {
+              "text": "にはいつ"
+            },
+            {
+              "text": "届",
+              "kana": "とど"
+            },
+            {
+              "text": "きますか。"
+            }
+          ],
+          "id": "s-010-3-3",
+          "startTime": 52.54,
+          "endTime": 56.59,
+          "slowStartTime": 70.43,
+          "slowEndTime": 76.02
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "銀行員",
+          "speakerRoleZh": "银行职员",
+          "japanese": "平日の午後三時までなら当日中に届きます。それ以降は翌営業日になります。",
+          "romaji": "heijitsu no gogo sanji made nara toujitsuchuu ni todokimasu sore ikou wa yoku eigyoubi ni narimasu",
+          "translation": "工作日下午三点前办理的话当天到账，超过时间则顺延至下一个工作日。",
+          "segments": [
+            {
+              "text": "平日",
+              "kana": "へいじつ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "午後三時",
+              "kana": "ごごさんじ"
+            },
+            {
+              "text": "までなら"
+            },
+            {
+              "text": "当日中",
+              "kana": "とうじつちゅう"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "届",
+              "kana": "とど"
+            },
+            {
+              "text": "きます。それ"
+            },
+            {
+              "text": "以降",
+              "kana": "いこう"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "翌営業日",
+              "kana": "よくえいぎょうび"
+            },
+            {
+              "text": "になります。"
+            }
+          ],
+          "id": "s-010-3-4",
+          "startTime": 57.09,
+          "endTime": 63.48,
+          "slowStartTime": 76.52,
+          "slowEndTime": 85.35
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听力问题：使用其他银行的ATM取款需要支付多少手续费？",
+          "options": [
+            "免费",
+            "110日元",
+            "220日元",
+            "330日元"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话中银行职员明确说明「他行のATMでは百十円かかります」，即使用其他银行的ATM需要支付110日元手续费。",
+          "id": "q-010-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「翌営業日」是什么意思？",
+          "options": [
+            "当天",
+            "次日",
+            "下一个工作日",
+            "下周一"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「翌営業日」指下一个营业日/工作日。对话中提到工作日下午三点后办理的汇款将顺延至「翌営業日」到账。",
+          "id": "q-010-3-2"
+        }
+      ]
+    }
+  ]
+}

@@ -47,7 +47,10 @@ interface FeedMsg {
   type: 'feed';
   samples: ArrayBuffer; // Int16 PCM 16kHz mono
 }
-interface StopMsg { type: 'stop'; }
+interface StopMsg {
+  type: 'stop';
+  recognize: boolean; // true: flush 后把残留语音段识别并回传 endpoint；false: 丢弃
+}
 interface RecognizeMsg {
   type: 'recognize';
   samples: ArrayBuffer; // Int16 PCM 16kHz mono
@@ -70,6 +73,9 @@ let vad: Vad | null = null;
 let stream: OfflineStream | null = null;
 let isListening: boolean = false;
 let feedCount: number = 0;
+// 自上次识别以来累积的全部音频。VAD 只判定"何时说完"（端点时机），
+// 识别内容用完整缓冲 —— 避免 VAD 段起点检测延迟裁掉句子开头（只识别出后半段）
+let pendingSamples: Float32Array[] = [];
 
 const w: ThreadWorkerGlobalScope = worker.workerPort;
 
@@ -82,13 +88,15 @@ w.onmessage = (e: MessageEvents): void => {
       break;
     case 'start':
       isListening = true;
+      feedCount = 0;
+      pendingSamples = [];
       appLogger.info(`[${TAG}] start listening`);
       break;
     case 'feed':
       handleFeed(data as FeedMsg);
       break;
     case 'stop':
-      handleStop();
+      handleStop(data as StopMsg);
       break;
     case 'recognize':
       handleRecognize(data as RecognizeMsg);
@@ -130,11 +138,16 @@ function handleInit(msg: InitMsg): void {
     recognizer = new OfflineRecognizer(recognizerConfig);
     appLogger.info(`[${TAG}] worker OfflineRecognizer created`);
 
+    // 语言学习场景调优：
+    // - threshold 0.35：学习者在麦克风前常轻声朗读，0.5 会把轻声语音判为静音丢失开头
+    // - minSilenceDuration 1.0s：学习者说长句时词间停顿常 >0.5s，
+    //   0.5s 会在句子中间误触发端点（如只说「はい」停顿后整句被截断，识别率极低）
+    // - minSpeechDuration 0.3s：过滤咳嗽/碰撞等瞬时噪声
     const silero = new SileroVadConfig(
       `${msg.destAsrDir}/silero_vad.onnx`,
-      0.5,    // threshold (语音概率阈值)
-      0.25,   // minSpeechDuration: 0.25 秒 (250ms)
-      0.5,    // minSilenceDuration: 0.5 秒 (500ms)
+      0.35,   // threshold (语音概率阈值)
+      0.3,    // minSpeechDuration: 0.3 秒 (300ms)
+      1.0,    // minSilenceDuration: 1.0 秒 —— 容忍学习者句中停顿
       512,    // windowSize: 512 samples (16kHz 下 32ms)
     );
     const tenVad = new TenVadConfig('', 0, 0, 0, 0);
@@ -178,6 +191,7 @@ function handleFeed(msg: FeedMsg): void {
       }
     }
     v.acceptWaveform(floatSamples);
+    pendingSamples.push(floatSamples);
     feedCount++;
     if (feedCount % 30 === 0) {
       appLogger.info(`[${TAG}] feed #${feedCount} maxAbs=${maxAbs.toFixed(4)} isDetected=${v.isDetected()} isEmpty=${v.isEmpty()}`);
@@ -188,21 +202,37 @@ function handleFeed(msg: FeedMsg): void {
   }
 }
 
+function concatPending(): Float32Array {
+  let total = 0;
+  for (const chunk of pendingSamples) {
+    total += chunk.length;
+  }
+  const out = new Float32Array(total);
+  let offset = 0;
+  for (const chunk of pendingSamples) {
+    out.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return out;
+}
+
 function drainVadSegments(): void {
   const v = vad;
   if (!v) {
     return;
   }
-  // 无论 isDetected() 状态如何，只要队列非空就排空
-  // 语音段结束时 isDetected()=false 但队列中有已完成的段
+  // VAD 段仅作为"一句话结束"的触发信号，段样本弃用；
+  // 识别改用 pendingSamples 完整音频（含 VAD 起点之前被裁掉的部分）
   while (!v.isEmpty()) {
-    const segment = v.front();
     v.pop();
-    processSegment(segment.samples);
+    if (pendingSamples.length > 0) {
+      processSegment(concatPending(), false);
+      pendingSamples = [];
+    }
   }
 }
 
-function processSegment(samples: Float32Array): void {
+function processSegment(samples: Float32Array, postAlways: boolean): void {
   const r = recognizer;
   const currentStream = stream;
   if (!r || !currentStream) {
@@ -215,8 +245,8 @@ function processSegment(samples: Float32Array): void {
     const text: string = result.text ? result.text.trim() : '';
     // 离线模式无 reset()，重建 stream 以便下一段识别
     stream = r.createStream();
-    if (isListening) {
-      appLogger.info(`[${TAG}] worker endpoint text="${text}"`);
+    if (isListening || postAlways) {
+      appLogger.info(`[${TAG}] worker endpoint text="${text}" postAlways=${postAlways}`);
       const epMsg: EndpointMsg = { type: 'endpoint', text: text };
       w.postMessage(epMsg);
     }
@@ -231,22 +261,26 @@ function processSegment(samples: Float32Array): void {
   }
 }
 
-function handleStop(): void {
+function handleStop(msg: StopMsg): void {
   isListening = false;
   const v = vad;
   if (v) {
     try {
       v.flush();
-      // flush 强制输出残留段，但可能不触发 isDetected()，此处直接排空队列
+      // 清空 VAD 段队列（段样本不再用于识别）
       while (!v.isEmpty()) {
-        const segment = v.front();
         v.pop();
-        processSegment(segment.samples);
       }
     } catch (e) {
       appLogger.error(`[${TAG}] worker stop flush failed`, e);
     }
   }
+  // 兜底：recognize=true 时无论 VAD 是否检出语音段，都把缓冲的全部音频送识别，
+  // 防止 VAD 漏检轻声开头/短句导致内容丢失
+  if (msg.recognize && pendingSamples.length > 0) {
+    processSegment(concatPending(), true);
+  }
+  pendingSamples = [];
   appLogger.info(`[${TAG}] worker stop done`);
   const doneMsg: StopDoneMsg = { type: 'stop_done' };
   w.postMessage(doneMsg);

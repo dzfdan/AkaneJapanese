@@ -213,7 +213,7 @@ export struct FavoritePage {
   @Builder
   EmptyStateBuilder() {
     Column() {
-      Text('⭐')
+      Text('✦')
         .fontSize(48);
 
       Text('还没有收藏的句子')

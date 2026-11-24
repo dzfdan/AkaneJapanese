@@ -1,28 +1,29 @@
 /**
  * 场景列表页
- * 展示所有学习场景，支持驾驶/驻车两种模式展示
+ * 展示所有学习场景（App 默认驻车模式，不再提供模式切换）
  */
 
 import { ThemeColors } from '../constants/ThemeConstants';
 import { AppConstants } from '../constants/AppConstants';
 import { SceneCard } from '../components/SceneCard';
-import { ModeSwitcher } from '../components/ModeSwitcher';
 import { Scene } from '../model/Scene';
 import { UserProgress } from '../model/UserProgress';
 import { SceneRepository } from '../service/SceneRepository';
 import { ProgressStore } from '../service/ProgressStore';
-import { ModeManager, AppMode } from '../service/ModeManager';
 import appLogger from '../utils/Logger';
 
 @Component
 export struct SceneListPage {
-  @Link currentMode: 'driving' | 'parked';
   onSceneClick: (sceneId: string) => void = () => {};
 
   @State scenes: Scene[] = [];
   @State completedMap: Record<string, boolean> = {};
   @State progressMap: Record<string, number> = {};
   @State selectedLevel: string = 'all';
+  // 场景列表容器实际宽度（vp），用于响应式计算卡片宽度铺满可用空间
+  @State containerWidth: number = 0;
+  // 横屏（16:9）紧凑布局
+  @StorageProp('isLandscape') isLandscape: boolean = false;
 
   private progressCallback: ((progress: UserProgress) => void) | null = null;
 
@@ -91,8 +92,16 @@ export struct SceneListPage {
     return this.scenes.filter((scene: Scene): boolean => scene.level === this.selectedLevel);
   }
 
-  private handleModeChange(mode: 'driving' | 'parked'): void {
-    ModeManager.getInstance().setMode(mode);
+  // 按数据中实际存在的难度等级生成筛选项，避免出现无内容的等级（如 N3）点击后页面空白
+  private getAvailableLevels(): string[] {
+    const levels: string[] = [];
+    for (const scene of this.scenes) {
+      if (scene.level && levels.indexOf(scene.level) < 0) {
+        levels.push(scene.level);
+      }
+    }
+    // 难度从高到低排序（N5 最简单排前面）
+    return levels.sort((a: string, b: string): number => b.localeCompare(a));
   }
 
   build() {
@@ -134,26 +143,19 @@ export struct SceneListPage {
         .layoutWeight(1)
         .alignItems(VerticalAlign.Center);
 
-        // 右侧：模式切换 + 难度筛选
+        // 右侧：难度筛选
         Row() {
-          // 难度筛选（驻车模式显示）
-          if (this.currentMode === 'parked') {
-            this.LevelFilterBuilder();
-          }
-
-          // 模式切换器
-          ModeSwitcher({
-            currentMode: $currentMode,
-            onModeChange: (mode: 'driving' | 'parked') => {
-              this.handleModeChange(mode);
-            }
-          })
-          .margin({ left: 12 });
+          this.LevelFilterBuilder();
         }
         .alignItems(VerticalAlign.Center);
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: this.isLandscape ? 6 : 12,
+        bottom: this.isLandscape ? 6 : 12
+      })
       .backgroundColor(ThemeColors.bgCard)
       .border({
         width: { bottom: 1 },
@@ -163,25 +165,43 @@ export struct SceneListPage {
       // 场景列表区域
       Scroll() {
         Column() {
-          // 场景网格 - 使用 Flex wrap
-          Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start }) {
-            ForEach(this.getFilteredScenes(), (scene: Scene) => {
-              SceneCard({
-                scene: scene,
-                progressPercent: this.progressMap[scene.id] || 0,
-                isCompleted: !!this.completedMap[scene.id],
-                onCardClick: () => {
-                  this.onSceneClick(scene.id);
-                }
-              })
-              .width(this.getCardWidth())
-              .margin({ right: 12, bottom: 12 });
-            }, (scene: Scene) => scene.id);
+          if (this.getFilteredScenes().length === 0) {
+            // 空状态：筛选无结果或数据未加载时给出提示，避免页面空白
+            Column() {
+              Text(this.scenes.length === 0 ? '场景加载中…' : '该难度暂无场景')
+                .fontSize(14)
+                .fontColor(ThemeColors.textTertiary);
+            }
+            .width('100%')
+            .padding({ top: 80 })
+            .alignItems(HorizontalAlign.Center);
+          } else {
+            // 场景网格 - 使用 Flex wrap
+            Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start }) {
+              ForEach(this.getFilteredScenes(), (scene: Scene) => {
+                SceneCard({
+                  scene: scene,
+                  progressPercent: this.progressMap[scene.id] || 0,
+                  isCompleted: !!this.completedMap[scene.id],
+                  onCardClick: () => {
+                    this.onSceneClick(scene.id);
+                  }
+                })
+                .width(this.getCardWidth())
+                .margin({ right: 12, bottom: 12 });
+              }, (scene: Scene) => scene.id);
+            }
+            .width('100%')
+            .padding(this.isLandscape ? 12 : 16);
           }
-          .width('100%')
-          .padding(16);
         }
-        .width('100%');
+        .width('100%')
+        .onAreaChange((_oldArea: Area, newArea: Area) => {
+          const w = Number(newArea.width);
+          if (!isNaN(w) && w > 0 && w !== this.containerWidth) {
+            this.containerWidth = w;
+          }
+        });
       }
       .layoutWeight(1)
       .width('100%')
@@ -197,9 +217,10 @@ export struct SceneListPage {
   LevelFilterBuilder() {
     Row() {
       this.LevelChipBuilder('all', '全部');
-      this.LevelChipBuilder('N5', 'N5');
-      this.LevelChipBuilder('N4', 'N4');
-      this.LevelChipBuilder('N3', 'N3');
+      // 只展示数据中实际存在的难度等级
+      ForEach(this.getAvailableLevels(), (level: string) => {
+        this.LevelChipBuilder(level, level);
+      }, (level: string) => level);
     }
     .alignItems(VerticalAlign.Center);
   }
@@ -218,12 +239,16 @@ export struct SceneListPage {
       });
   }
 
+  // 响应式卡片宽度：按容器宽度自动分列（基准卡片 200 + 右间距 12），铺满可用宽度
+  // 窄屏单列时卡片占满整行，宽屏自动排 2~3 列，避免右侧留大片空白
   private getCardWidth(): number {
-    // 驾驶模式卡片更大更易点击，驻车模式信息更丰富但卡片稍小
-    if (this.currentMode === 'driving') {
-      return 220;
-    } else {
-      return 200;
+    const unit = 212; // 基准卡片宽 200 + 右间距 12
+    const padding = 32; // Flex 左右 padding 16*2
+    const available = this.containerWidth - padding;
+    if (available <= 0) {
+      return 200; // 布局完成前的初始值
     }
+    const cols = Math.max(1, Math.floor(available / unit));
+    return Math.max(120, Math.floor(available / cols) - 12);
   }
 }

@@ -1,0 +1,600 @@
+{
+  "id": "scene-011",
+  "titleJa": "郵便局で荷物を送る",
+  "titleZh": "邮局寄件",
+  "level": "N4",
+  "category": "生活服务",
+  "descriptionZh": "在日本邮局寄件的场景。包含选择邮寄方式、填写单据、查询包裹与更改地址。",
+  "audioNormal": "scene-011-normal.wav",
+  "audioSlow": "scene-011-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-011-1",
+      "titleJa": "荷物を送りたい",
+      "titleZh": "寄包裹选方式",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "すみません、この荷物を中国に送りたいんですが。",
+          "romaji": "sumimasen kono nimotsu o chuugoku ni okuritai n desu ga",
+          "translation": "不好意思，我想把这个包裹寄到中国。",
+          "segments": [
+            {
+              "text": "すみません、この"
+            },
+            {
+              "text": "荷物",
+              "kana": "にもつ"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "中国",
+              "kana": "ちゅうごく"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "送",
+              "kana": "おく"
+            },
+            {
+              "text": "りたいんですが。"
+            }
+          ],
+          "id": "s-011-1-1",
+          "startTime": 0.5,
+          "endTime": 3.99,
+          "slowStartTime": 0.5,
+          "slowEndTime": 5.32
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "郵便局員",
+          "speakerRoleZh": "邮局职员",
+          "japanese": "はい、普通便と航空便と速達便がございます。",
+          "romaji": "hai futsuubin to koukuubin to sokutatsubin ga gozaimasu",
+          "translation": "好的，有普通件、航空件和快递件。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "普通便",
+              "kana": "ふつうびん"
+            },
+            {
+              "text": "と"
+            },
+            {
+              "text": "航空便",
+              "kana": "こうくうびん"
+            },
+            {
+              "text": "と"
+            },
+            {
+              "text": "速達便",
+              "kana": "そくたつびん"
+            },
+            {
+              "text": "がございます。"
+            }
+          ],
+          "id": "s-011-1-2",
+          "startTime": 4.49,
+          "endTime": 8.26,
+          "slowStartTime": 5.82,
+          "slowEndTime": 11.02
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "速達便はいくらですか。",
+          "romaji": "sokutatsubin wa ikura desu ka",
+          "translation": "快递件多少钱？",
+          "segments": [
+            {
+              "text": "速達便",
+              "kana": "そくたつびん"
+            },
+            {
+              "text": "はいくらですか。"
+            }
+          ],
+          "id": "s-011-1-3",
+          "startTime": 8.76,
+          "endTime": 10.46,
+          "slowStartTime": 11.52,
+          "slowEndTime": 13.83
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "郵便局員",
+          "speakerRoleZh": "邮局职员",
+          "japanese": "速達便は二千五百円で、普通便より千円高いです。",
+          "romaji": "sokutatsubin wa nisen gohyaku en de futsuubin yori sen en takai desu",
+          "translation": "快递件是2500日元，比普通件贵1000日元。",
+          "segments": [
+            {
+              "text": "速達便",
+              "kana": "そくたつびん"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "二千五百円",
+              "kana": "にせんごひゃくえん"
+            },
+            {
+              "text": "で、"
+            },
+            {
+              "text": "普通便",
+              "kana": "ふつうびん"
+            },
+            {
+              "text": "より"
+            },
+            {
+              "text": "千円",
+              "kana": "せんえん"
+            },
+            {
+              "text": "高",
+              "kana": "たか"
+            },
+            {
+              "text": "いです。"
+            }
+          ],
+          "id": "s-011-1-4",
+          "startTime": 10.96,
+          "endTime": 15.27,
+          "slowStartTime": 14.33,
+          "slowEndTime": 20.28
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，顾客想把包裹寄到哪里？",
+          "options": [
+            "日本",
+            "中国",
+            "美国",
+            "韩国"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "顾客第一句说「この荷物を中国に送りたいんですが」，明确表示想寄到中国。",
+          "id": "q-011-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "根据对话，快递件和普通件的费用相差多少？",
+          "options": [
+            "500日元",
+            "1000日元",
+            "1500日元",
+            "2500日元"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "邮局职员说「普通便より千円高いです」，即快递件比普通件贵1000日元。",
+          "id": "q-011-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-011-2",
+      "titleJa": "伝票の記入と確認",
+      "titleZh": "填写单据与确认",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "すみません、この送り状の住所の書き方を教えてください。",
+          "romaji": "sumimasen, kono okurijou no juusho no kakikata o oshiete kudasai.",
+          "translation": "不好意思，请告诉我这张运单上的地址写法。",
+          "segments": [
+            {
+              "text": "すみません、この"
+            },
+            {
+              "text": "送り状",
+              "kana": "おくりじょう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "住所",
+              "kana": "じゅうしょ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "書き方",
+              "kana": "かきかた"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "教えて",
+              "kana": "おしえて"
+            },
+            {
+              "text": "ください。"
+            }
+          ],
+          "id": "s-011-2-1",
+          "startTime": 15.77,
+          "endTime": 19.96,
+          "slowStartTime": 20.78,
+          "slowEndTime": 26.57
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "郵便局員",
+          "speakerRoleZh": "邮局职员",
+          "japanese": "郵便番号から上に書いてください。保険はつけますか。",
+          "romaji": "yuubin bangou kara ue ni kaite kudasai. hoken wa tsukemasu ka.",
+          "translation": "请从邮政编码开始往上填写。要加保险吗？",
+          "segments": [
+            {
+              "text": "郵便番号",
+              "kana": "ゆうびんばんごう"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "上",
+              "kana": "うえ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "書いて",
+              "kana": "かいて"
+            },
+            {
+              "text": "ください。"
+            },
+            {
+              "text": "保険",
+              "kana": "ほけん"
+            },
+            {
+              "text": "はつけますか。"
+            }
+          ],
+          "id": "s-011-2-2",
+          "startTime": 20.46,
+          "endTime": 24.88,
+          "slowStartTime": 27.07,
+          "slowEndTime": 33.16
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "はい、お願いします。あと、何日ぐらいで届きますか。",
+          "romaji": "hai, onegai shimasu. ato, nannichi gurai de todokimasu ka.",
+          "translation": "好的，麻烦你了。另外，大概几天能送到？",
+          "segments": [
+            {
+              "text": "はい、お"
+            },
+            {
+              "text": "願い",
+              "kana": "ねがい"
+            },
+            {
+              "text": "します。あと、"
+            },
+            {
+              "text": "何日",
+              "kana": "なんにち"
+            },
+            {
+              "text": "ぐらいで"
+            },
+            {
+              "text": "届きます",
+              "kana": "とどきます"
+            },
+            {
+              "text": "か。"
+            }
+          ],
+          "id": "s-011-2-3",
+          "startTime": 25.38,
+          "endTime": 30.51,
+          "slowStartTime": 33.66,
+          "slowEndTime": 40.74
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "郵便局員",
+          "speakerRoleZh": "邮局职员",
+          "japanese": "二日ぐらいです。この追跡番号で確認できますよ。",
+          "romaji": "futsuka gurai desu. kono tsuiseki bangou de kakunin dekimasu yo.",
+          "translation": "大概两天。用这个追踪号码可以查询哦。",
+          "segments": [
+            {
+              "text": "二日",
+              "kana": "ふつか"
+            },
+            {
+              "text": "ぐらいです。この"
+            },
+            {
+              "text": "追跡番号",
+              "kana": "ついせきばんごう"
+            },
+            {
+              "text": "で"
+            },
+            {
+              "text": "確認",
+              "kana": "かくにん"
+            },
+            {
+              "text": "できますよ。"
+            }
+          ],
+          "id": "s-011-2-4",
+          "startTime": 31.01,
+          "endTime": 35.53,
+          "slowStartTime": 41.24,
+          "slowEndTime": 47.46
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，包裹大概几天能送到？",
+          "options": [
+            "一天",
+            "两天",
+            "三天",
+            "一周"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "邮局职员说「二日ぐらいです」，即大概两天送达。",
+          "id": "q-011-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「追跡番号」是什么意思？",
+          "options": [
+            "邮政编码",
+            "电话号码",
+            "追踪号码",
+            "保险单号"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「追跡番号」是用于查询包裹运输状态的追踪号码。",
+          "id": "q-011-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-011-3",
+      "titleJa": "荷物の問い合わせ",
+      "titleZh": "查询包裹与改址",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "すみません、先週送った荷物がまだ届いていないんですが。",
+          "romaji": "sumimasen, senshuu okutta nimotsu ga mada todoite inai n desu ga.",
+          "translation": "不好意思，我上周寄的包裹还没有收到。",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "先週",
+              "kana": "せんしゅう"
+            },
+            {
+              "text": "送った",
+              "kana": "おくった"
+            },
+            {
+              "text": "荷物",
+              "kana": "にもつ"
+            },
+            {
+              "text": "がまだ"
+            },
+            {
+              "text": "届",
+              "kana": "とど"
+            },
+            {
+              "text": "いていないんですが。"
+            }
+          ],
+          "id": "s-011-3-1",
+          "startTime": 36.03,
+          "endTime": 40.16,
+          "slowStartTime": 47.96,
+          "slowEndTime": 53.67
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "郵便局員",
+          "speakerRoleZh": "邮局职员",
+          "japanese": "追跡番号を教えていただけますか。確認いたします。",
+          "romaji": "tsuiseki bangou o oshiete itadakemasu ka. kakunin itashimasu.",
+          "translation": "可以告诉我查询号码吗？我来帮您确认。",
+          "segments": [
+            {
+              "text": "追跡番号",
+              "kana": "ついせきばんごう"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "教",
+              "kana": "おし"
+            },
+            {
+              "text": "えていただけますか。"
+            },
+            {
+              "text": "確認",
+              "kana": "かくにん"
+            },
+            {
+              "text": "いたします。"
+            }
+          ],
+          "id": "s-011-3-2",
+          "startTime": 40.66,
+          "endTime": 45.13,
+          "slowStartTime": 54.17,
+          "slowEndTime": 60.32
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "顾客",
+          "japanese": "引っ越したので、新しい住所に転送してもらえますか。",
+          "romaji": "hikkoshita node, atarashii juusho ni tensou shite moraemasu ka.",
+          "translation": "因为我搬家了，可以帮我转寄到新地址吗？",
+          "segments": [
+            {
+              "text": "引",
+              "kana": "ひ"
+            },
+            {
+              "text": "っ"
+            },
+            {
+              "text": "越",
+              "kana": "こ"
+            },
+            {
+              "text": "したので、"
+            },
+            {
+              "text": "新",
+              "kana": "あたら"
+            },
+            {
+              "text": "しい"
+            },
+            {
+              "text": "住所",
+              "kana": "じゅうしょ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "転送",
+              "kana": "てんそう"
+            },
+            {
+              "text": "してもらえますか。"
+            }
+          ],
+          "id": "s-011-3-3",
+          "startTime": 45.63,
+          "endTime": 49.51,
+          "slowStartTime": 60.82,
+          "slowEndTime": 66.18
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "郵便局員",
+          "speakerRoleZh": "邮局职员",
+          "japanese": "はい、転送手続きをいたします。新しい住所をこちらにご記入ください。",
+          "romaji": "hai, tensou tetsuzuki o itashimasu. atarashii juusho o kochira ni gokinyuu kudasai.",
+          "translation": "好的，我来为您办理转寄手续。请在这里填写新地址。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "転送手続",
+              "kana": "てんそうてつづ"
+            },
+            {
+              "text": "きをいたします。"
+            },
+            {
+              "text": "新",
+              "kana": "あたら"
+            },
+            {
+              "text": "しい"
+            },
+            {
+              "text": "住所",
+              "kana": "じゅうしょ"
+            },
+            {
+              "text": "をこちらにご"
+            },
+            {
+              "text": "記入",
+              "kana": "きにゅう"
+            },
+            {
+              "text": "ください。"
+            }
+          ],
+          "id": "s-011-3-4",
+          "startTime": 50.01,
+          "endTime": 55.93,
+          "slowStartTime": 66.68,
+          "slowEndTime": 74.86
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "顾客说「先週送った荷物がまだ届いていない」，这句话是什么意思？",
+          "options": [
+            "上周寄的包裹已经收到了",
+            "上周寄的包裹还没有收到",
+            "想寄一个新的包裹",
+            "包裹的运费太贵了"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「まだ届いていない」表示「还没有收到」，「まだ～ていない」是N4语法，表示动作尚未完成。",
+          "id": "q-011-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「転送してもらえますか」中的「転送」是什么意思？",
+          "options": [
+            "退回包裹",
+            "查询包裹",
+            "转寄到别的地址",
+            "取消寄件"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「転送」指把邮件或包裹转寄到新的地址，常用于搬家后的邮件转寄服务。",
+          "id": "q-011-3-2"
+        }
+      ]
+    }
+  ]
+}

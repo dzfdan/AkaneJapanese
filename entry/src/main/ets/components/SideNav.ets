@@ -4,6 +4,7 @@
  */
 
 import { ThemeColors } from '../constants/ThemeConstants';
+import { ScenesIcon, ProgressIcon, SettingsIcon } from './PlayerIcons';
 
 interface NavItem {
   key: string;
@@ -18,10 +19,9 @@ export struct SideNav {
   @State isCompact: boolean = false;
 
   private navItems: NavItem[] = [
-    { key: 'scenes', icon: '🎧', label: '会话' },
-    { key: 'progress', icon: '📊', label: '进度' },
-    { key: 'favorites', icon: '⭐', label: '收藏' },
-    { key: 'settings', icon: '⚙️', label: '设置' }
+    { key: 'scenes', icon: '◆', label: '会话' },
+    { key: 'progress', icon: '▩', label: '进度' },
+    { key: 'settings', icon: '☰', label: '设置' }
   ];
 
   build() {
@@ -89,9 +89,13 @@ export struct SideNav {
       }
 
       // 图标
-      Text(item.icon)
-        .fontSize(this.isCompact ? 20 : 20)
-        .opacity(this.currentTab === item.key ? 1 : 0.7);
+            if (item.key === 'scenes') {
+        ScenesIcon({ color: this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary, iconSize: 22 });
+      } else if (item.key === 'progress') {
+        ProgressIcon({ color: this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary, iconSize: 22 });
+      } else {
+        SettingsIcon({ color: this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary, iconSize: 22 });
+      }
 
       // 文字（非紧凑模式显示）
       if (!this.isCompact) {

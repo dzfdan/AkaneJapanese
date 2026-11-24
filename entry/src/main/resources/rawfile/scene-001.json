@@ -22,11 +22,23 @@
           "romaji": "sumimasen, kono chikaku ni eki ga arimasu ka?",
           "translation": "请问，这附近有车站吗？",
           "segments": [
-            {"text": "すみません、この"},
-            {"text": "近", "kana": "ちか"},
-            {"text": "くに"},
-            {"text": "駅", "kana": "えき"},
-            {"text": "がありますか？"}
+            {
+              "text": "すみません、この"
+            },
+            {
+              "text": "近",
+              "kana": "ちか"
+            },
+            {
+              "text": "くに"
+            },
+            {
+              "text": "駅",
+              "kana": "えき"
+            },
+            {
+              "text": "がありますか？"
+            }
           ],
           "startTime": 0.0,
           "endTime": 3.5,
@@ -42,11 +54,23 @@
           "romaji": "ee, arimasu yo. kono michi o massugu itte kudasai.",
           "translation": "嗯，有的哦。请沿着这条路直走。",
           "segments": [
-            {"text": "ええ、ありますよ。この"},
-            {"text": "道", "kana": "みち"},
-            {"text": "をまっすぐ"},
-            {"text": "行", "kana": "い"},
-            {"text": "ってください。"}
+            {
+              "text": "ええ、ありますよ。この"
+            },
+            {
+              "text": "道",
+              "kana": "みち"
+            },
+            {
+              "text": "をまっすぐ"
+            },
+            {
+              "text": "行",
+              "kana": "い"
+            },
+            {
+              "text": "ってください。"
+            }
           ],
           "startTime": 4.0,
           "endTime": 8.0,
@@ -62,18 +86,48 @@
           "romaji": "futatsume no shingou o migi ni magaru to, hidarigawa ni arimasu.",
           "translation": "在第二个红绿灯右转，车站就在左侧。",
           "segments": [
-            {"text": "二", "kana": "ふた"},
-            {"text": "つ"},
-            {"text": "目", "kana": "め"},
-            {"text": "の"},
-            {"text": "信号", "kana": "しんごう"},
-            {"text": "を"},
-            {"text": "右", "kana": "みぎ"},
-            {"text": "に"},
-            {"text": "曲", "kana": "まが"},
-            {"text": "ると、"},
-            {"text": "左側", "kana": "ひだりがわ"},
-            {"text": "にあります。"}
+            {
+              "text": "二",
+              "kana": "ふた"
+            },
+            {
+              "text": "つ"
+            },
+            {
+              "text": "目",
+              "kana": "め"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "信号",
+              "kana": "しんごう"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "右",
+              "kana": "みぎ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "曲が",
+              "kana": "ま"
+            },
+            {
+              "text": "ると、"
+            },
+            {
+              "text": "左側",
+              "kana": "ひだりがわ"
+            },
+            {
+              "text": "にあります。"
+            }
           ],
           "startTime": 8.5,
           "endTime": 13.0,
@@ -89,7 +143,9 @@
           "romaji": "wakarimashita. koko kara dono kurai kakarimasu ka?",
           "translation": "明白了。从这里大概需要多长时间？",
           "segments": [
-            {"text": "わかりました。ここからどのくらいかかりますか？"}
+            {
+              "text": "わかりました。ここからどのくらいかかりますか？"
+            }
           ],
           "startTime": 13.5,
           "endTime": 17.5,
@@ -105,11 +161,24 @@
           "romaji": "aruite gofun gurai desu.",
           "translation": "走路大约五分钟。",
           "segments": [
-            {"text": "歩", "kana": "ある"},
-            {"text": "いて"},
-            {"text": "五", "kana": "ご"},
-            {"text": "分", "kana": "ふん"},
-            {"text": "ぐらいです。"}
+            {
+              "text": "歩",
+              "kana": "ある"
+            },
+            {
+              "text": "いて"
+            },
+            {
+              "text": "五",
+              "kana": "ご"
+            },
+            {
+              "text": "分",
+              "kana": "ふん"
+            },
+            {
+              "text": "ぐらいです。"
+            }
           ],
           "startTime": 18.0,
           "endTime": 20.5,
@@ -122,7 +191,12 @@
           "id": "q-001-1-1",
           "type": "listening",
           "questionZh": "路人告诉游客车站在哪个方向？",
-          "options": ["直走后第一个红绿灯左转", "直走后第二个红绿灯右转", "直走后第二个红绿灯左转", "右转后直走"],
+          "options": [
+            "直走后第一个红绿灯左转",
+            "直走后第二个红绿灯右转",
+            "直走后第二个红绿灯左转",
+            "右转后直走"
+          ],
           "correctIndex": 1,
           "explanationZh": "路人说「二つ目の信号を右に曲がると、左側にあります」，意思是在第二个红绿灯右转后，车站在左侧。"
         },
@@ -130,7 +204,12 @@
           "id": "q-001-1-2",
           "type": "meaning",
           "questionZh": "「どのくらい」在对话中的意思是？",
-          "options": ["多少钱", "多长时间/多少", "在哪里", "怎么样"],
+          "options": [
+            "多少钱",
+            "多长时间/多少",
+            "在哪里",
+            "怎么样"
+          ],
           "correctIndex": 1,
           "explanationZh": "「どのくらい」可以询问时间、距离、数量等，此处询问路程需要多长时间。"
         }
@@ -150,9 +229,16 @@
           "romaji": "anou, kono hen ni konbini wa arimasu ka?",
           "translation": "请问，这附近有便利店吗？",
           "segments": [
-            {"text": "あのう、この"},
-            {"text": "辺", "kana": "へん"},
-            {"text": "にコンビニはありますか？"}
+            {
+              "text": "あのう、この"
+            },
+            {
+              "text": "辺",
+              "kana": "へん"
+            },
+            {
+              "text": "にコンビニはありますか？"
+            }
           ],
           "startTime": 22.0,
           "endTime": 25.5,
@@ -168,15 +254,37 @@
           "romaji": "konbini desu ka? kono michi o watatte, hidari ni iku to arimasu yo.",
           "translation": "便利店吗？过了这条马路往左走就有哦。",
           "segments": [
-            {"text": "コンビニですか？この"},
-            {"text": "道", "kana": "みち"},
-            {"text": "を"},
-            {"text": "渡", "kana": "わた"},
-            {"text": "って、"},
-            {"text": "左", "kana": "ひだり"},
-            {"text": "に"},
-            {"text": "行", "kana": "い"},
-            {"text": "くとありますよ。"}
+            {
+              "text": "コンビニですか？この"
+            },
+            {
+              "text": "道",
+              "kana": "みち"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "渡",
+              "kana": "わた"
+            },
+            {
+              "text": "って、"
+            },
+            {
+              "text": "左",
+              "kana": "ひだり"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "行",
+              "kana": "い"
+            },
+            {
+              "text": "くとありますよ。"
+            }
           ],
           "startTime": 26.0,
           "endTime": 31.0,
@@ -192,8 +300,13 @@
           "romaji": "oudanhodou wa doko desu ka?",
           "translation": "人行横道在哪里？",
           "segments": [
-            {"text": "横断歩道", "kana": "おうだんほどう"},
-            {"text": "はどこですか？"}
+            {
+              "text": "横断歩道",
+              "kana": "おうだんほどう"
+            },
+            {
+              "text": "はどこですか？"
+            }
           ],
           "startTime": 31.5,
           "endTime": 34.5,
@@ -209,13 +322,30 @@
           "romaji": "asoko ni arimasu yo. miemasu ka? aoi shingou no tokoro desu.",
           "translation": "就在那里哦。能看到吗？蓝色信号灯的地方。",
           "segments": [
-            {"text": "あそこにありますよ。"},
-            {"text": "見", "kana": "み"},
-            {"text": "えますか？"},
-            {"text": "青", "kana": "あお"},
-            {"text": "い"},
-            {"text": "信号", "kana": "しんごう"},
-            {"text": "のところです。"}
+            {
+              "text": "あそこにありますよ。"
+            },
+            {
+              "text": "見",
+              "kana": "み"
+            },
+            {
+              "text": "えますか？"
+            },
+            {
+              "text": "青",
+              "kana": "あお"
+            },
+            {
+              "text": "い"
+            },
+            {
+              "text": "信号",
+              "kana": "しんごう"
+            },
+            {
+              "text": "のところです。"
+            }
           ],
           "startTime": 35.0,
           "endTime": 40.0,
@@ -231,9 +361,16 @@
           "romaji": "hai, miemasu. arigatou gozaimasu!",
           "translation": "好的，看到了。非常感谢！",
           "segments": [
-            {"text": "はい、"},
-            {"text": "見", "kana": "み"},
-            {"text": "えます。ありがとうございます！"}
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "見",
+              "kana": "み"
+            },
+            {
+              "text": "えます。ありがとうございます！"
+            }
           ],
           "startTime": 40.5,
           "endTime": 43.5,
@@ -246,7 +383,12 @@
           "id": "q-001-2-1",
           "type": "reading",
           "questionZh": "「この道を渡って」中的「渡る」是什么意思？",
-          "options": ["沿着走", "穿过、渡过", "拐弯", "返回"],
+          "options": [
+            "沿着走",
+            "穿过、渡过",
+            "拐弯",
+            "返回"
+          ],
           "correctIndex": 1,
           "explanationZh": "「渡る（わたる）」表示穿过、渡过，「道を渡る」意为过马路。"
         },
@@ -254,7 +396,12 @@
           "id": "q-001-2-2",
           "type": "listening",
           "questionZh": "便利店在什么位置？",
-          "options": ["过马路后往左走", "过马路后往右走", "直走第二个路口左转", "红绿灯对面"],
+          "options": [
+            "过马路后往左走",
+            "过马路后往右走",
+            "直走第二个路口左转",
+            "红绿灯对面"
+          ],
           "correctIndex": 0,
           "explanationZh": "店员说「この道を渡って、左に行くとあります」，意思是过了马路往左走就有。"
         }
@@ -274,15 +421,37 @@
           "romaji": "sumimasen, shinjuku made ikitai n desu ga, doko de norikaetara ii desu ka?",
           "translation": "请问，我想去新宿，在哪里换乘比较好呢？",
           "segments": [
-            {"text": "すみません、"},
-            {"text": "新宿", "kana": "しんじゅく"},
-            {"text": "まで"},
-            {"text": "行", "kana": "い"},
-            {"text": "きたいんですが、どこで"},
-            {"text": "乗", "kana": "の"},
-            {"text": "り"},
-            {"text": "換", "kana": "か"},
-            {"text": "えたらいいですか？"}
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "新宿",
+              "kana": "しんじゅく"
+            },
+            {
+              "text": "まで"
+            },
+            {
+              "text": "行",
+              "kana": "い"
+            },
+            {
+              "text": "きたいんですが、どこで"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "り"
+            },
+            {
+              "text": "換",
+              "kana": "か"
+            },
+            {
+              "text": "えたらいいですか？"
+            }
           ],
           "startTime": 45.0,
           "endTime": 50.5,
@@ -298,18 +467,48 @@
           "romaji": "shinjuku desu ka. tsugi no shibuya eki de yamanotesen ni norikaete kudasai.",
           "translation": "新宿吗。请在下一站涩谷站换乘山手线。",
           "segments": [
-            {"text": "新宿", "kana": "しんじゅく"},
-            {"text": "ですか。"},
-            {"text": "次", "kana": "つぎ"},
-            {"text": "の"},
-            {"text": "渋谷駅", "kana": "しぶやえき"},
-            {"text": "で"},
-            {"text": "山手線", "kana": "やまのてせん"},
-            {"text": "に"},
-            {"text": "乗", "kana": "の"},
-            {"text": "り"},
-            {"text": "換", "kana": "か"},
-            {"text": "えてください。"}
+            {
+              "text": "新宿",
+              "kana": "しんじゅく"
+            },
+            {
+              "text": "ですか。"
+            },
+            {
+              "text": "次",
+              "kana": "つぎ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "渋谷駅",
+              "kana": "しぶやえき"
+            },
+            {
+              "text": "で"
+            },
+            {
+              "text": "山手線",
+              "kana": "やまのてせん"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "り"
+            },
+            {
+              "text": "換",
+              "kana": "か"
+            },
+            {
+              "text": "えてください。"
+            }
           ],
           "startTime": 51.0,
           "endTime": 56.5,
@@ -325,10 +524,20 @@
           "romaji": "yamanotesen wa nanbansen desu ka?",
           "translation": "山手线在几号站台？",
           "segments": [
-            {"text": "山手線", "kana": "やまのてせん"},
-            {"text": "は"},
-            {"text": "何番線", "kana": "なんばんせん"},
-            {"text": "ですか？"}
+            {
+              "text": "山手線",
+              "kana": "やまのてせん"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "何番線",
+              "kana": "なんばんせん"
+            },
+            {
+              "text": "ですか？"
+            }
           ],
           "startTime": 57.0,
           "endTime": 60.0,
@@ -344,13 +553,31 @@
           "romaji": "sanbansen desu. sotomawari ni notte kudasai.",
           "translation": "三号站台。请坐外环方向。",
           "segments": [
-            {"text": "三番線", "kana": "さんばんせん"},
-            {"text": "です。"},
-            {"text": "外", "kana": "そと"},
-            {"text": "回", "kana": "まわ"},
-            {"text": "りに"},
-            {"text": "乗", "kana": "の"},
-            {"text": "ってください。"}
+            {
+              "text": "三番線",
+              "kana": "さんばんせん"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "外",
+              "kana": "そと"
+            },
+            {
+              "text": "回",
+              "kana": "まわ"
+            },
+            {
+              "text": "りに"
+            },
+            {
+              "text": "乗",
+              "kana": "の"
+            },
+            {
+              "text": "ってください。"
+            }
           ],
           "startTime": 60.5,
           "endTime": 64.5,
@@ -366,9 +593,17 @@
           "romaji": "sotomawari desu ne. arigatou gozaimasu.",
           "translation": "外环方向对吧。非常感谢。",
           "segments": [
-            {"text": "外", "kana": "そと"},
-            {"text": "回", "kana": "まわ"},
-            {"text": "りですね。ありがとうございます。"}
+            {
+              "text": "外",
+              "kana": "そと"
+            },
+            {
+              "text": "回",
+              "kana": "まわ"
+            },
+            {
+              "text": "りですね。ありがとうございます。"
+            }
           ],
           "startTime": 65.0,
           "endTime": 68.0,
@@ -384,7 +619,9 @@
           "romaji": "itterasshaimase.",
           "translation": "请慢走。",
           "segments": [
-            {"text": "いってらっしゃいませ。"}
+            {
+              "text": "いってらっしゃいませ。"
+            }
           ],
           "startTime": 68.5,
           "endTime": 70.5,
@@ -397,7 +634,12 @@
           "id": "q-001-3-1",
           "type": "listening",
           "questionZh": "乘客要在哪里换乘山手线？",
-          "options": ["新宿站", "涩谷站", "东京站", "池袋站"],
+          "options": [
+            "新宿站",
+            "涩谷站",
+            "东京站",
+            "池袋站"
+          ],
           "correctIndex": 1,
           "explanationZh": "站务员说「次の渋谷駅で山手線に乗り換えてください」，即在下一站涩谷换乘。"
         },
@@ -405,7 +647,12 @@
           "id": "q-001-3-2",
           "type": "meaning",
           "questionZh": "「外回り」是什么意思？",
-          "options": ["内侧线路", "外环线路", "快速列车", "各站停车"],
+          "options": [
+            "内侧线路",
+            "外环线路",
+            "快速列车",
+            "各站停车"
+          ],
           "correctIndex": 1,
           "explanationZh": "「外回り（そとまわり）」指山手线等环状线路的外环方向，与「内回り（うちまわり）」相对。"
         }

@@ -7,6 +7,7 @@ import { SherpaAsrEngine } from '../service/SherpaAsrEngine';
 import { HighlightSegment } from '../service/SimilarityMatcher';
 import { abilityAccessCtrl, common } from '@kit.AbilityKit';
 import appLogger from '../utils/Logger';
+import { SkipNextIcon } from './PlayerIcons';
 
 @Component
 export struct ConversationTab {
@@ -17,6 +18,8 @@ export struct ConversationTab {
   @State uiState: ConversationUiState | null = null;
   @State permissionGranted: boolean = false;
   @State modelState: 'idle' | 'loading' | 'ready' | 'failed' = 'idle';
+  // 横屏（16:9）适配：紧凑上下留白
+  @StorageProp('isLandscape') isLandscape: boolean = false;
   private stateCallback: ((s: ConversationUiState) => void) | null = null;
 
   aboutToAppear(): void {
@@ -115,14 +118,14 @@ export struct ConversationTab {
     }
     .width('100%')
     .height('100%')
-    .padding({ top: 24, bottom: 24 });
+    .padding({ top: this.isLandscape ? 12 : 24, bottom: this.isLandscape ? 12 : 24 });
   }
 
   @Builder
   buildIdle() {
     Column() {
-      Text('🤖').fontSize(48).margin({ bottom: 24 });
-      Text('对话模式').fontSize(20).fontWeight(700).margin({ bottom: 8 });
+      Text('◉').fontSize(48).margin({ bottom: 24 });
+      Text('人机对话').fontSize(20).fontWeight(700).margin({ bottom: 8 });
       Text('App 说一句，你跟一句，App 判断你说得对不对').fontSize(12).fontColor(ThemeColors.textSecondary).margin({ bottom: 32 });
       Button('▶ 开始对话')
         .width('80%').height(48).fontSize(16).fontWeight(600)
@@ -136,9 +139,9 @@ export struct ConversationTab {
   @Builder
   buildPermissionDenied() {
     Column() {
-      Text('🔒').fontSize(48).margin({ bottom: 24 });
+      Text('⛔').fontSize(48).margin({ bottom: 24 });
       Text('需要麦克风权限').fontSize(18).fontWeight(700).margin({ bottom: 8 });
-      Text('对话模式需要使用麦克风进行语音识别').fontSize(12).fontColor(ThemeColors.textSecondary).margin({ bottom: 32 });
+      Text('人机对话需要使用麦克风进行语音识别').fontSize(12).fontColor(ThemeColors.textSecondary).margin({ bottom: 32 });
       Button('⚙ 去设置')
         .width('80%').height(48).fontSize(16).fontWeight(600)
         .backgroundColor(ThemeColors.primary).fontColor('#FFFFFF')
@@ -162,7 +165,7 @@ export struct ConversationTab {
   buildModelLoading() {
     Column() {
       LoadingProgress().width(48).height(48).margin({ bottom: 16 });
-      Text('⏳ 模型加载中…').fontSize(14).fontColor(ThemeColors.textSecondary);
+      Text('◌ 模型加载中…').fontSize(14).fontColor(ThemeColors.textSecondary);
     }
     .width('100%').height('100%').justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center);
   }
@@ -170,7 +173,7 @@ export struct ConversationTab {
   @Builder
   buildAppSpeaking() {
     Column() {
-      Text('🤖').fontSize(48).margin({ bottom: 12 });
+      Text('◉').fontSize(48).margin({ bottom: 12 });
       Text('App 说话中…').fontSize(14).fontColor(ThemeColors.textSecondary).margin({ bottom: 24 });
       if (this.uiState && this.uiState.currentSentence) {
         FuriganaText({
@@ -190,7 +193,7 @@ export struct ConversationTab {
   @Builder
   buildWaitingUser() {
     Column() {
-      Text('🎤').fontSize(48).margin({ bottom: 12 });
+      Text('◉').fontSize(48).margin({ bottom: 12 });
       Text('● 录音中（请跟读）').fontSize(14).fontColor(ThemeColors.error).margin({ bottom: 24 });
       if (this.uiState && this.uiState.currentSentence) {
         FuriganaText({
@@ -211,7 +214,7 @@ export struct ConversationTab {
   buildRecognizing() {
     Column() {
       LoadingProgress().width(48).height(48).margin({ bottom: 16 });
-      Text('⏳ 识别中…').fontSize(14).fontColor(ThemeColors.textSecondary);
+      Text('◌ 识别中…').fontSize(14).fontColor(ThemeColors.textSecondary);
     }
     .width('100%').height('100%').justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center);
   }
@@ -220,7 +223,7 @@ export struct ConversationTab {
   buildFeedback() {
     Column() {
       // App 说
-      Text('🤖 App 说:').fontSize(12).fontColor(ThemeColors.textSecondary).width('100%').margin({ bottom: 4 });
+      Text('◉ App 说:').fontSize(12).fontColor(ThemeColors.textSecondary).width('100%').margin({ bottom: 4 });
       if (this.uiState && this.uiState.currentSentence) {
         FuriganaText({
           segments: this.uiState.currentSentence.segments || [],
@@ -234,7 +237,7 @@ export struct ConversationTab {
       }
 
       // 用户说
-      Text('🎤 你说:').fontSize(12).fontColor(ThemeColors.textSecondary).width('100%').margin({ bottom: 4 });
+      Text('◉ 你说:').fontSize(12).fontColor(ThemeColors.textSecondary).width('100%').margin({ bottom: 4 });
       if (this.uiState && this.uiState.lastMatch) {
         // 差异高亮：isDiff 标红，否则正常
         Text() {
@@ -294,16 +297,23 @@ export struct ConversationTab {
 
       // 按钮组
       Row() {
-        Button('🔁 重试')
+        Button('↻ 重试')
           .layoutWeight(1).height(44).fontSize(14)
           .backgroundColor(ThemeColors.bgCard).fontColor(ThemeColors.textPrimary)
           .borderRadius(10).margin({ right: 8 })
           .onClick(() => this.handleRetry());
-        Button('⏭ 下一句')
-          .layoutWeight(1).height(44).fontSize(14)
-          .backgroundColor(ThemeColors.primary).fontColor('#FFFFFF')
-          .borderRadius(10)
-          .onClick(() => this.handleNext());
+        Button() {
+          Row() {
+            SkipNextIcon({ color: '#FFFFFF', iconSize: 20 });
+            Text(' 下一句')
+              .fontSize(14)
+              .fontColor('#FFFFFF');
+          }
+        }
+        .layoutWeight(1).height(44)
+        .backgroundColor(ThemeColors.primary)
+        .borderRadius(10)
+        .onClick(() => this.handleNext());
       }
       .width('100%');
     }

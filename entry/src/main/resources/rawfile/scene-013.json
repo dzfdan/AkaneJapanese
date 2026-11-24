@@ -1,0 +1,606 @@
+{
+  "id": "scene-013",
+  "titleJa": "名刺交換と取引先訪問",
+  "titleZh": "交换名片·拜访客户",
+  "level": "N3",
+  "category": "商务",
+  "descriptionZh": "拜访客户与商务往来的场景。包含初次拜访与名片交换、商谈开场、约定下次日程与告别。",
+  "audioNormal": "scene-013-normal.wav",
+  "audioSlow": "scene-013-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-013-1",
+      "titleJa": "初訪問と名刺交換",
+      "titleZh": "初次拜访与名片交换",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "受付担当",
+          "speakerRoleZh": "前台接待",
+          "japanese": "いらっしゃいませ。本日はどのようなご用件でしょうか。",
+          "romaji": "irasshaimase. honjitsu wa dono you na goyouken deshou ka.",
+          "translation": "欢迎光临。请问您今天有什么事情？",
+          "segments": [
+            {
+              "text": "いらっしゃいませ。"
+            },
+            {
+              "text": "本日",
+              "kana": "ほんじつ"
+            },
+            {
+              "text": "はどのようなご"
+            },
+            {
+              "text": "用件",
+              "kana": "ようけん"
+            },
+            {
+              "text": "でしょうか。"
+            }
+          ],
+          "id": "s-013-1-1",
+          "startTime": 0.5,
+          "endTime": 4.64,
+          "slowStartTime": 0.5,
+          "slowEndTime": 6.2
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "訪問客",
+          "speakerRoleZh": "来访客人",
+          "japanese": "山田商事の佐藤と申します。営業部の田中様にお会いしたいのですが。",
+          "romaji": "yamada shouji no satou to moushimasu. eigyoubu no tanaka sama ni oai shitai no desu ga.",
+          "translation": "我是山田商事的佐藤。我想见营业部的田中先生。",
+          "segments": [
+            {
+              "text": "山田商事",
+              "kana": "やまだしょうじ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "佐藤",
+              "kana": "さとう"
+            },
+            {
+              "text": "と"
+            },
+            {
+              "text": "申",
+              "kana": "もう"
+            },
+            {
+              "text": "します。"
+            },
+            {
+              "text": "営業部",
+              "kana": "えいぎょうぶ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "様",
+              "kana": "さま"
+            },
+            {
+              "text": "にお"
+            },
+            {
+              "text": "会",
+              "kana": "あ"
+            },
+            {
+              "text": "いしたいのですが。"
+            }
+          ],
+          "id": "s-013-1-2",
+          "startTime": 5.14,
+          "endTime": 10.63,
+          "slowStartTime": 6.7,
+          "slowEndTime": 14.28
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "受付担当",
+          "speakerRoleZh": "前台接待",
+          "japanese": "かしこまりました。恐れ入りますが、お名刺をいただけますか。",
+          "romaji": "kashikomarimashita. osoreirimasu ga, omeishi o itadakemasu ka.",
+          "translation": "明白了。不好意思，能给我一张您的名片吗？",
+          "segments": [
+            {
+              "text": "かしこまりました。"
+            },
+            {
+              "text": "恐",
+              "kana": "おそ"
+            },
+            {
+              "text": "れ"
+            },
+            {
+              "text": "入",
+              "kana": "い"
+            },
+            {
+              "text": "りますが、お"
+            },
+            {
+              "text": "名刺",
+              "kana": "めいし"
+            },
+            {
+              "text": "をいただけますか。"
+            }
+          ],
+          "id": "s-013-1-3",
+          "startTime": 11.13,
+          "endTime": 15.89,
+          "slowStartTime": 14.78,
+          "slowEndTime": 21.33
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "訪問客",
+          "speakerRoleZh": "来访客人",
+          "japanese": "はい、こちらが私の名刺でございます。どうぞよろしくお願いいたします。",
+          "romaji": "hai, kochira ga watashi no meishi de gozaimasu. douzo yoroshiku onegai itashimasu.",
+          "translation": "好的，这是我的名片。请多关照。",
+          "segments": [
+            {
+              "text": "はい、こちらが"
+            },
+            {
+              "text": "私",
+              "kana": "わたし"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "名刺",
+              "kana": "めいし"
+            },
+            {
+              "text": "でございます。どうぞよろしくお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いいたします。"
+            }
+          ],
+          "id": "s-013-1-4",
+          "startTime": 16.39,
+          "endTime": 22.24,
+          "slowStartTime": 21.83,
+          "slowEndTime": 29.91
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听力理解：来访者佐藤想要见谁？",
+          "options": [
+            "营业部的田中先生",
+            "前台接待小姐",
+            "山田商事的社长",
+            "营业部的佐藤先生"
+          ],
+          "correctIndex": 0,
+          "explanationZh": "对话中佐藤说「営業部の田中様にお会いしたいのですが」，即想见营业部的田中先生。",
+          "id": "q-013-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "语义理解：「恐れ入りますが、お名刺をいただけますか」最恰当的中文意思是？",
+          "options": [
+            "很抱歉，请把名片还给我",
+            "不好意思，能给我一张您的名片吗",
+            "非常抱歉，我没有带名片",
+            "对不起，请在这里签名"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「恐れ入りますが」是礼貌的铺垫表达，「いただけますか」表示请求对方给予，整句意为「不好意思，能给我一张您的名片吗」。",
+          "id": "q-013-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-013-2",
+      "titleJa": "商談の始まり",
+      "titleZh": "商谈开场与议题说明",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "営業担当者",
+          "speakerRoleZh": "销售负责人",
+          "japanese": "本日はお忙しいところ、お時間をいただきありがとうございます。",
+          "romaji": "honjitsu wa oisogashii tokoro ojikan o itadaki arigatou gozaimasu",
+          "translation": "今天您在百忙之中抽出时间，非常感谢。",
+          "segments": [
+            {
+              "text": "本日",
+              "kana": "ほんじつ"
+            },
+            {
+              "text": "はお"
+            },
+            {
+              "text": "忙",
+              "kana": "いそが"
+            },
+            {
+              "text": "しいところ、お"
+            },
+            {
+              "text": "時間",
+              "kana": "じかん"
+            },
+            {
+              "text": "をいただきありがとうございます。"
+            }
+          ],
+          "id": "s-013-2-1",
+          "startTime": 22.74,
+          "endTime": 27.13,
+          "slowStartTime": 30.41,
+          "slowEndTime": 36.48
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "取引先担当者",
+          "speakerRoleZh": "客户负责人",
+          "japanese": "こちらこそ、わざわざお越しいただいて恐縮です。",
+          "romaji": "kochira koso wazawaza okoshi itadaite kyoushuku desu",
+          "translation": "哪里哪里，您特意跑一趟，真是过意不去。",
+          "segments": [
+            {
+              "text": "こちらこそ、わざわざお"
+            },
+            {
+              "text": "越",
+              "kana": "こ"
+            },
+            {
+              "text": "しいただいて"
+            },
+            {
+              "text": "恐縮",
+              "kana": "きょうしゅく"
+            },
+            {
+              "text": "です。"
+            }
+          ],
+          "id": "s-013-2-2",
+          "startTime": 27.63,
+          "endTime": 31.18,
+          "slowStartTime": 36.98,
+          "slowEndTime": 41.87
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "営業担当者",
+          "speakerRoleZh": "销售负责人",
+          "japanese": "早速ですが、今日は新しい商品についてご説明させていただきたいと思います。",
+          "romaji": "sassoku desu ga kyou wa atarashii shouhin ni tsuite gosetsumei sasete itadakitai to omoimasu",
+          "translation": "恕我冒昧直接进入正题，今天想就新产品向您做个说明。",
+          "segments": [
+            {
+              "text": "早速",
+              "kana": "さっそく"
+            },
+            {
+              "text": "ですが、"
+            },
+            {
+              "text": "今日",
+              "kana": "きょう"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "新",
+              "kana": "あたら"
+            },
+            {
+              "text": "しい"
+            },
+            {
+              "text": "商品",
+              "kana": "しょうひん"
+            },
+            {
+              "text": "についてご"
+            },
+            {
+              "text": "説明",
+              "kana": "せつめい"
+            },
+            {
+              "text": "させていただきたいと"
+            },
+            {
+              "text": "思",
+              "kana": "おも"
+            },
+            {
+              "text": "います。"
+            }
+          ],
+          "id": "s-013-2-3",
+          "startTime": 31.68,
+          "endTime": 37.52,
+          "slowStartTime": 42.37,
+          "slowEndTime": 50.44
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "取引先担当者",
+          "speakerRoleZh": "客户负责人",
+          "japanese": "はい、ぜひお願いします。資料も拝見させていただきますね。",
+          "romaji": "hai zehi onegai shimasu shiryou mo haiken sasete itadakimasu ne",
+          "translation": "好的，请务必介绍一下。资料也请让我看看。",
+          "segments": [
+            {
+              "text": "はい、ぜひお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            },
+            {
+              "text": "資料",
+              "kana": "しりょう"
+            },
+            {
+              "text": "も"
+            },
+            {
+              "text": "拝見",
+              "kana": "はいけん"
+            },
+            {
+              "text": "させていただきますね。"
+            }
+          ],
+          "id": "s-013-2-4",
+          "startTime": 38.02,
+          "endTime": 43.2,
+          "slowStartTime": 50.94,
+          "slowEndTime": 58.09
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听力题：「本日はお忙しいところ、お時間をいただきありがとうございます」这句话中，说话人A在表达什么？",
+          "options": [
+            "对客户的迟到表示不满",
+            "感谢客户在百忙中抽出时间",
+            "请求客户延长商谈时间",
+            "向客户确认下次见面的时间"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「お忙しいところ、お時間をいただきありがとうございます」是商务场合的经典开场白，意为「感谢您在百忙之中抽出时间」，表达对客户的谢意。",
+          "id": "q-013-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「早速ですが、今日は新しい商品についてご説明させていただきたいと思います」中的「早速ですが」是什么意思？",
+          "options": [
+            "虽然很着急，但是",
+            "恕我冒昧直接进入正题",
+            "因为时间很早，所以",
+            "虽然很遗憾，但是"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「早速ですが」是商务日语中常用的过渡语，用于寒暄之后礼貌地切入正题，相当于中文的「恕我冒昧，直接进入正题」。",
+          "id": "q-013-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-013-3",
+      "titleJa": "次回の約束とお礼",
+      "titleZh": "约定下次与告别",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "来客",
+          "speakerRoleZh": "来访客人",
+          "japanese": "今日はお忙しいところ、ありがとうございました。",
+          "romaji": "kyou wa oisogashii tokoro arigatou gozaimashita",
+          "translation": "今天您在百忙之中抽出时间，非常感谢。",
+          "segments": [
+            {
+              "text": "今日",
+              "kana": "きょう"
+            },
+            {
+              "text": "はお"
+            },
+            {
+              "text": "忙",
+              "kana": "いそが"
+            },
+            {
+              "text": "しいところ、ありがとうございました。"
+            }
+          ],
+          "id": "s-013-3-1",
+          "startTime": 43.7,
+          "endTime": 47.04,
+          "slowStartTime": 58.59,
+          "slowEndTime": 63.2
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "担当者",
+          "speakerRoleZh": "负责人",
+          "japanese": "こちらこそ、わざわざお越しいただき、感謝しております。",
+          "romaji": "kochira koso wazawaza okoshi itadaki kansha shite orimasu",
+          "translation": "我们才要感谢，感谢您特意前来。",
+          "segments": [
+            {
+              "text": "こちらこそ、わざわざお"
+            },
+            {
+              "text": "越",
+              "kana": "こ"
+            },
+            {
+              "text": "しいただき、"
+            },
+            {
+              "text": "感謝",
+              "kana": "かんしゃ"
+            },
+            {
+              "text": "しております。"
+            }
+          ],
+          "id": "s-013-3-2",
+          "startTime": 47.54,
+          "endTime": 51.85,
+          "slowStartTime": 63.7,
+          "slowEndTime": 69.65
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "来客",
+          "speakerRoleZh": "来访客人",
+          "japanese": "来週の打ち合わせは、水曜日の午後二時でいかがでしょうか。",
+          "romaji": "raishuu no uchiawase wa suiyoubi no gogo niji de ikaga deshou ka",
+          "translation": "下周的会议，定在周三下午两点怎么样呢？",
+          "segments": [
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "打",
+              "kana": "う"
+            },
+            {
+              "text": "ち"
+            },
+            {
+              "text": "合",
+              "kana": "あ"
+            },
+            {
+              "text": "わせは、"
+            },
+            {
+              "text": "水曜日",
+              "kana": "すいようび"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "午後",
+              "kana": "ごご"
+            },
+            {
+              "text": "二時",
+              "kana": "にじ"
+            },
+            {
+              "text": "でいかがでしょうか。"
+            }
+          ],
+          "id": "s-013-3-3",
+          "startTime": 52.35,
+          "endTime": 56.4,
+          "slowStartTime": 70.15,
+          "slowEndTime": 75.73
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "担当者",
+          "speakerRoleZh": "负责人",
+          "japanese": "はい、結構です。では、また来週お会いしましょう。",
+          "romaji": "hai kekkou desu dewa mata raishuu oai shimashou",
+          "translation": "好的，可以。那么，我们下周再见吧。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "結構",
+              "kana": "けっこう"
+            },
+            {
+              "text": "です。では、また"
+            },
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "お"
+            },
+            {
+              "text": "会",
+              "kana": "あ"
+            },
+            {
+              "text": "いしましょう。"
+            }
+          ],
+          "id": "s-013-3-4",
+          "startTime": 56.9,
+          "endTime": 61.75,
+          "slowStartTime": 76.23,
+          "slowEndTime": 82.92
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "根据对话内容，两人约定下次会议的时间是什么时候？",
+          "options": [
+            "下周一上午十点",
+            "下周三下午两点",
+            "本周五下午三点",
+            "下周二上午九点"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "A 提议「来週の打ち合わせは、水曜日の午後二時でいかがでしょうか」，B 回答「はい、結構です」，因此约定时间是下周三下午两点。",
+          "id": "q-013-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「こちらこそ」在对话中表达的是什么意思？",
+          "options": [
+            "请往这边走",
+            "我才应该感谢您",
+            "这边比较便宜",
+            "请多多关照"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「こちらこそ」用于回应对方的感谢或道歉，表示「我才应该……」，此处意为「我才要感谢您」。",
+          "id": "q-013-3-2"
+        }
+      ]
+    }
+  ]
+}

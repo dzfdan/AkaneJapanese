@@ -1,0 +1,675 @@
+{
+  "id": "scene-004",
+  "titleJa": "オンライン会議",
+  "titleZh": "线上会议",
+  "level": "N3",
+  "category": "商务",
+  "descriptionZh": "参加日本公司线上会议的真实场景。包含音频画面确认、进度汇报、会议总结与后续安排等商务表达。",
+  "audioNormal": "scene-004-normal.wav",
+  "audioSlow": "scene-004-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-004-1",
+      "titleJa": "オンライン会議の開始前",
+      "titleZh": "线上会议开始前",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "司会者",
+          "speakerRoleZh": "主持人",
+          "japanese": "皆さん、聞こえますか。音声と画面の確認をお願いします。",
+          "romaji": "minasan kikoemasu ka onsei to gamen no kakunin o onegai shimasu",
+          "translation": "大家能听到吗？请确认一下音频和画面。",
+          "segments": [
+            {
+              "text": "皆",
+              "kana": "みな"
+            },
+            {
+              "text": "さん、"
+            },
+            {
+              "text": "聞",
+              "kana": "き"
+            },
+            {
+              "text": "こえますか。"
+            },
+            {
+              "text": "音声",
+              "kana": "おんせい"
+            },
+            {
+              "text": "と"
+            },
+            {
+              "text": "画面",
+              "kana": "がめん"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "確認",
+              "kana": "かくにん"
+            },
+            {
+              "text": "をお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            }
+          ],
+          "id": "s-004-1-1",
+          "startTime": 0.5,
+          "endTime": 5.65,
+          "slowStartTime": 0.5,
+          "slowEndTime": 7.6
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "参加者",
+          "speakerRoleZh": "参会者",
+          "japanese": "はい、問題なく聞こえています。画面もきれいに見えていますよ。",
+          "romaji": "hai mondai naku kikoete imasu gamen mo kirei ni miete imasu yo",
+          "translation": "是的，听得很清楚，没有问题。画面也看得很清楚。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "問題",
+              "kana": "もんだい"
+            },
+            {
+              "text": "なく"
+            },
+            {
+              "text": "聞",
+              "kana": "き"
+            },
+            {
+              "text": "こえています。"
+            },
+            {
+              "text": "画面",
+              "kana": "がめん"
+            },
+            {
+              "text": "もきれいに"
+            },
+            {
+              "text": "見",
+              "kana": "み"
+            },
+            {
+              "text": "えていますよ。"
+            }
+          ],
+          "id": "s-004-1-2",
+          "startTime": 6.15,
+          "endTime": 11.17,
+          "slowStartTime": 8.1,
+          "slowEndTime": 15.02
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "司会者",
+          "speakerRoleZh": "主持人",
+          "japanese": "ありがとうございます。では、時間になりましたので、会議を始めましょう。",
+          "romaji": "arigatou gozaimasu de wa jikan ni narimashita node kaigi o hajimemashou",
+          "translation": "谢谢。那么，时间到了，我们开始开会吧。",
+          "segments": [
+            {
+              "text": "ありがとうございます。では、"
+            },
+            {
+              "text": "時間",
+              "kana": "じかん"
+            },
+            {
+              "text": "になりましたので、"
+            },
+            {
+              "text": "会議",
+              "kana": "かいぎ"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "始",
+              "kana": "はじ"
+            },
+            {
+              "text": "めましょう。"
+            }
+          ],
+          "id": "s-004-1-3",
+          "startTime": 11.67,
+          "endTime": 17.89,
+          "slowStartTime": 15.52,
+          "slowEndTime": 24.13
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "参加者",
+          "speakerRoleZh": "参会者",
+          "japanese": "よろしくお願いします。今日の議題は何ですか。",
+          "romaji": "yoroshiku onegai shimasu kyou no gidai wa nan desu ka",
+          "translation": "请多关照。今天的议题是什么？",
+          "segments": [
+            {
+              "text": "よろしくお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            },
+            {
+              "text": "今日",
+              "kana": "きょう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "議題",
+              "kana": "ぎだい"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "何",
+              "kana": "なん"
+            },
+            {
+              "text": "ですか。"
+            }
+          ],
+          "id": "s-004-1-4",
+          "startTime": 18.39,
+          "endTime": 22.3,
+          "slowStartTime": 24.63,
+          "slowEndTime": 30.01
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听音频，会议开始前主持人首先请大家确认什么？",
+          "options": [
+            "资料是否已打印",
+            "音频和画面是否正常",
+            "网络费用是否已支付",
+            "会议室是否已预约"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "主持人说「音声と画面の確認をお願いします」，即请大家确认音频和画面，因此选第二项。",
+          "id": "q-004-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「議題」在对话中的意思是什么？",
+          "options": [
+            "会议记录",
+            "参会人员名单",
+            "会议要讨论的议题",
+            "会议结束时间"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「議題」指会议上要讨论的题目、议题，对话中参会者询问今天的议题是什么，因此选第三项。",
+          "id": "q-004-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-004-2",
+      "titleJa": "進捗報告と確認",
+      "titleZh": "进度汇报与确认",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "発表者",
+          "speakerRoleZh": "汇报人",
+          "japanese": "では、先週からの進捗について簡単にご報告します。",
+          "romaji": "de wa senshuu kara no shinchoku ni tsuite kantan ni go houkoku shimasu",
+          "translation": "那么，我简单汇报一下从上周开始的进度。",
+          "segments": [
+            {
+              "text": "では、"
+            },
+            {
+              "text": "先週",
+              "kana": "せんしゅう"
+            },
+            {
+              "text": "からの"
+            },
+            {
+              "text": "進捗",
+              "kana": "しんちょく"
+            },
+            {
+              "text": "について"
+            },
+            {
+              "text": "簡単",
+              "kana": "かんたん"
+            },
+            {
+              "text": "にご"
+            },
+            {
+              "text": "報告",
+              "kana": "ほうこく"
+            },
+            {
+              "text": "します。"
+            }
+          ],
+          "id": "s-004-2-1",
+          "startTime": 22.8,
+          "endTime": 27.13,
+          "slowStartTime": 30.51,
+          "slowEndTime": 36.49
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "参加者",
+          "speakerRoleZh": "参会者",
+          "japanese": "お願いします。予定通り進んでいるかどうか知りたいです。",
+          "romaji": "onegai shimasu yotei doori susunde iru ka dou ka shiritai desu",
+          "translation": "拜托了。我想知道是否按计划进行。",
+          "segments": [
+            {
+              "text": "お"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            },
+            {
+              "text": "予定通",
+              "kana": "よていどお"
+            },
+            {
+              "text": "り"
+            },
+            {
+              "text": "進",
+              "kana": "すす"
+            },
+            {
+              "text": "んでいるかどうか"
+            },
+            {
+              "text": "知",
+              "kana": "し"
+            },
+            {
+              "text": "りたいです。"
+            }
+          ],
+          "id": "s-004-2-2",
+          "startTime": 27.63,
+          "endTime": 32.04,
+          "slowStartTime": 36.99,
+          "slowEndTime": 43.07
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "発表者",
+          "speakerRoleZh": "汇报人",
+          "japanese": "設計の部分はほぼ終わりましたが、テストが少し遅れています。",
+          "romaji": "sekkei no bubun wa hobo owarimashita ga tesuto ga sukoshi okurete imasu",
+          "translation": "设计部分基本完成了，但测试稍微有些延迟。",
+          "segments": [
+            {
+              "text": "設計",
+              "kana": "せっけい"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "部分",
+              "kana": "ぶぶん"
+            },
+            {
+              "text": "はほぼ"
+            },
+            {
+              "text": "終",
+              "kana": "お"
+            },
+            {
+              "text": "わりましたが、テストが"
+            },
+            {
+              "text": "少",
+              "kana": "すこ"
+            },
+            {
+              "text": "し"
+            },
+            {
+              "text": "遅",
+              "kana": "おく"
+            },
+            {
+              "text": "れています。"
+            }
+          ],
+          "id": "s-004-2-3",
+          "startTime": 32.54,
+          "endTime": 36.94,
+          "slowStartTime": 43.57,
+          "slowEndTime": 49.64
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "参加者",
+          "speakerRoleZh": "参会者",
+          "japanese": "分かりました。来週の会議までにテストを終わらせられますか。",
+          "romaji": "wakarimashita raishuu no kaigi made ni tesuto o owaraseraremasu ka",
+          "translation": "明白了。能在下周会议之前完成测试吗？",
+          "segments": [
+            {
+              "text": "分",
+              "kana": "わ"
+            },
+            {
+              "text": "かりました。"
+            },
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "会議",
+              "kana": "かいぎ"
+            },
+            {
+              "text": "までにテストを"
+            },
+            {
+              "text": "終",
+              "kana": "お"
+            },
+            {
+              "text": "わらせられますか。"
+            }
+          ],
+          "id": "s-004-2-4",
+          "startTime": 37.44,
+          "endTime": 42.02,
+          "slowStartTime": 50.14,
+          "slowEndTime": 56.44
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听到的句子「テストが少し遅れています」中，说话人表达了什么情况？",
+          "options": [
+            "测试已经提前完成",
+            "测试稍微有些延迟",
+            "测试进行得非常顺利",
+            "测试决定取消"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「遅れています」表示「延迟、落后」，「少し」表示「稍微」，所以整句意思是测试稍微延迟了。",
+          "id": "q-004-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「予定通り進んでいるかどうか知りたいです」这句话的意思是什么？",
+          "options": [
+            "想知道是否按计划进行",
+            "想确认会议的具体时间",
+            "想了解谁负责测试工作",
+            "想询问设计是否已经完成"
+          ],
+          "correctIndex": 0,
+          "explanationZh": "「予定通り」意为「按计划」，「進んでいるかどうか」意为「是否在进行中」，「知りたい」意为「想知道」，整句表示想知道是否按计划进行。",
+          "id": "q-004-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-004-3",
+      "titleJa": "会議のまとめと次回の予定",
+      "titleZh": "会议总结与下次安排",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "司会者",
+          "speakerRoleZh": "主持人",
+          "japanese": "では、今日の会議はこれで終わりにしたいと思います。",
+          "romaji": "de wa kyou no kaigi wa kore de owari ni shitai to omoimasu",
+          "translation": "那么，今天的会议我想就到此结束。",
+          "segments": [
+            {
+              "text": "では、"
+            },
+            {
+              "text": "今日",
+              "kana": "きょう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "会議",
+              "kana": "かいぎ"
+            },
+            {
+              "text": "はこれで"
+            },
+            {
+              "text": "終",
+              "kana": "お"
+            },
+            {
+              "text": "わりにしたいと"
+            },
+            {
+              "text": "思",
+              "kana": "おも"
+            },
+            {
+              "text": "います。"
+            }
+          ],
+          "id": "s-004-3-1",
+          "startTime": 42.52,
+          "endTime": 46.12,
+          "slowStartTime": 56.94,
+          "slowEndTime": 61.91
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "参加者",
+          "speakerRoleZh": "参会者",
+          "japanese": "お疲れ様でした。来週の予定はもう決まりましたか。",
+          "romaji": "otsukaresama deshita raishuu no yotei wa mou kimarimashita ka",
+          "translation": "辛苦了。下周的安排已经定好了吗？",
+          "segments": [
+            {
+              "text": "お"
+            },
+            {
+              "text": "疲",
+              "kana": "つか"
+            },
+            {
+              "text": "れ"
+            },
+            {
+              "text": "様",
+              "kana": "さま"
+            },
+            {
+              "text": "でした。"
+            },
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "予定",
+              "kana": "よてい"
+            },
+            {
+              "text": "はもう"
+            },
+            {
+              "text": "決",
+              "kana": "き"
+            },
+            {
+              "text": "まりましたか。"
+            }
+          ],
+          "id": "s-004-3-2",
+          "startTime": 46.62,
+          "endTime": 50.87,
+          "slowStartTime": 62.41,
+          "slowEndTime": 68.25
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "司会者",
+          "speakerRoleZh": "主持人",
+          "japanese": "はい、来週の火曜日の午後三時からにするつもりです。",
+          "romaji": "hai raishuu no kayoubi no gogo sanji kara ni suru tsumori desu",
+          "translation": "是的，我打算定在下周二下午三点开始。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "火曜日",
+              "kana": "かようび"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "午後",
+              "kana": "ごご"
+            },
+            {
+              "text": "三時",
+              "kana": "さんじ"
+            },
+            {
+              "text": "からにするつもりです。"
+            }
+          ],
+          "id": "s-004-3-3",
+          "startTime": 51.37,
+          "endTime": 55.36,
+          "slowStartTime": 68.75,
+          "slowEndTime": 74.27
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "参加者",
+          "speakerRoleZh": "参会者",
+          "japanese": "分かりました。議事録を後でメールで送ってもらえますか。",
+          "romaji": "wakarimashita gijiroku o ato de meeru de okutte moraemasu ka",
+          "translation": "明白了。会议记录可以稍后通过邮件发给我吗？",
+          "segments": [
+            {
+              "text": "分",
+              "kana": "わ"
+            },
+            {
+              "text": "かりました。"
+            },
+            {
+              "text": "議事録",
+              "kana": "ぎじろく"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "後",
+              "kana": "あと"
+            },
+            {
+              "text": "でメールで"
+            },
+            {
+              "text": "送",
+              "kana": "おく"
+            },
+            {
+              "text": "ってもらえますか。"
+            }
+          ],
+          "id": "s-004-3-4",
+          "startTime": 55.86,
+          "endTime": 60.2,
+          "slowStartTime": 74.77,
+          "slowEndTime": 80.74
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "根据对话，下次会议定在什么时候？",
+          "options": [
+            "本周五上午十点",
+            "下周二下午三点",
+            "下周三下午两点",
+            "下周一上午九点"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "A 明确说「来週の火曜日の午後三時からにするつもりです」，即下周二下午三点开始。",
+          "id": "q-004-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「議事録を後でメールで送ってもらえますか」中的「議事録（ぎじろく）」是什么意思？",
+          "options": [
+            "邀请函",
+            "会议记录",
+            "日程表",
+            "参会名单"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「議事録」指会议记录、会议纪要，B 希望会后通过邮件收到会议记录。",
+          "id": "q-004-3-2"
+        }
+      ]
+    }
+  ]
+}

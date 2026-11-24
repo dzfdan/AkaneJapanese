@@ -1,0 +1,617 @@
+{
+  "id": "scene-014",
+  "titleJa": "休暇を申請する",
+  "titleZh": "请假调休",
+  "level": "N3",
+  "category": "商务",
+  "descriptionZh": "职场请假沟通的场景。包含向上司提出请假、说明工作交接安排、获批与致谢。",
+  "audioNormal": "scene-014-normal.wav",
+  "audioSlow": "scene-014-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-014-1",
+      "titleJa": "休暇の申請",
+      "titleZh": "向上司提出请假",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "部下",
+          "speakerRoleZh": "下属",
+          "japanese": "課長、少しご相談したいことがあるのですが。",
+          "romaji": "kachou, sukoshi go soudan shitai koto ga aru no desu ga.",
+          "translation": "课长，我有点事想跟您商量一下。",
+          "segments": [
+            {
+              "text": "課長",
+              "kana": "かちょう"
+            },
+            {
+              "text": "、"
+            },
+            {
+              "text": "少",
+              "kana": "すこ"
+            },
+            {
+              "text": "しご"
+            },
+            {
+              "text": "相談",
+              "kana": "そうだん"
+            },
+            {
+              "text": "したいことがあるのですが。"
+            }
+          ],
+          "id": "s-014-1-1",
+          "startTime": 0.5,
+          "endTime": 3.89,
+          "slowStartTime": 0.5,
+          "slowEndTime": 5.17
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "課長",
+          "speakerRoleZh": "课长",
+          "japanese": "うん、いいよ。何かな。",
+          "romaji": "un, ii yo. nanika na.",
+          "translation": "嗯，可以啊。什么事呢？",
+          "segments": [
+            {
+              "text": "うん、いいよ。"
+            },
+            {
+              "text": "何",
+              "kana": "なに"
+            },
+            {
+              "text": "かな。"
+            }
+          ],
+          "id": "s-014-1-2",
+          "startTime": 4.39,
+          "endTime": 6.86,
+          "slowStartTime": 5.67,
+          "slowEndTime": 9.06
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "部下",
+          "speakerRoleZh": "下属",
+          "japanese": "来週の金曜日に、有給休暇を取らせていただけないでしょうか。",
+          "romaji": "raishuu no kinyoubi ni, yuukyuu kyuuka o torasete itadakenai deshou ka.",
+          "translation": "下周五，不知能否请您批准我休一天带薪假。",
+          "segments": [
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "金曜日",
+              "kana": "きんようび"
+            },
+            {
+              "text": "に、"
+            },
+            {
+              "text": "有給休暇",
+              "kana": "ゆうきゅうきゅうか"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "取",
+              "kana": "と"
+            },
+            {
+              "text": "らせていただけないでしょうか。"
+            }
+          ],
+          "id": "s-014-1-3",
+          "startTime": 7.36,
+          "endTime": 11.76,
+          "slowStartTime": 9.56,
+          "slowEndTime": 15.63
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "課長",
+          "speakerRoleZh": "课长",
+          "japanese": "来週の金曜日だね。用事があるの。",
+          "romaji": "raishuu no kinyoubi da ne. youji ga aru no.",
+          "translation": "下周五是吧。有什么事吗？",
+          "segments": [
+            {
+              "text": "来週",
+              "kana": "らいしゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "金曜日",
+              "kana": "きんようび"
+            },
+            {
+              "text": "だね。"
+            },
+            {
+              "text": "用事",
+              "kana": "ようじ"
+            },
+            {
+              "text": "があるの。"
+            }
+          ],
+          "id": "s-014-1-4",
+          "startTime": 12.26,
+          "endTime": 15.48,
+          "slowStartTime": 16.13,
+          "slowEndTime": 20.55
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听力理解：部下想在哪一天请假？",
+          "options": [
+            "本周五",
+            "下周五",
+            "下周一",
+            "下周三"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话中部下明确说「来週の金曜日に、有給休暇を取らせていただけないでしょうか」，即希望在下周五休带薪假。",
+          "id": "q-014-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「取らせていただけないでしょうか」这种表达方式的主要作用是什么？",
+          "options": [
+            "强硬地命令对方",
+            "委婉礼貌地请求许可",
+            "表达强烈的拒绝",
+            "询问对方的日程安排"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「～させていただけないでしょうか」是日语中非常礼貌的请求表达，通过使役加授受的形式，委婉地请求对方允许自己做某事。",
+          "id": "q-014-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-014-2",
+      "titleJa": "業務の引き継ぎ",
+      "titleZh": "说明交接安排",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "部下",
+          "speakerRoleZh": "下属",
+          "japanese": "休暇の間、私の業務は田中さんに代理をお願いするつもりです。",
+          "romaji": "kyuuka no aida watashi no gyoumu wa tanaka san ni dairi o onegai suru tsumori desu",
+          "translation": "休假期间，我打算请田中代理我的业务。",
+          "segments": [
+            {
+              "text": "休暇",
+              "kana": "きゅうか"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "間",
+              "kana": "あいだ"
+            },
+            {
+              "text": "、"
+            },
+            {
+              "text": "私",
+              "kana": "わたし"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "業務",
+              "kana": "ぎょうむ"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "さんに"
+            },
+            {
+              "text": "代理",
+              "kana": "だいり"
+            },
+            {
+              "text": "をお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いするつもりです。"
+            }
+          ],
+          "id": "s-014-2-1",
+          "startTime": 15.98,
+          "endTime": 20.92,
+          "slowStartTime": 21.05,
+          "slowEndTime": 27.87
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "上司",
+          "speakerRoleZh": "上司",
+          "japanese": "田中さんは引き受けてくれそうですか。",
+          "romaji": "tanaka san wa hikiukete kuresou desu ka",
+          "translation": "田中愿意接受吗？",
+          "segments": [
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "さんは"
+            },
+            {
+              "text": "引",
+              "kana": "ひ"
+            },
+            {
+              "text": "き"
+            },
+            {
+              "text": "受",
+              "kana": "う"
+            },
+            {
+              "text": "けてくれそうですか。"
+            }
+          ],
+          "id": "s-014-2-2",
+          "startTime": 21.42,
+          "endTime": 23.69,
+          "slowStartTime": 28.37,
+          "slowEndTime": 31.48
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "部下",
+          "speakerRoleZh": "下属",
+          "japanese": "はい、すでに確認済みです。取引先への連絡方法も引き継ぎ資料にまとめてあります。",
+          "romaji": "hai sudeni kakuninzumi desu torihikisaki e no renraku houhou mo hikitsugi shiryou ni matomete arimasu",
+          "translation": "是的，已经确认过了。联系客户的方法也整理在交接资料里了。",
+          "segments": [
+            {
+              "text": "はい、すでに"
+            },
+            {
+              "text": "確認済",
+              "kana": "かくにんず"
+            },
+            {
+              "text": "みです。"
+            },
+            {
+              "text": "取引先",
+              "kana": "とりひきさき"
+            },
+            {
+              "text": "への"
+            },
+            {
+              "text": "連絡",
+              "kana": "れんらく"
+            },
+            {
+              "text": "方法",
+              "kana": "ほうほう"
+            },
+            {
+              "text": "も"
+            },
+            {
+              "text": "引",
+              "kana": "ひ"
+            },
+            {
+              "text": "き"
+            },
+            {
+              "text": "継",
+              "kana": "つ"
+            },
+            {
+              "text": "ぎ"
+            },
+            {
+              "text": "資料",
+              "kana": "しりょう"
+            },
+            {
+              "text": "にまとめてあります。"
+            }
+          ],
+          "id": "s-014-2-3",
+          "startTime": 24.19,
+          "endTime": 31.28,
+          "slowStartTime": 31.98,
+          "slowEndTime": 41.78
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "上司",
+          "speakerRoleZh": "上司",
+          "japanese": "進行中の案件の進捗状況も書いてありますか。",
+          "romaji": "shinkouchuu no anken no shinchoku joukyou mo kaite arimasu ka",
+          "translation": "进行中的案件的进度情况也写了吗？",
+          "segments": [
+            {
+              "text": "進行中",
+              "kana": "しんこうちゅう"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "案件",
+              "kana": "あんけん"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "進捗状況",
+              "kana": "しんちょくじょうきょう"
+            },
+            {
+              "text": "も"
+            },
+            {
+              "text": "書",
+              "kana": "か"
+            },
+            {
+              "text": "いてありますか。"
+            }
+          ],
+          "id": "s-014-2-4",
+          "startTime": 31.78,
+          "endTime": 35.32,
+          "slowStartTime": 42.28,
+          "slowEndTime": 47.16
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听力理解：休假期间，下属打算请谁代理自己的业务？",
+          "options": [
+            "上司",
+            "田中",
+            "客户",
+            "人事负责人"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "对话第一句中下属说「私の業務は田中さんに代理をお願いするつもりです」，即打算请田中代理业务，因此正确答案是田中。",
+          "id": "q-014-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「引き継ぎ資料にまとめてあります」这句话的意思是什么？",
+          "options": [
+            "打算整理交接资料",
+            "已经整理在交接资料里了",
+            "请别人整理交接资料",
+            "交接资料还没有准备好"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「まとめてあります」表示事先已经整理好并保持该状态，即联系客户的方法等内容已经整理在交接资料里了。",
+          "id": "q-014-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-014-3",
+      "titleJa": "承認とお礼",
+      "titleZh": "获批与致谢",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "部長",
+          "speakerRoleZh": "部长",
+          "japanese": "休暇の申請、承認しましたよ。",
+          "romaji": "kyuuka no shinsei, shounin shimashita yo.",
+          "translation": "你的休假申请，我批准了哦。",
+          "segments": [
+            {
+              "text": "休暇",
+              "kana": "きゅうか"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "申請",
+              "kana": "しんせい"
+            },
+            {
+              "text": "、"
+            },
+            {
+              "text": "承認",
+              "kana": "しょうにん"
+            },
+            {
+              "text": "しましたよ。"
+            }
+          ],
+          "id": "s-014-3-1",
+          "startTime": 35.82,
+          "endTime": 38.55,
+          "slowStartTime": 47.66,
+          "slowEndTime": 51.42
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "社員",
+          "speakerRoleZh": "员工",
+          "japanese": "ありがとうございます。戻ったら、すぐに報告に伺います。",
+          "romaji": "arigatou gozaimasu. modottara, sugu ni houkoku ni ukagaimasu.",
+          "translation": "非常感谢您。回来后，我马上来向您汇报。",
+          "segments": [
+            {
+              "text": "ありがとうございます。"
+            },
+            {
+              "text": "戻",
+              "kana": "もど"
+            },
+            {
+              "text": "ったら、すぐに"
+            },
+            {
+              "text": "報告",
+              "kana": "ほうこく"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "伺",
+              "kana": "うかが"
+            },
+            {
+              "text": "います。"
+            }
+          ],
+          "id": "s-014-3-2",
+          "startTime": 39.05,
+          "endTime": 44.14,
+          "slowStartTime": 51.92,
+          "slowEndTime": 58.95
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "部長",
+          "speakerRoleZh": "部长",
+          "japanese": "はい、楽しみにしています。お土産話も聞かせてくださいね。",
+          "romaji": "hai, tanoshimi ni shite imasu. omiyagebanashi mo kikasete kudasai ne.",
+          "translation": "好的，我很期待。也请给我讲讲旅途的见闻哦。",
+          "segments": [
+            {
+              "text": "はい、"
+            },
+            {
+              "text": "楽",
+              "kana": "たの"
+            },
+            {
+              "text": "しみにしています。お"
+            },
+            {
+              "text": "土産話",
+              "kana": "みやげばなし"
+            },
+            {
+              "text": "も"
+            },
+            {
+              "text": "聞",
+              "kana": "き"
+            },
+            {
+              "text": "かせてくださいね。"
+            }
+          ],
+          "id": "s-014-3-3",
+          "startTime": 44.64,
+          "endTime": 49.74,
+          "slowStartTime": 59.45,
+          "slowEndTime": 66.49
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "社員",
+          "speakerRoleZh": "员工",
+          "japanese": "もちろんです。皆さんへのお土産も買ってきますね。",
+          "romaji": "mochiron desu. minasan e no omiyage mo katte kimasu ne.",
+          "translation": "当然。我也会给大家带礼物回来哦。",
+          "segments": [
+            {
+              "text": "もちろんです。"
+            },
+            {
+              "text": "皆",
+              "kana": "みな"
+            },
+            {
+              "text": "さんへのお"
+            },
+            {
+              "text": "土産",
+              "kana": "みやげ"
+            },
+            {
+              "text": "も"
+            },
+            {
+              "text": "買",
+              "kana": "か"
+            },
+            {
+              "text": "ってきますね。"
+            }
+          ],
+          "id": "s-014-3-4",
+          "startTime": 50.24,
+          "endTime": 54.27,
+          "slowStartTime": 66.99,
+          "slowEndTime": 72.54
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "员工休假回来后首先要做什么？",
+          "options": [
+            "给大家买礼物",
+            "马上向部长汇报",
+            "讲旅途见闻",
+            "继续休息一天"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "员工说「戻ったら、すぐに報告に伺います」，表示回来后马上向部长汇报。",
+          "id": "q-014-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「お土産話」是什么意思？",
+          "options": [
+            "关于礼物的价格",
+            "旅途中的见闻趣事",
+            "请假的手续",
+            "工作的汇报"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「お土産話」指旅行回来后讲给大家听的见闻趣事，部长希望员工分享旅行故事。",
+          "id": "q-014-3-2"
+        }
+      ]
+    }
+  ]
+}

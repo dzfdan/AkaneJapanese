@@ -7,6 +7,7 @@ import { ThemeColors } from '../constants/ThemeConstants';
 import { Segment } from '../model/Sentence';
 import { FuriganaText } from '../components/FuriganaText';
 import { formatDuration } from '../utils/TimeUtil';
+import { SkipBackIcon, SkipNextIcon, PlayIcon, PauseIcon } from './PlayerIcons';
 
 @Component
 export struct PlayerBar {
@@ -21,61 +22,40 @@ export struct PlayerBar {
   onNext: () => void = () => {};
   onBarClick?: () => void;
   @State showCompact: boolean = false;
+  // 横屏（16:9）适配：紧凑内边距、控件居中
+  @StorageProp('isLandscape') isLandscape: boolean = false;
 
   build() {
     Row() {
-      // 左侧：当前播放信息
-      Column() {
-        Text(this.sceneTitle)
-          .fontSize(10)
-          .fontColor(ThemeColors.textSecondary)
-          .width('100%')
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .maxLines(1);
-
-        FuriganaText({
-          segments: this.segments,
-          japanese: this.sentenceJapanese,
-          fontSize: 14,
-          fontColor: ThemeColors.textPrimary,
-          fontWeight: 600,
-          containerWidth: '100%',
-          compact: true
-        })
-          .margin({ top: 2 });
-      }
-      .layoutWeight(1)
-      .alignItems(HorizontalAlign.Start)
-      .onClick(() => {
-        if (this.onBarClick) {
-          this.onBarClick();
-        }
-      });
-
-      // 右侧：控制按钮 + 进度
+      // 控制按钮 + 进度（移除左侧场景标题区域）
       Row() {
         // 上一首按钮
-        this.CircleButton('⏮', 40, ThemeColors.bgCardElevated, ThemeColors.textPrimary, () => {
+        this.CircleButton('skipBack', 40, ThemeColors.bgCardElevated, ThemeColors.primary, () => {
           this.onPrev();
         });
 
         // 播放/暂停按钮（主按钮）
-        Column() {
-          this.CircleButton(
-            this.isPlaying ? '⏸' : '▶',
-            52,
-            ThemeColors.primary,
-            '#FFFFFF',
-            () => {
-              this.onPlayPause();
-            },
-            22
-          );
+        Stack() {
+          Circle()
+            .width(52)
+            .height(52)
+            .fill(ThemeColors.primary);
+
+          if (this.isPlaying) {
+            PauseIcon({ color: '#FFFFFF', iconSize: 34 });
+          } else {
+            PlayIcon({ color: '#FFFFFF', iconSize: 34 });
+          }
         }
-        .margin({ left: 8, right: 8 });
+        .width(52)
+        .height(52)
+        .margin({ left: 8, right: 8 })
+        .onClick(() => {
+          this.onPlayPause();
+        });
 
         // 下一首按钮
-        this.CircleButton('⏭', 40, ThemeColors.bgCardElevated, ThemeColors.textPrimary, () => {
+        this.CircleButton('skipNext', 40, ThemeColors.bgCardElevated, ThemeColors.primary, () => {
           this.onNext();
         });
 
@@ -120,10 +100,11 @@ export struct PlayerBar {
           .alignItems(HorizontalAlign.End);
         }
       }
-      .alignItems(VerticalAlign.Center);
+      .alignItems(VerticalAlign.Center)
+      .justifyContent(this.isLandscape ? FlexAlign.Center : FlexAlign.Start);
     }
     .width('100%')
-    .padding(12)
+    .padding(this.isLandscape ? 8 : 12)
     .backgroundColor(ThemeColors.bgCard)
     .borderRadius(12)
     .alignItems(VerticalAlign.Center);
@@ -136,7 +117,7 @@ export struct PlayerBar {
     bgColor: string,
     iconColor: string,
     onClick: () => void,
-    iconSize: number = 18
+    iconSize: number = 24
   ) {
     Stack() {
       Circle()
@@ -144,9 +125,15 @@ export struct PlayerBar {
         .height(size)
         .fill(bgColor);
 
-      Text(icon)
-        .fontSize(iconSize)
-        .fontColor(iconColor);
+      if (icon === 'skipBack') {
+        SkipBackIcon({ color: iconColor, iconSize: iconSize });
+      } else if (icon === 'skipNext') {
+        SkipNextIcon({ color: iconColor, iconSize: iconSize });
+      } else if (icon === 'pause') {
+        PauseIcon({ color: iconColor, iconSize: iconSize });
+      } else {
+        PlayIcon({ color: iconColor, iconSize: iconSize });
+      }
     }
     .width(size)
     .height(size)

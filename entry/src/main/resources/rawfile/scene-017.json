@@ -1,0 +1,599 @@
+{
+  "id": "scene-017",
+  "titleJa": "友人を誘う",
+  "titleZh": "约朋友吃饭",
+  "level": "N4",
+  "category": "社交",
+  "descriptionZh": "约朋友聚餐的日常场景。包含提出邀约、商量时间地点、临时改期与确认。",
+  "audioNormal": "scene-017-normal.wav",
+  "audioSlow": "scene-017-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-017-1",
+      "titleJa": "週末の誘い",
+      "titleZh": "邀约周末聚餐",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "誘う人",
+          "speakerRoleZh": "邀请方",
+          "japanese": "田中さん、今週末ひまですか。",
+          "romaji": "tanaka san konshuumatsu hima desu ka",
+          "translation": "田中，这个周末有空吗？",
+          "segments": [
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "さん、"
+            },
+            {
+              "text": "今週末",
+              "kana": "こんしゅうまつ"
+            },
+            {
+              "text": "ひまですか。"
+            }
+          ],
+          "id": "s-017-1-1",
+          "startTime": 0.5,
+          "endTime": 3.11,
+          "slowStartTime": 0.5,
+          "slowEndTime": 4.09
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "誘われる人",
+          "speakerRoleZh": "被邀请方",
+          "japanese": "土曜日は用事がありますが、日曜日はひまです。",
+          "romaji": "doyoubi wa youji ga arimasu ga nichiyoubi wa hima desu",
+          "translation": "星期六有事，不过星期天有空。",
+          "segments": [
+            {
+              "text": "土曜日",
+              "kana": "どようび"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "用事",
+              "kana": "ようじ"
+            },
+            {
+              "text": "がありますが、"
+            },
+            {
+              "text": "日曜日",
+              "kana": "にちようび"
+            },
+            {
+              "text": "はひまです。"
+            }
+          ],
+          "id": "s-017-1-2",
+          "startTime": 3.61,
+          "endTime": 7.11,
+          "slowStartTime": 4.59,
+          "slowEndTime": 9.41
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "誘う人",
+          "speakerRoleZh": "邀请方",
+          "japanese": "じゃ、日曜日にいっしょに昼ご飯を食べませんか。",
+          "romaji": "ja nichiyoubi ni issho ni hirugohan o tabemasen ka",
+          "translation": "那星期天一起吃午饭好吗？",
+          "segments": [
+            {
+              "text": "じゃ、"
+            },
+            {
+              "text": "日曜日",
+              "kana": "にちようび"
+            },
+            {
+              "text": "にいっしょに"
+            },
+            {
+              "text": "昼ご飯",
+              "kana": "ひるごはん"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "食",
+              "kana": "た"
+            },
+            {
+              "text": "べませんか。"
+            }
+          ],
+          "id": "s-017-1-3",
+          "startTime": 7.61,
+          "endTime": 10.91,
+          "slowStartTime": 9.91,
+          "slowEndTime": 14.46
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "誘われる人",
+          "speakerRoleZh": "被邀请方",
+          "japanese": "いいですね。ぜひ行きたいです。",
+          "romaji": "ii desu ne zehi ikitai desu",
+          "translation": "好啊，我很想去。",
+          "segments": [
+            {
+              "text": "いいですね。ぜひ"
+            },
+            {
+              "text": "行",
+              "kana": "い"
+            },
+            {
+              "text": "きたいです。"
+            }
+          ],
+          "id": "s-017-1-4",
+          "startTime": 11.41,
+          "endTime": 13.95,
+          "slowStartTime": 14.96,
+          "slowEndTime": 18.45
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，田中（B）哪一天有空？",
+          "options": [
+            "星期六",
+            "星期天",
+            "星期六和星期天都有空",
+            "两天都没空"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "B 说「土曜日は用事がありますが、日曜日はひまです」，即周六有事，周日有空，所以选星期天。",
+          "id": "q-017-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「昼ご飯を食べませんか」这句话的意思是什么？",
+          "options": [
+            "你吃过午饭了吗",
+            "要不要一起吃午饭",
+            "我不想吃午饭",
+            "午饭已经准备好了"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「～ませんか」是邀请对方做某事的句型，「食べませんか」意为「要不要一起吃」，表示提议。",
+          "id": "q-017-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-017-2",
+      "titleJa": "日時とお店を決める",
+      "titleZh": "定时间地点",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "誘う人",
+          "speakerRoleZh": "邀请者",
+          "japanese": "土曜日の夜、駅前の居酒屋はどうですか。",
+          "romaji": "doyoubi no yoru, ekimae no izakaya wa dou desu ka.",
+          "translation": "星期六晚上，车站前的居酒屋怎么样？",
+          "segments": [
+            {
+              "text": "土曜日",
+              "kana": "どようび"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "夜",
+              "kana": "よる"
+            },
+            {
+              "text": "、"
+            },
+            {
+              "text": "駅前",
+              "kana": "えきまえ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "居酒屋",
+              "kana": "いざかや"
+            },
+            {
+              "text": "はどうですか。"
+            }
+          ],
+          "id": "s-017-2-1",
+          "startTime": 14.45,
+          "endTime": 17.68,
+          "slowStartTime": 18.95,
+          "slowEndTime": 23.41
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "誘われる人",
+          "speakerRoleZh": "被邀请者",
+          "japanese": "いいですね。何時に集まりましょうか。",
+          "romaji": "ii desu ne. nanji ni atsumarimashou ka.",
+          "translation": "好啊。几点集合呢？",
+          "segments": [
+            {
+              "text": "いいですね。"
+            },
+            {
+              "text": "何時",
+              "kana": "なんじ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "集",
+              "kana": "あつ"
+            },
+            {
+              "text": "まりましょうか。"
+            }
+          ],
+          "id": "s-017-2-2",
+          "startTime": 18.18,
+          "endTime": 21.29,
+          "slowStartTime": 23.91,
+          "slowEndTime": 28.18
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "誘う人",
+          "speakerRoleZh": "邀请者",
+          "japanese": "六時に駅の前で会いましょう。予算は三千円ぐらいです。",
+          "romaji": "rokuji ni eki no mae de aimashou. yosan wa sanzen'en gurai desu.",
+          "translation": "六点在车站前见面吧。预算三千日元左右。",
+          "segments": [
+            {
+              "text": "六時",
+              "kana": "ろくじ"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "駅",
+              "kana": "えき"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "前",
+              "kana": "まえ"
+            },
+            {
+              "text": "で"
+            },
+            {
+              "text": "会",
+              "kana": "あ"
+            },
+            {
+              "text": "いましょう。"
+            },
+            {
+              "text": "予算",
+              "kana": "よさん"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "三千円",
+              "kana": "さんぜんえん"
+            },
+            {
+              "text": "ぐらいです。"
+            }
+          ],
+          "id": "s-017-2-3",
+          "startTime": 21.79,
+          "endTime": 26.42,
+          "slowStartTime": 28.68,
+          "slowEndTime": 35.06
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "誘われる人",
+          "speakerRoleZh": "被邀请者",
+          "japanese": "わかりました。辛いものが好きなので、辛い料理の店がいいです。",
+          "romaji": "wakarimashita. karai mono ga suki na node, karai ryouri no mise ga ii desu.",
+          "translation": "明白了。我喜欢辣的东西，所以想去有辣菜的店。",
+          "segments": [
+            {
+              "text": "わかりました。"
+            },
+            {
+              "text": "辛",
+              "kana": "から"
+            },
+            {
+              "text": "いものが"
+            },
+            {
+              "text": "好",
+              "kana": "す"
+            },
+            {
+              "text": "きなので、"
+            },
+            {
+              "text": "辛",
+              "kana": "から"
+            },
+            {
+              "text": "い"
+            },
+            {
+              "text": "料理",
+              "kana": "りょうり"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "店",
+              "kana": "みせ"
+            },
+            {
+              "text": "がいいです。"
+            }
+          ],
+          "id": "s-017-2-4",
+          "startTime": 26.92,
+          "endTime": 32.13,
+          "slowStartTime": 35.56,
+          "slowEndTime": 42.74
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "两人约定几点在哪里集合？",
+          "options": [
+            "五点在居酒屋门口",
+            "六点在车站前",
+            "七点在车站前",
+            "六点在店里"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "A 说「六時に駅の前で会いましょう」，即六点在车站前见面，所以选第二项。",
+          "id": "q-017-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「予算は三千円ぐらいです」中的「予算」是什么意思？",
+          "options": [
+            "菜单",
+            "预算",
+            "口味",
+            "预约"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「予算（よさん）」意为预算，这句话表示预算大约三千日元。",
+          "id": "q-017-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-017-3",
+      "titleJa": "予定の変更と確認",
+      "titleZh": "改期与确认",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "友人",
+          "speakerRoleZh": "朋友",
+          "japanese": "ごめん、土曜日は急用ができたから、日曜日に変えてもいい？",
+          "romaji": "gomen, doyoubi wa kyuuyou ga dekita kara, nichiyoubi ni kaete mo ii?",
+          "translation": "抱歉，周六我突然有事，改到周日可以吗？",
+          "segments": [
+            {
+              "text": "ごめん、"
+            },
+            {
+              "text": "土曜日",
+              "kana": "どようび"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "急用",
+              "kana": "きゅうよう"
+            },
+            {
+              "text": "ができたから、"
+            },
+            {
+              "text": "日曜日",
+              "kana": "にちようび"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "変",
+              "kana": "か"
+            },
+            {
+              "text": "えてもいい？"
+            }
+          ],
+          "id": "s-017-3-1",
+          "startTime": 32.63,
+          "endTime": 37.1,
+          "slowStartTime": 43.24,
+          "slowEndTime": 49.41
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "友人",
+          "speakerRoleZh": "朋友",
+          "japanese": "大丈夫だよ。日曜日の何時がいい？",
+          "romaji": "daijoubu da yo. nichiyoubi no nanji ga ii?",
+          "translation": "没关系。周日几点好呢？",
+          "segments": [
+            {
+              "text": "大丈夫",
+              "kana": "だいじょうぶ"
+            },
+            {
+              "text": "だよ。"
+            },
+            {
+              "text": "日曜日",
+              "kana": "にちようび"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "何時",
+              "kana": "なんじ"
+            },
+            {
+              "text": "がいい？"
+            }
+          ],
+          "id": "s-017-3-2",
+          "startTime": 37.6,
+          "endTime": 40.67,
+          "slowStartTime": 49.91,
+          "slowEndTime": 54.13
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "友人",
+          "speakerRoleZh": "朋友",
+          "japanese": "十二時ごろはどう？駅前のレストランで待ち合わせよう。",
+          "romaji": "juuniji goro wa dou? ekimae no resutoran de machiawaseyou.",
+          "translation": "十二点左右怎么样？在站前的餐厅碰头吧。",
+          "segments": [
+            {
+              "text": "十二時",
+              "kana": "じゅうにじ"
+            },
+            {
+              "text": "ごろはどう？"
+            },
+            {
+              "text": "駅前",
+              "kana": "えきまえ"
+            },
+            {
+              "text": "のレストランで"
+            },
+            {
+              "text": "待",
+              "kana": "ま"
+            },
+            {
+              "text": "ち"
+            },
+            {
+              "text": "合",
+              "kana": "あ"
+            },
+            {
+              "text": "わせよう。"
+            }
+          ],
+          "id": "s-017-3-3",
+          "startTime": 41.17,
+          "endTime": 45.42,
+          "slowStartTime": 54.63,
+          "slowEndTime": 60.48
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "友人",
+          "speakerRoleZh": "朋友",
+          "japanese": "わかった。じゃあ、当日の朝にもう一度連絡するね。",
+          "romaji": "wakatta. jaa, toujitsu no asa ni mou ichido renraku suru ne.",
+          "translation": "好的。那么，当天早上我再联系你一次。",
+          "segments": [
+            {
+              "text": "わかった。じゃあ、"
+            },
+            {
+              "text": "当日",
+              "kana": "とうじつ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "朝",
+              "kana": "あさ"
+            },
+            {
+              "text": "にもう"
+            },
+            {
+              "text": "一度",
+              "kana": "いちど"
+            },
+            {
+              "text": "連絡",
+              "kana": "れんらく"
+            },
+            {
+              "text": "するね。"
+            }
+          ],
+          "id": "s-017-3-4",
+          "startTime": 45.92,
+          "endTime": 50.57,
+          "slowStartTime": 60.98,
+          "slowEndTime": 67.4
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，A 为什么想把约会从周六改到周日？",
+          "options": [
+            "因为周六要上班",
+            "因为突然有急事",
+            "因为身体不舒服",
+            "因为天气不好"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "A 说「土曜日は急用ができたから」，意思是周六突然有急事，所以想改到周日。",
+          "id": "q-017-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「当日の朝にもう一度連絡するね」这句话是什么意思？",
+          "options": [
+            "前一天晚上再联系一次",
+            "当天早上再联系一次",
+            "取消当天的约会",
+            "当天中午一起吃饭"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「当日の朝」意为「当天早上」，「もう一度連絡する」意为「再联系一次」，所以整句是「当天早上再联系一次」。",
+          "id": "q-017-3-2"
+        }
+      ]
+    }
+  ]
+}

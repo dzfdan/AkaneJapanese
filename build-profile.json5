@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\neusoft\\.ohos\\config\\default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.cer",
+          "certpath": "C:/Users/neusoft/.ohos/config/default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B96DDC744E3C00C54969943FD92EBE5F68165BBA9DA40ADFDAC86392891C451DEA4B0FA920C68F1",
-          "profile": "C:\\Users\\neusoft\\.ohos\\config\\default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.p7b",
+          "keyPassword": "0000001B9384F7A879408912E6377BAE4D1770E53FF9FF410C46DB378019A7EEF747DBC28BA4D4CAAE8277",
+          "profile": "C:/Users/neusoft/.ohos/config/default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\neusoft\\.ohos\\config\\default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.p12",
-          "storePassword": "0000001B02DF51359062B4473851D203A37888C4C5E815951D0E21CA17C5ED8BF406BACEB841C6B9456E0E"
+          "storeFile": "C:/Users/neusoft/.ohos/config/default_AkaneJapanese_eJHLgwgRAlTMqt_Rphlgqjg864e7Ch2BHFrqUk8fR3Y=.p12",
+          "storePassword": "0000001BAD8C6A82C7AB1C510EA725659F1292F1A04ACD16BFD0D3B99E2C9F138ED4C4974EB1714068A536"
         }
       }
     ],

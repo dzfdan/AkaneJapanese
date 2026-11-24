@@ -4,6 +4,7 @@
  */
 
 import { ThemeColors } from '../constants/ThemeConstants';
+import { ScenesIcon, ProgressIcon, SettingsIcon } from './PlayerIcons';
 
 interface TabItem {
   key: string;
@@ -17,10 +18,9 @@ export struct BottomTab {
   onTabChange: (tab: string) => void = () => {};
 
   private tabItems: TabItem[] = [
-    { key: 'scenes', icon: '🎧', label: '会话' },
-    { key: 'progress', icon: '📊', label: '进度' },
-    { key: 'favorites', icon: '⭐', label: '收藏' },
-    { key: 'settings', icon: '⚙️', label: '设置' }
+    { key: 'scenes', icon: '◆', label: '会话' },
+    { key: 'progress', icon: '▩', label: '进度' },
+    { key: 'settings', icon: '☰', label: '设置' }
   ];
 
   build() {
@@ -43,12 +43,17 @@ export struct BottomTab {
   @Builder
   TabItemBuilder(item: TabItem) {
     Column() {
-      Text(item.icon)
-        .fontSize(18);
+            if (item.key === 'scenes') {
+        ScenesIcon({ color: this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary, iconSize: 22 });
+      } else if (item.key === 'progress') {
+        ProgressIcon({ color: this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary, iconSize: 22 });
+      } else {
+        SettingsIcon({ color: this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary, iconSize: 22 });
+      }
 
       Text(item.label)
         .fontSize(10)
-        .fontColor(this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textTertiary)
+        .fontColor(this.currentTab === item.key ? ThemeColors.primary : ThemeColors.textSecondary)
         .margin({ top: 2 });
     }
     .layoutWeight(1)

@@ -7,7 +7,5 @@
   "author": "",
   "license": "",
   "dependencies": {},
-  "devDependencies": {
-    "@ohos/hvigor-ohos-plugin": "26.0.0"
-  }
+  "devDependencies": {}
 }

@@ -1,0 +1,575 @@
+{
+  "id": "scene-006",
+  "titleJa": "ホテルでチェックイン",
+  "titleZh": "酒店入住",
+  "level": "N4",
+  "category": "旅行",
+  "descriptionZh": "入住日本酒店的真实场景。包含前台办理入住、询问设施与换房请求、退房结账等实用表达。",
+  "audioNormal": "scene-006-normal.wav",
+  "audioSlow": "scene-006-slow.wav",
+  "dialogues": [
+    {
+      "id": "dlg-006-1",
+      "titleJa": "チェックインの受付",
+      "titleZh": "前台办理入住",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "客人",
+          "japanese": "すみません、予約をしている田中ですが、チェックインをお願いします。",
+          "romaji": "sumimasen yoyaku o shite iru tanaka desu ga chekkuin o onegai shimasu",
+          "translation": "不好意思，我是预订了房间的田中，请帮我办理入住。",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "予約",
+              "kana": "よやく"
+            },
+            {
+              "text": "をしている"
+            },
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "ですが、チェックインをお"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。"
+            }
+          ],
+          "id": "s-006-1-1",
+          "startTime": 0.5,
+          "endTime": 5.33,
+          "slowStartTime": 0.5,
+          "slowEndTime": 7.18
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "フロント係",
+          "speakerRoleZh": "前台工作人员",
+          "japanese": "田中様ですね。ご予約を確認いたしますので、少々お待ちください。",
+          "romaji": "tanaka sama desu ne goyoyaku o kakunin itashimasu node shoushou omachi kudasai",
+          "translation": "是田中先生/女士吧。我为您确认预订，请稍等。",
+          "segments": [
+            {
+              "text": "田中",
+              "kana": "たなか"
+            },
+            {
+              "text": "様",
+              "kana": "さま"
+            },
+            {
+              "text": "ですね。ご"
+            },
+            {
+              "text": "予約",
+              "kana": "よやく"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "確認",
+              "kana": "かくにん"
+            },
+            {
+              "text": "いたしますので、"
+            },
+            {
+              "text": "少々",
+              "kana": "しょうしょう"
+            },
+            {
+              "text": "お"
+            },
+            {
+              "text": "待",
+              "kana": "ま"
+            },
+            {
+              "text": "ちください。"
+            }
+          ],
+          "id": "s-006-1-2",
+          "startTime": 5.83,
+          "endTime": 11.72,
+          "slowStartTime": 7.68,
+          "slowEndTime": 15.83
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "客",
+          "speakerRoleZh": "客人",
+          "japanese": "はい、お願いします。シングルルームを予約しました。",
+          "romaji": "hai onegai shimasu shinguru ruumu o yoyaku shimashita",
+          "translation": "好的，麻烦您了。我预订的是单人间。",
+          "segments": [
+            {
+              "text": "はい、お"
+            },
+            {
+              "text": "願",
+              "kana": "ねが"
+            },
+            {
+              "text": "いします。シングルルームを"
+            },
+            {
+              "text": "予約",
+              "kana": "よやく"
+            },
+            {
+              "text": "しました。"
+            }
+          ],
+          "id": "s-006-1-3",
+          "startTime": 12.22,
+          "endTime": 16.69,
+          "slowStartTime": 16.33,
+          "slowEndTime": 22.47
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "フロント係",
+          "speakerRoleZh": "前台工作人员",
+          "japanese": "はい、シングルルームでございますね。では、こちらの用紙にご記入ください。",
+          "romaji": "hai shinguru ruumu de gozaimasu ne dewa kochira no youshi ni gokinyuu kudasai",
+          "translation": "好的，是单人间没错。那么，请在这张表格上填写信息。",
+          "segments": [
+            {
+              "text": "はい、シングルルームでございますね。では、こちらの"
+            },
+            {
+              "text": "用紙",
+              "kana": "ようし"
+            },
+            {
+              "text": "にご"
+            },
+            {
+              "text": "記入",
+              "kana": "きにゅう"
+            },
+            {
+              "text": "ください。"
+            }
+          ],
+          "id": "s-006-1-4",
+          "startTime": 17.19,
+          "endTime": 23.21,
+          "slowStartTime": 22.97,
+          "slowEndTime": 31.29
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，客人预订的是什么房型？",
+          "options": [
+            "双人间",
+            "单人间",
+            "家庭房",
+            "套房"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "客人说「シングルルームを予約しました」，前台也确认「シングルルームでございますね」，因此是单人间。",
+          "id": "q-006-1-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「少々お待ちください」是什么意思？",
+          "options": [
+            "请在这里签名",
+            "请稍等片刻",
+            "请出示护照",
+            "请跟我来"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「少々」意为「稍微、少许」，「お待ちください」是「请等待」的礼貌说法，合起来是「请稍等」。",
+          "id": "q-006-1-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-006-2",
+      "titleJa": "部屋の変更と設備の質問",
+      "titleZh": "换房请求与设施询问",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "宿泊客",
+          "speakerRoleZh": "住客",
+          "japanese": "すみません、部屋のエアコンが動かないんですが。",
+          "romaji": "sumimasen heya no eakon ga ugokanain desu ga",
+          "translation": "不好意思，房间的空调不运转了。",
+          "segments": [
+            {
+              "text": "すみません、"
+            },
+            {
+              "text": "部屋",
+              "kana": "へや"
+            },
+            {
+              "text": "のエアコンが"
+            },
+            {
+              "text": "動",
+              "kana": "うご"
+            },
+            {
+              "text": "かないんですが。"
+            }
+          ],
+          "id": "s-006-2-1",
+          "startTime": 23.71,
+          "endTime": 26.9,
+          "slowStartTime": 31.79,
+          "slowEndTime": 36.17
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "フロント係",
+          "speakerRoleZh": "前台工作人员",
+          "japanese": "申し訳ございません。すぐに確認して、別の部屋に変えます。",
+          "romaji": "moushiwake gozaimasen sugu ni kakunin shite betsu no heya ni kaemasu",
+          "translation": "非常抱歉。我们马上确认，并为您换到别的房间。",
+          "segments": [
+            {
+              "text": "申し訳",
+              "kana": "もうしわけ"
+            },
+            {
+              "text": "ございません。すぐに"
+            },
+            {
+              "text": "確認",
+              "kana": "かくにん"
+            },
+            {
+              "text": "して、"
+            },
+            {
+              "text": "別",
+              "kana": "べつ"
+            },
+            {
+              "text": "の"
+            },
+            {
+              "text": "部屋",
+              "kana": "へや"
+            },
+            {
+              "text": "に"
+            },
+            {
+              "text": "変",
+              "kana": "か"
+            },
+            {
+              "text": "えます。"
+            }
+          ],
+          "id": "s-006-2-2",
+          "startTime": 27.4,
+          "endTime": 32.7,
+          "slowStartTime": 36.67,
+          "slowEndTime": 43.98
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "宿泊客",
+          "speakerRoleZh": "住客",
+          "japanese": "ありがとうございます。あと、Wi-Fiのパスワードを教えてください。",
+          "romaji": "arigatou gozaimasu ato waifai no pasuwaado o oshiete kudasai",
+          "translation": "谢谢。另外，请告诉我Wi-Fi的密码。",
+          "segments": [
+            {
+              "text": "ありがとうございます。あと、Wi-Fiのパスワードを"
+            },
+            {
+              "text": "教",
+              "kana": "おし"
+            },
+            {
+              "text": "えてください。"
+            }
+          ],
+          "id": "s-006-2-3",
+          "startTime": 33.2,
+          "endTime": 38.45,
+          "slowStartTime": 44.48,
+          "slowEndTime": 51.76
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "フロント係",
+          "speakerRoleZh": "前台工作人员",
+          "japanese": "はい、こちらのカードに書いてあります。朝食は七時から九時半までです。",
+          "romaji": "hai kochira no kaado ni kaite arimasu choushoku wa shichiji kara kuji han made desu",
+          "translation": "好的，写在这张卡片上。早餐是从七点到九点半。",
+          "segments": [
+            {
+              "text": "はい、こちらのカードに"
+            },
+            {
+              "text": "書",
+              "kana": "か"
+            },
+            {
+              "text": "いてあります。"
+            },
+            {
+              "text": "朝食",
+              "kana": "ちょうしょく"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "七時",
+              "kana": "しちじ"
+            },
+            {
+              "text": "から"
+            },
+            {
+              "text": "九時半",
+              "kana": "くじはん"
+            },
+            {
+              "text": "までです。"
+            }
+          ],
+          "id": "s-006-2-4",
+          "startTime": 38.95,
+          "endTime": 44.87,
+          "slowStartTime": 52.26,
+          "slowEndTime": 60.42
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，住客最初提出的房间问题是什么？",
+          "options": [
+            "电视坏了",
+            "空调不运转",
+            "没有热水",
+            "房间太吵"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "住客说「部屋のエアコンが動かない」，即房间的空调不运转，所以选B。",
+          "id": "q-006-2-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「朝食は七時から九時半までです」这句话的意思是什么？",
+          "options": [
+            "早餐七点半开始",
+            "早餐供应时间是七点到九点半",
+            "早餐九点结束",
+            "晚餐七点到九点半"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "「七時から九時半まで」表示从七点到九点半，「朝食」是早餐，所以选B。",
+          "id": "q-006-2-2"
+        }
+      ]
+    },
+    {
+      "id": "dlg-006-3",
+      "titleJa": "チェックアウト",
+      "titleZh": "退房结账",
+      "sentences": [
+        {
+          "speaker": "A",
+          "speakerRoleJa": "宿泊客",
+          "speakerRoleZh": "住宿客人",
+          "japanese": "おはようございます。チェックアウトをお願いします。",
+          "romaji": "ohayou gozaimasu. chekkuauto o onegai shimasu.",
+          "translation": "早上好，我要办理退房。",
+          "segments": [
+            {
+              "text": "おはようございます。"
+            },
+            {
+              "text": "チェックアウト"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "お願",
+              "kana": "おねが"
+            },
+            {
+              "text": "いします。"
+            }
+          ],
+          "id": "s-006-3-1",
+          "startTime": 45.37,
+          "endTime": 49.22,
+          "slowStartTime": 60.92,
+          "slowEndTime": 66.22
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "フロント係",
+          "speakerRoleZh": "前台工作人员",
+          "japanese": "ありがとうございます。お部屋番号を教えてください。",
+          "romaji": "arigatou gozaimasu. oheya bangou o oshiete kudasai.",
+          "translation": "谢谢您。请告诉我您的房间号。",
+          "segments": [
+            {
+              "text": "ありがとうございます。"
+            },
+            {
+              "text": "お"
+            },
+            {
+              "text": "部屋番号",
+              "kana": "へやばんごう"
+            },
+            {
+              "text": "を"
+            },
+            {
+              "text": "教",
+              "kana": "おし"
+            },
+            {
+              "text": "えてください。"
+            }
+          ],
+          "id": "s-006-3-2",
+          "startTime": 49.72,
+          "endTime": 53.84,
+          "slowStartTime": 66.72,
+          "slowEndTime": 72.4
+        },
+        {
+          "speaker": "A",
+          "speakerRoleJa": "宿泊客",
+          "speakerRoleZh": "住宿客人",
+          "japanese": "305号室です。料金は全部でいくらですか。",
+          "romaji": "sanbyakugo goushitsu desu. ryoukin wa zenbu de ikura desu ka.",
+          "translation": "是305号房。费用一共是多少钱？",
+          "segments": [
+            {
+              "text": "305"
+            },
+            {
+              "text": "号室",
+              "kana": "ごうしつ"
+            },
+            {
+              "text": "です。"
+            },
+            {
+              "text": "料金",
+              "kana": "りょうきん"
+            },
+            {
+              "text": "は"
+            },
+            {
+              "text": "全部",
+              "kana": "ぜんぶ"
+            },
+            {
+              "text": "でいくらですか。"
+            }
+          ],
+          "id": "s-006-3-3",
+          "startTime": 54.34,
+          "endTime": 58.68,
+          "slowStartTime": 72.9,
+          "slowEndTime": 78.87
+        },
+        {
+          "speaker": "B",
+          "speakerRoleJa": "フロント係",
+          "speakerRoleZh": "前台工作人员",
+          "japanese": "二泊で三万円になります。お荷物はこちらでお預かりします。",
+          "romaji": "nihaku de sanmanen ni narimasu. onimotsu wa kochira de oazukari shimasu.",
+          "translation": "住两晚一共是三万日元。您的行李由我们这边代为保管。",
+          "segments": [
+            {
+              "text": "二泊",
+              "kana": "にはく"
+            },
+            {
+              "text": "で"
+            },
+            {
+              "text": "三万円",
+              "kana": "さんまんえん"
+            },
+            {
+              "text": "になります。お"
+            },
+            {
+              "text": "荷物",
+              "kana": "にもつ"
+            },
+            {
+              "text": "はこちらでお"
+            },
+            {
+              "text": "預",
+              "kana": "あず"
+            },
+            {
+              "text": "かりします。"
+            }
+          ],
+          "id": "s-006-3-4",
+          "startTime": 59.18,
+          "endTime": 64.09,
+          "slowStartTime": 79.37,
+          "slowEndTime": 86.16
+        }
+      ],
+      "quiz": [
+        {
+          "type": "listening",
+          "questionZh": "听对话，客人退房后，前台工作人员表示会帮忙做什么？",
+          "options": [
+            "打扫房间",
+            "保管行李",
+            "叫出租车",
+            "准备早餐"
+          ],
+          "correctIndex": 1,
+          "explanationZh": "前台最后说「お荷物はこちらでお預かりします」，表示行李由前台代为保管，因此选「保管行李」。",
+          "id": "q-006-3-1"
+        },
+        {
+          "type": "meaning",
+          "questionZh": "「料金は全部でいくらですか」这句话的意思是什么？",
+          "options": [
+            "费用什么时候支付",
+            "费用可以用卡支付吗",
+            "费用一共是多少钱",
+            "费用包含早餐吗"
+          ],
+          "correctIndex": 2,
+          "explanationZh": "「全部でいくらですか」是询问总计金额的常用说法，意思是「一共多少钱」。",
+          "id": "q-006-3-2"
+        }
+      ]
+    }
+  ]
+}

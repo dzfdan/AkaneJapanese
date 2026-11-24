@@ -28,6 +28,8 @@ export struct ProgressPage {
   @State todayMinutes: number = 0;
   @State recentScenes: RecentScene[] = [];
   @State isLoading: boolean = true;
+  // 横屏（16:9）适配：左右分栏
+  @StorageProp('isLandscape') isLandscape: boolean = false;
 
   aboutToAppear(): void {
     this.loadProgress();
@@ -124,9 +126,62 @@ export struct ProgressPage {
 
   build() {
     Column() {
-      // 顶部标题
+      this.HeaderBuilder();
+
+      if (this.isLoading) {
+        this.LoadingBuilder();
+      } else if (this.isLandscape) {
+        // 横屏（16:9）：左侧统计 + 右侧最近学习
+        Row() {
+          Column() {
+            this.StatsGridBuilder();
+          }
+          .width('42%')
+          .height('100%')
+          .margin({ right: 16 });
+
+          Column() {
+            this.RecentTitleBuilder();
+            if (this.recentScenes.length === 0) {
+              this.EmptyStateBuilder();
+            } else {
+              this.RecentListBuilder();
+            }
+          }
+          .layoutWeight(1)
+          .height('100%');
+        }
+        .width('100%')
+        .layoutWeight(1);
+      } else {
+        // 统计卡片（2列网格）
+        Column() {
+          this.StatsGridBuilder();
+        }
+        .margin({ bottom: 24 });
+
+        // 最近学习场景列表
+        this.RecentTitleBuilder();
+
+        if (this.recentScenes.length === 0) {
+          this.EmptyStateBuilder();
+        } else {
+          this.RecentListBuilder();
+        }
+      }
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor(ThemeColors.bgApp)
+    .padding(this.isLandscape ? 12 : 16);
+  }
+
+  // ---- 顶部标题 ----
+  @Builder
+  HeaderBuilder() {
+    Column() {
       Text('学习进度')
-        .fontSize(24)
+        .fontSize(this.isLandscape ? 20 : 24)
         .fontWeight(700)
         .fontColor(ThemeColors.textPrimary)
         .width('100%')
@@ -138,50 +193,41 @@ export struct ProgressPage {
           .fontSize(12)
           .fontColor(ThemeColors.textTertiary)
           .width('100%')
-          .margin({ bottom: 16 });
-      }
-
-      if (this.isLoading) {
-        this.LoadingBuilder();
-      } else {
-        // 统计卡片（2列网格）
-        Column() {
-          this.StatsGridBuilder();
-        }
-        .margin({ bottom: 24 });
-
-        // 最近学习场景列表
-        Text('最近学习')
-          .fontSize(16)
-          .fontWeight(600)
-          .fontColor(ThemeColors.textPrimary)
-          .width('100%')
-          .margin({ bottom: 12 });
-
-        if (this.recentScenes.length === 0) {
-          this.EmptyStateBuilder();
-        } else {
-          List() {
-            ForEach(this.recentScenes, (item: RecentScene, index: number) => {
-              ListItem() {
-                SceneCard({
-                  scene: item.scene,
-                  progressPercent: item.progress,
-                  isCompleted: item.isCompleted
-                });
-              }
-              .margin({ bottom: index < this.recentScenes.length - 1 ? 10 : 0 });
-            }, (item: RecentScene) => item.scene.id);
-          }
-          .width('100%')
-          .layoutWeight(1);
-        }
+          .margin({ bottom: this.isLandscape ? 8 : 16 });
       }
     }
     .width('100%')
-    .height('100%')
-    .backgroundColor(ThemeColors.bgApp)
-    .padding(16);
+    .alignItems(HorizontalAlign.Start);
+  }
+
+  // ---- 最近学习标题 ----
+  @Builder
+  RecentTitleBuilder() {
+    Text('最近学习')
+      .fontSize(16)
+      .fontWeight(600)
+      .fontColor(ThemeColors.textPrimary)
+      .width('100%')
+      .margin({ bottom: 12 });
+  }
+
+  // ---- 最近学习列表 ----
+  @Builder
+  RecentListBuilder() {
+    List() {
+      ForEach(this.recentScenes, (item: RecentScene, index: number) => {
+        ListItem() {
+          SceneCard({
+            scene: item.scene,
+            progressPercent: item.progress,
+            isCompleted: item.isCompleted
+          });
+        }
+        .margin({ bottom: index < this.recentScenes.length - 1 ? 10 : 0 });
+      }, (item: RecentScene) => item.scene.id);
+    }
+    .width('100%')
+    .layoutWeight(1);
   }
 
   // ---- 统计卡片网格 ----

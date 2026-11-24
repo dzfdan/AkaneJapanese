@@ -3,7 +3,7 @@ import { Sentence } from '../model/Sentence';
 import { PlayerController } from './PlayerController';
 import { SherpaAsrEngine } from './SherpaAsrEngine';
 import { AudioRecorder } from './AudioRecorder';
-import { MatchResult, match } from './SimilarityMatcher';
+import { MatchResult, matchWithReading, getSentenceReading } from './SimilarityMatcher';
 import { CallbackList } from '../utils/CallbackList';
 import appLogger from '../utils/Logger';
 
@@ -15,8 +15,12 @@ export interface ConversationUiState {
   state: ConversationState;
   currentScene: Scene | null;
   currentDialogueIndex: number;
+  /** App 刚说的句子索引（偶数：0, 2, 4...） */
   currentSentenceIndex: number;
+  /** App 刚说的句子 */
   currentSentence: Sentence | null;
+  /** 用户应该说的句子（currentSentenceIndex + 1，奇数索引） */
+  targetSentence: Sentence | null;
   lastMatch: MatchResult | null;
   retryCount: number;
   errorMessage: string | null;
@@ -29,6 +33,7 @@ export class ConversationController {
   private state: ConversationState = 'IDLE';
   private currentScene: Scene | null = null;
   private currentDialogueIndex: number = 0;
+  // App 刚说的句子索引（偶数：0, 2, 4...），用户说下一句（奇数索引）
   private currentSentenceIndex: number = 0;
   private lastMatch: MatchResult | null = null;
   private retryCount: number = 0;
@@ -65,22 +70,38 @@ export class ConversationController {
 
   getUiState(): ConversationUiState {
     const sentence = this.getCurrentSentence();
+    const target = this.getTargetSentence();
     return {
       state: this.state,
       currentScene: this.currentScene,
       currentDialogueIndex: this.currentDialogueIndex,
       currentSentenceIndex: this.currentSentenceIndex,
       currentSentence: sentence,
+      targetSentence: target,
       lastMatch: this.lastMatch,
       retryCount: this.retryCount,
       errorMessage: this.errorMessage,
     };
   }
 
+  /**
+   * 开始对话模式
+   * 对话规则：App 说偶数索引句子（0, 2, 4...），用户说奇数索引句子（1, 3, 5...）
+   * App 播放完句子 N 后，等待用户说句子 N+1，并匹配句子 N+1（而非 N）。
+   * 反馈后 App 继续说句子 N+2，交替进行，直到所有句子完成。
+   * @param scene 场景对象
+   * @param dialogueIdx 起始对话索引
+   * @param sentenceIdx 起始句子索引（若为奇数会自动回退到上一个偶数，作为 App 的起始句）
+   */
   async startConversation(scene: Scene, dialogueIdx: number, sentenceIdx: number): Promise<void> {
     this.currentScene = scene;
     this.currentDialogueIndex = dialogueIdx;
-    this.currentSentenceIndex = sentenceIdx;
+    // 起始索引必须是偶数（App 的轮次）。若传入奇数，回退到上一个偶数。
+    let startIdx = sentenceIdx;
+    if (startIdx % 2 !== 0) {
+      startIdx = Math.max(0, startIdx - 1);
+    }
+    this.currentSentenceIndex = startIdx;
     this.retryCount = 0;
     this.lastMatch = null;
     this.errorMessage = null;
@@ -111,6 +132,14 @@ export class ConversationController {
   }
 
   private onAppSentenceEnd(_sentence: Sentence): void {
+    // App 说完后，检查是否存在用户的目标句子（下一句，奇数索引）
+    const target = this.getTargetSentence();
+    if (!target) {
+      // App 已说最后一句，没有用户轮次，对话结束
+      appLogger.info(`[${TAG}] onAppSentenceEnd: no target sentence, conversation done`);
+      this.stopConversation();
+      return;
+    }
     this.beginWaitingUser().catch((e: Object) => {
       appLogger.error(`[${TAG}] beginWaitingUser failed`, e);
     });
@@ -128,11 +157,22 @@ export class ConversationController {
           this.asr.feedPcmChunk(samples);
         }
       };
+      this.recorder.onError = (msg: string) => {
+        appLogger.error('[' + TAG + '] recorder error: ' + msg);
+        this.errorMessage = msg;
+        this.setState('IDLE');
+        this.recorder.stop().catch(() => {});
+        this.asr.stopListening().catch(() => {});
+      };
       await this.recorder.start();
     } catch (e) {
-      appLogger.error(`[${TAG}] beginWaitingUser failed`, e);
-      this.errorMessage = '录音启动失败';
+      const errMsg = e instanceof Error ? e.message : String(e);
+      appLogger.error(`[${TAG}] beginWaitingUser failed: ` + errMsg, e);
+      this.errorMessage = '录音启动失败：' + errMsg;
       this.setState('IDLE');
+      try {
+        this.asr.stopListening();
+      } catch (_) {}
     }
   }
 
@@ -150,9 +190,10 @@ export class ConversationController {
       appLogger.error(`[${TAG}] asr.stopListening failed`, e);
     }
 
-    const sentence = this.getCurrentSentence();
-    if (!sentence) {
-      this.errorMessage = '没有当前句子';
+    // 匹配用户的目标句子（奇数索引：App 说完后的下一句 N+1，而不是 App 说的 N）
+    const target = this.getTargetSentence();
+    if (!target) {
+      this.errorMessage = '没有目标句子';
       this.setState('IDLE');
       return;
     }
@@ -164,7 +205,7 @@ export class ConversationController {
         this.setState('FEEDBACK');
         return;
       }
-      const result = match(text, sentence.japanese);
+      const result = matchWithReading(text, target.japanese, getSentenceReading(target));
       this.lastMatch = result;
       this.setState('FEEDBACK');
     } catch (e) {
@@ -182,6 +223,7 @@ export class ConversationController {
     if (this.state !== 'FEEDBACK') {
       return;
     }
+    // 重试同一句目标句子（用户说错的奇数索引句子），不重新播放 App 句子
     this.retryCount += 1;
     this.lastMatch = null;
     this.errorMessage = null;
@@ -190,24 +232,45 @@ export class ConversationController {
     });
   }
 
+  /**
+   * 进入下一轮：App 说下一句偶数索引句子（currentSentenceIndex + 2）
+   * 若当前对话已无更多句子，则进入下一组对话的第 0 句；
+   * 若已无下一组对话，则结束对话。
+   *
+   * 允许在任意状态下调用——非 FEEDBACK 状态会先清理当前录音/播放资源，
+   * 避免用户卡死在 APP_SPEAKING / WAITING_USER 等中间状态。
+   */
   nextSentence(): void {
-    if (this.state !== 'FEEDBACK') {
-      return;
-    }
     if (!this.currentScene) {
+      appLogger.warn(`[${TAG}] nextSentence: no currentScene`);
       return;
     }
+    // 非 FEEDBACK 状态：先清理录音/播放资源，再跳到下一轮
+    if (this.state === 'APP_SPEAKING' || this.state === 'WAITING_USER'
+      || this.state === 'USER_SPEAKING' || this.state === 'RECOGNIZING') {
+      appLogger.info(`[${TAG}] nextSentence: state=${this.state}, cleaning up first`);
+      try { this.recorder.stop().catch(() => {}); } catch (_) {}
+      try { this.asr.stopListening().catch(() => {}); } catch (_) {}
+      try { this.player.pause().catch(() => {}); } catch (_) {}
+    }
+
     const dialogue = this.currentScene.dialogues[this.currentDialogueIndex];
     if (!dialogue) {
+      appLogger.warn(`[${TAG}] nextSentence: no dialogue at index ${this.currentDialogueIndex}`);
       return;
     }
-    if (this.currentSentenceIndex < dialogue.sentences.length - 1) {
-      this.currentSentenceIndex += 1;
+    // 下一句 App 应说的索引 = 当前 + 2（跳过用户刚说的奇数句）
+    const nextAppIdx = this.currentSentenceIndex + 2;
+    if (nextAppIdx < dialogue.sentences.length) {
+      this.currentSentenceIndex = nextAppIdx;
     } else {
+      // 当前对话已无更多 App 句子，进入下一组对话的第 0 句
       if (this.currentDialogueIndex < this.currentScene.dialogues.length - 1) {
         this.currentDialogueIndex += 1;
         this.currentSentenceIndex = 0;
       } else {
+        // 全部对话结束
+        appLogger.info(`[${TAG}] nextSentence: all dialogues done`);
         this.stopConversation();
         return;
       }
@@ -216,7 +279,7 @@ export class ConversationController {
     this.retryCount = 0;
     this.errorMessage = null;
     this.beginAppSpeaking().catch((e: Object) => {
-      appLogger.error(`[${TAG}] nextSentence failed`, e);
+      appLogger.error(`[${TAG}] nextSentence beginAppSpeaking failed`, e);
     });
   }
 
@@ -234,6 +297,9 @@ export class ConversationController {
     this.notifyStateChange();
   }
 
+  /**
+   * 获取 App 刚说的句子（偶数索引）
+   */
   private getCurrentSentence(): Sentence | null {
     if (!this.currentScene) {
       return null;
@@ -248,6 +314,25 @@ export class ConversationController {
     return dialogue.sentences[this.currentSentenceIndex];
   }
 
+  /**
+   * 获取用户应该说的句子（App 句子的下一句，奇数索引）
+   * 若不存在（App 已说最后一句），返回 null
+   */
+  private getTargetSentence(): Sentence | null {
+    if (!this.currentScene) {
+      return null;
+    }
+    const dialogue = this.currentScene.dialogues[this.currentDialogueIndex];
+    if (!dialogue) {
+      return null;
+    }
+    const targetIdx = this.currentSentenceIndex + 1;
+    if (targetIdx < 0 || targetIdx >= dialogue.sentences.length) {
+      return null;
+    }
+    return dialogue.sentences[targetIdx];
+  }
+
   private setState(s: ConversationState): void {
     this.state = s;
     appLogger.info(`[${TAG}] state -> ${s}`);
@@ -259,4 +344,3 @@ export class ConversationController {
     this.listeners.notify((cb: StateChangeCb) => cb(ui));
   }
 }
-
