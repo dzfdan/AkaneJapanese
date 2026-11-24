@@ -17,7 +17,6 @@ Thumbs.db
 *.swp
 .hvigor/
 oh-package-lock.json5
-entry/src/main/resources/rawfile/asr/**/*.onnx
 entry/src/main/resources/rawfile/asr/**/*.tar.bz2
 *.tar.bz2
 
